@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { useEditorStore } from 'lib/editorStore';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 /**
  * A simple visual representation of the generated Open Graph image. This
@@ -16,6 +16,7 @@ export default function CanvasStage() {
     subtitle,
     theme,
     layout,
+    accentColor,
     bannerUrl,
     logoFile,
     logoPosition,
@@ -43,7 +44,8 @@ export default function CanvasStage() {
 
   return (
     <div
-      className={`relative w-full h-0 pt-[52.5%] overflow-hidden rounded-lg shadow-md border border-gray-200 ${themeClasses}`}
+      className={`relative w-full h-0 pt-[52.5%] overflow-hidden rounded-lg shadow-md border ${themeClasses}`}
+      style={{ borderColor: accentColor }}
     >
       {/* Banner */}
       {bannerUrl && (
@@ -60,7 +62,10 @@ export default function CanvasStage() {
       <div
         className={`absolute inset-0 flex flex-col justify-center px-12 py-8 space-y-4 ${layoutClasses}`}
       >
-        <h1 className="text-3xl md:text-5xl font-bold leading-tight break-words">
+        <h1
+          className="text-3xl md:text-5xl font-bold leading-tight break-words"
+          style={{ color: accentColor }}
+        >
           {title || 'Seu título aqui'}
         </h1>
         <p className="text-lg md:text-2xl max-w-prose">
