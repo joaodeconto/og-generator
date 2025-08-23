@@ -11,7 +11,6 @@ import { generateRandomStyle, type RandomStyle } from 'lib/randomStyle';
  * meta tags. Allows downloading the canvas as a PNG in different resolutions.
  */
 export default function ExportControls() {
-  const { title, subtitle } = useEditorStore();
 
   const sizePresets: Record<string, ImageSize> = {
     '1200x630': { width: 1200, height: 630 },
