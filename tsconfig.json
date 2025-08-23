@@ -35,7 +35,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
-  ],
+, "__tests__/scrape.test.cjs"  ],
   "exclude": [
     "node_modules"
   ]
