@@ -8,6 +8,17 @@ import { blobToDataURL } from './images';
  * @returns A base64 data URL of the processed image
  */
 export async function removeImageBackground(source: Blob | string): Promise<string> {
+  if (typeof crossOriginIsolated !== "undefined" && !crossOriginIsolated) {
+    try {
+      Object.defineProperty(navigator, "hardwareConcurrency", {
+        configurable: true,
+        get: () => 1,
+      });
+    } catch {
+      // ignore inability to override
+    }
+  }
+
   const blob = await removeBackground(source);
   return blobToDataURL(blob);
 }
