@@ -3,5 +3,5 @@ declare module 'html-to-image' {
 }
 
 declare module '@imgly/background-removal' {
-  export default function removeBackground(...args: any[]): Promise<any>;
+  export function removeBackground(...args: any[]): Promise<any>;
 }
