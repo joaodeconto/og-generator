@@ -14,10 +14,12 @@ export interface EditorState {
   accentColor: string;
   bannerUrl?: string;
   logoFile?: File;
+  logoUrl?: string;
   logoPosition: { x: number; y: number };
   logoScale: number;
   invertLogo: boolean;
   removeLogoBg: boolean;
+  maskLogo: boolean;
   // actions
   setTitle: (value: string) => void;
   setSubtitle: (value: string) => void;
@@ -26,10 +28,12 @@ export interface EditorState {
   setAccentColor: (value: string) => void;
   setBannerUrl: (value: string | undefined) => void;
   setLogoFile: (file: File | undefined) => void;
+  setLogoUrl: (url: string | undefined) => void;
   setLogoPosition: (x: number, y: number) => void;
   setLogoScale: (scale: number) => void;
   toggleInvertLogo: () => void;
   toggleRemoveLogoBg: () => void;
+  toggleMaskLogo: () => void;
 }
 
 export const useEditorStore = create<EditorState>((set) => ({
@@ -42,15 +46,18 @@ export const useEditorStore = create<EditorState>((set) => ({
   logoScale: 1,
   invertLogo: false,
   removeLogoBg: false,
+  maskLogo: false,
   setTitle: (value) => set({ title: value }),
   setSubtitle: (value) => set({ subtitle: value }),
   setTheme: (value) => set({ theme: value }),
   setLayout: (value) => set({ layout: value }),
   setAccentColor: (value) => set({ accentColor: value }),
   setBannerUrl: (value) => set({ bannerUrl: value }),
-  setLogoFile: (file) => set({ logoFile: file }),
+  setLogoFile: (file) => set({ logoFile: file, logoUrl: undefined }),
+  setLogoUrl: (url) => set({ logoUrl: url, logoFile: undefined }),
   setLogoPosition: (x, y) => set({ logoPosition: { x, y } }),
   setLogoScale: (scale) => set({ logoScale: scale }),
   toggleInvertLogo: () => set((state) => ({ invertLogo: !state.invertLogo })),
-  toggleRemoveLogoBg: () => set((state) => ({ removeLogoBg: !state.removeLogoBg }))
+  toggleRemoveLogoBg: () => set((state) => ({ removeLogoBg: !state.removeLogoBg })),
+  toggleMaskLogo: () => set((state) => ({ maskLogo: !state.maskLogo }))
 }));
