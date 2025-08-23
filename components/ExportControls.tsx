@@ -2,6 +2,8 @@
 
 import { useEditorStore } from 'lib/editorStore';
 import { useSession } from 'next-auth/react';
+import { useState } from 'react';
+import { generateRandomStyle, type RandomStyle } from 'lib/randomStyle';
 
 /**
  * Buttons to export the generated Open Graph image and copy the associated
@@ -9,8 +11,9 @@ import { useSession } from 'next-auth/react';
  * is left as a TODO for future sprints.
  */
 export default function ExportControls() {
-  const { title, subtitle } = useEditorStore();
+  const { title, subtitle, theme, layout, accentColor, setTheme, setLayout, setAccentColor } = useEditorStore();
   const { data: session } = useSession();
+  const [prevStyle, setPrevStyle] = useState<RandomStyle | null>(null);
 
   const handleCopyMeta = async () => {
     const tags = [
@@ -35,7 +38,19 @@ export default function ExportControls() {
   };
 
   const handleSurprise = () => {
-    alert('Funcionalidade “Surpreenda-me” não implementada ainda.');
+    setPrevStyle({ theme, layout, accentColor });
+    const random = generateRandomStyle();
+    setTheme(random.theme);
+    setLayout(random.layout);
+    setAccentColor(random.accentColor);
+  };
+
+  const handleUndo = () => {
+    if (!prevStyle) return;
+    setTheme(prevStyle.theme);
+    setLayout(prevStyle.layout);
+    setAccentColor(prevStyle.accentColor);
+    setPrevStyle(null);
   };
 
   return (
@@ -58,6 +73,14 @@ export default function ExportControls() {
       >
         Surpreenda‑me
       </button>
+      {prevStyle && (
+        <button
+          onClick={handleUndo}
+          className="rounded-md bg-yellow-500 px-4 py-2 text-sm font-medium text-white hover:bg-yellow-600"
+        >
+          Desfazer
+        </button>
+      )}
     </div>
   );
 }
