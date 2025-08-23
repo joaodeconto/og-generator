@@ -3,6 +3,8 @@
 import Image from 'next/image';
 import { useEditorStore } from 'lib/editorStore';
 import { useEffect, useState } from 'react';
+import { invertImageColors, blobToDataURL } from 'lib/images';
+import { removeImageBackground } from 'lib/removeBg';
 
 /**
  * A simple visual representation of the generated Open Graph image. This
@@ -19,24 +21,55 @@ export default function CanvasStage() {
     accentColor,
     bannerUrl,
     logoFile,
+    logoUrl,
     logoPosition,
     logoScale,
-    invertLogo
+    invertLogo,
+    removeLogoBg,
+    maskLogo
   } = useEditorStore();
   const [logoDataUrl, setLogoDataUrl] = useState<string | undefined>(undefined);
 
-  // Convert uploaded logo file into data URL for display
+  // Prepare logo image applying optional background removal and inversion
   useEffect(() => {
-    if (logoFile) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        setLogoDataUrl(reader.result as string);
-      };
-      reader.readAsDataURL(logoFile);
-      return () => reader.abort();
-    }
-    setLogoDataUrl(undefined);
-  }, [logoFile]);
+    let cancelled = false;
+    const process = async () => {
+      let source: string | Blob | undefined;
+      if (logoFile) {
+        source = logoFile;
+      } else if (logoUrl) {
+        source = logoUrl;
+      } else {
+        setLogoDataUrl(undefined);
+        return;
+      }
+
+      try {
+        if (removeLogoBg) {
+          source = await removeImageBackground(source);
+        } else if (source instanceof Blob) {
+          source = await blobToDataURL(source);
+        }
+
+        if (invertLogo && typeof source === 'string') {
+          source = await invertImageColors(source);
+        }
+
+        if (!cancelled) {
+          setLogoDataUrl(source as string);
+        }
+      } catch (e) {
+        console.error(e);
+        if (!cancelled) {
+          setLogoDataUrl(undefined);
+        }
+      }
+    };
+    process();
+    return () => {
+      cancelled = true;
+    };
+  }, [logoFile, logoUrl, removeLogoBg, invertLogo]);
 
   // Determine CSS classes for themes and layout
   const themeClasses = theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-white text-gray-900';
@@ -80,8 +113,7 @@ export default function CanvasStage() {
           style={{
             top: `${logoPosition.y}%`,
             left: `${logoPosition.x}%`,
-            transform: `translate(-50%, -50%) scale(${logoScale})`,
-            filter: invertLogo ? 'invert(1)' : undefined
+            transform: `translate(-50%, -50%) scale(${logoScale})`
           }}
         >
           {/* We ignore type errors because Next.js <Image> requires fixed width/height or fill. */}
@@ -89,7 +121,7 @@ export default function CanvasStage() {
           <img
             src={logoDataUrl}
             alt="Logo"
-            className="object-contain w-24 h-24 rounded-full shadow"
+            className={`object-contain w-24 h-24 ${maskLogo ? 'rounded-full' : ''} shadow`}
           />
         </div>
       )}
