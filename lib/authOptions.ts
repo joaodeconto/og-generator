@@ -6,6 +6,7 @@ import TwitterProvider from 'next-auth/providers/twitter';
 import FacebookProvider from 'next-auth/providers/facebook';
 import InstagramProvider from 'next-auth/providers/instagram';
 
+
 /**
  * Shared NextAuth configuration. This file centralises the providers and other
  * options so they can be reused in both the API route and server components
@@ -16,15 +17,18 @@ export const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID ?? '',
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? ''
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? '',
+      authorization: { params: { prompt: "consent", access_type: "offline", response_type: "code" } }
     }),
     GithubProvider({
       clientId: process.env.GITHUB_CLIENT_ID ?? '',
-      clientSecret: process.env.GITHUB_CLIENT_SECRET ?? ''
+      clientSecret: process.env.GITHUB_CLIENT_SECRET ?? '',
     }),
     LinkedinProvider({
       clientId: process.env.LINKEDIN_CLIENT_ID ?? '',
-      clientSecret: process.env.LINKEDIN_CLIENT_SECRET ?? ''
+      clientSecret: process.env.LINKEDIN_CLIENT_SECRET ?? '',
+      issuer: "https://www.linkedin.com/oauth",                 // <- chave do fix
+      authorization: { params: { scope: "openid profile email" } } // OIDC
     }),
     TwitterProvider({
       clientId: process.env.TWITTER_CONSUMER_KEY ?? '',
