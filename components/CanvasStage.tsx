@@ -43,6 +43,7 @@ export default function CanvasStage() {
 
   return (
     <div
+      id="og-canvas"
       className={`relative w-full h-0 pt-[52.5%] overflow-hidden rounded-lg shadow-md border border-gray-200 ${themeClasses}`}
     >
       {/* Banner */}
