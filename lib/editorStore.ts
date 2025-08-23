@@ -11,6 +11,7 @@ export interface EditorState {
   subtitle: string;
   theme: 'light' | 'dark';
   layout: 'left' | 'center';
+  accentColor: string;
   bannerUrl?: string;
   logoFile?: File;
   logoPosition: { x: number; y: number };
@@ -22,6 +23,7 @@ export interface EditorState {
   setSubtitle: (value: string) => void;
   setTheme: (value: 'light' | 'dark') => void;
   setLayout: (value: 'left' | 'center') => void;
+  setAccentColor: (value: string) => void;
   setBannerUrl: (value: string | undefined) => void;
   setLogoFile: (file: File | undefined) => void;
   setLogoPosition: (x: number, y: number) => void;
@@ -35,6 +37,7 @@ export const useEditorStore = create<EditorState>((set) => ({
   subtitle: '',
   theme: 'light',
   layout: 'left',
+  accentColor: '#3b82f6',
   logoPosition: { x: 0, y: 0 },
   logoScale: 1,
   invertLogo: false,
@@ -43,6 +46,7 @@ export const useEditorStore = create<EditorState>((set) => ({
   setSubtitle: (value) => set({ subtitle: value }),
   setTheme: (value) => set({ theme: value }),
   setLayout: (value) => set({ layout: value }),
+  setAccentColor: (value) => set({ accentColor: value }),
   setBannerUrl: (value) => set({ bannerUrl: value }),
   setLogoFile: (file) => set({ logoFile: file }),
   setLogoPosition: (x, y) => set({ logoPosition: { x, y } }),
