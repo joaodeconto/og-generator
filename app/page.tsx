@@ -5,6 +5,7 @@ import EditorControls from 'components/EditorControls';
 import ExportControls from 'components/ExportControls';
 import AuthButtons from 'components/AuthButtons';
 import PresetsPanel from 'components/PresetsPanel';
+import MetadataPanel from 'components/MetadataPanel';
 import { useSession } from 'next-auth/react';
 
 export default function HomePage() {
@@ -30,6 +31,9 @@ export default function HomePage() {
         </div>
         <div>
           <PresetsPanel />
+          <div className="mt-6">
+            <MetadataPanel />
+          </div>
         </div>
       </section>
     </main>
