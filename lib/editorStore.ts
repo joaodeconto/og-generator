@@ -1,0 +1,52 @@
+import { create } from 'zustand';
+
+/**
+ * Definition of the editor's state. This store manages the current values of
+ * fields used to generate an Open Graph image as well as transforms applied
+ * to the uploaded logo. Individual fields are updated via dedicated setter
+ * actions to make state changes predictable and easy to trace.
+ */
+export interface EditorState {
+  title: string;
+  subtitle: string;
+  theme: 'light' | 'dark';
+  layout: 'left' | 'center';
+  bannerUrl?: string;
+  logoFile?: File;
+  logoPosition: { x: number; y: number };
+  logoScale: number;
+  invertLogo: boolean;
+  removeLogoBg: boolean;
+  // actions
+  setTitle: (value: string) => void;
+  setSubtitle: (value: string) => void;
+  setTheme: (value: 'light' | 'dark') => void;
+  setLayout: (value: 'left' | 'center') => void;
+  setBannerUrl: (value: string | undefined) => void;
+  setLogoFile: (file: File | undefined) => void;
+  setLogoPosition: (x: number, y: number) => void;
+  setLogoScale: (scale: number) => void;
+  toggleInvertLogo: () => void;
+  toggleRemoveLogoBg: () => void;
+}
+
+export const useEditorStore = create<EditorState>((set) => ({
+  title: '',
+  subtitle: '',
+  theme: 'light',
+  layout: 'left',
+  logoPosition: { x: 0, y: 0 },
+  logoScale: 1,
+  invertLogo: false,
+  removeLogoBg: false,
+  setTitle: (value) => set({ title: value }),
+  setSubtitle: (value) => set({ subtitle: value }),
+  setTheme: (value) => set({ theme: value }),
+  setLayout: (value) => set({ layout: value }),
+  setBannerUrl: (value) => set({ bannerUrl: value }),
+  setLogoFile: (file) => set({ logoFile: file }),
+  setLogoPosition: (x, y) => set({ logoPosition: { x, y } }),
+  setLogoScale: (scale) => set({ logoScale: scale }),
+  toggleInvertLogo: () => set((state) => ({ invertLogo: !state.invertLogo })),
+  toggleRemoveLogoBg: () => set((state) => ({ removeLogoBg: !state.removeLogoBg }))
+}));
