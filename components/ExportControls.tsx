@@ -3,13 +3,14 @@
 import { useEditorStore } from 'lib/editorStore';
 import { useState } from 'react';
 import { exportElementAsPng, ImageSize } from 'lib/images';
+import { useSession } from 'next-auth/react';
+import { generateRandomStyle, type RandomStyle } from 'lib/randomStyle';
 
 /**
  * Buttons to export the generated Open Graph image and copy the associated
  * meta tags. Allows downloading the canvas as a PNG in different resolutions.
  */
 export default function ExportControls() {
-  const { title, subtitle } = useEditorStore();
 
   const sizePresets: Record<string, ImageSize> = {
     '1200x630': { width: 1200, height: 630 },
@@ -18,6 +19,9 @@ export default function ExportControls() {
   };
 
   const [selectedSize, setSelectedSize] = useState<keyof typeof sizePresets>('1200x630');
+  const { title, subtitle, theme, layout, accentColor, setTheme, setLayout, setAccentColor } = useEditorStore();
+  const { data: session } = useSession();
+  const [prevStyle, setPrevStyle] = useState<RandomStyle | null>(null);
 
   const handleCopyMeta = async () => {
     const tags = [
@@ -51,7 +55,19 @@ export default function ExportControls() {
   };
 
   const handleSurprise = () => {
-    alert('Funcionalidade “Surpreenda-me” não implementada ainda.');
+    setPrevStyle({ theme, layout, accentColor });
+    const random = generateRandomStyle();
+    setTheme(random.theme);
+    setLayout(random.layout);
+    setAccentColor(random.accentColor);
+  };
+
+  const handleUndo = () => {
+    if (!prevStyle) return;
+    setTheme(prevStyle.theme);
+    setLayout(prevStyle.layout);
+    setAccentColor(prevStyle.accentColor);
+    setPrevStyle(null);
   };
 
   return (
@@ -85,6 +101,14 @@ export default function ExportControls() {
       >
         Surpreenda‑me
       </button>
+      {prevStyle && (
+        <button
+          onClick={handleUndo}
+          className="rounded-md bg-yellow-500 px-4 py-2 text-sm font-medium text-white hover:bg-yellow-600"
+        >
+          Desfazer
+        </button>
+      )}
     </div>
   );
 }
