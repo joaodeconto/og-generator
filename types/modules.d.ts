@@ -5,3 +5,8 @@ declare module 'html-to-image' {
 declare module '@imgly/background-removal' {
   export function removeBackground(...args: any[]): Promise<any>;
 }
+
+declare module '@odeconto/scraper' {
+  export function scrape(url: string, options?: any): Promise<any>;
+  export function pickBestImage(meta: any): any;
+}
