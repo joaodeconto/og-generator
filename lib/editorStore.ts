@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import type { Preset } from './randomStyle';
 
 /**
  * Definition of the editor's state. This store manages the current values of
@@ -20,6 +21,7 @@ export interface EditorState {
   invertLogo: boolean;
   removeLogoBg: boolean;
   maskLogo: boolean;
+  presets: Preset[];
   // actions
   setTitle: (value: string) => void;
   setSubtitle: (value: string) => void;
@@ -34,6 +36,8 @@ export interface EditorState {
   toggleInvertLogo: () => void;
   toggleRemoveLogoBg: () => void;
   toggleMaskLogo: () => void;
+  addPreset: (preset: Preset) => void;
+  applyPreset: (preset: Preset) => void;
 }
 
 export const useEditorStore = create<EditorState>((set) => ({
@@ -47,6 +51,7 @@ export const useEditorStore = create<EditorState>((set) => ({
   invertLogo: false,
   removeLogoBg: false,
   maskLogo: false,
+  presets: [],
   setTitle: (value) => set({ title: value }),
   setSubtitle: (value) => set({ subtitle: value }),
   setTheme: (value) => set({ theme: value }),
@@ -59,5 +64,13 @@ export const useEditorStore = create<EditorState>((set) => ({
   setLogoScale: (scale) => set({ logoScale: scale }),
   toggleInvertLogo: () => set((state) => ({ invertLogo: !state.invertLogo })),
   toggleRemoveLogoBg: () => set((state) => ({ removeLogoBg: !state.removeLogoBg })),
-  toggleMaskLogo: () => set((state) => ({ maskLogo: !state.maskLogo }))
+  toggleMaskLogo: () => set((state) => ({ maskLogo: !state.maskLogo })),
+  addPreset: (preset) =>
+    set((state) => ({ presets: [...state.presets, preset] })),
+  applyPreset: (preset) =>
+    set({
+      theme: preset.theme,
+      layout: preset.layout,
+      accentColor: preset.accentColor
+    })
 }));
