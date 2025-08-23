@@ -6,3 +6,4 @@ out
 .env.*.local
 dist
 coverage
+tsconfig.tsbuildinfo

@@ -27,8 +27,7 @@ export const authOptions: NextAuthOptions = {
     LinkedinProvider({
       clientId: process.env.LINKEDIN_CLIENT_ID ?? '',
       clientSecret: process.env.LINKEDIN_CLIENT_SECRET ?? '',
-      issuer: "https://www.linkedin.com/oauth",                 // <- chave do fix
-      authorization: { params: { scope: "openid profile email" } } // OIDC
+      authorization: { params: { scope: "openid profile email" } }
     }),
     TwitterProvider({
       clientId: process.env.TWITTER_CONSUMER_KEY ?? '',
