@@ -17,11 +17,22 @@ export async function exportElementAsPng(
   size: ImageSize,
   filename = 'og-image.png'
 ): Promise<void> {
+  const { width: originalWidth, height: originalHeight } =
+    element.getBoundingClientRect();
+
+  const scaleX = size.width / originalWidth;
+  const scaleY = size.height / originalHeight;
+
   const dataUrl = await toPng(element, {
     width: size.width,
     height: size.height,
-    canvasWidth: size.width,
-    canvasHeight: size.height
+    style: {
+      transform: `scale(${scaleX}, ${scaleY})`,
+      transformOrigin: 'top left',
+      width: `${originalWidth}px`,
+      height: `${originalHeight}px`
+    },
+    pixelRatio: 1
   });
 
   const link = document.createElement('a');
