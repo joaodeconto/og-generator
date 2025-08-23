@@ -4,6 +4,7 @@ import CanvasStage from 'components/CanvasStage';
 import EditorControls from 'components/EditorControls';
 import ExportControls from 'components/ExportControls';
 import AuthButtons from 'components/AuthButtons';
+import PresetsPanel from 'components/PresetsPanel';
 import { useSession } from 'next-auth/react';
 
 export default function HomePage() {
@@ -14,7 +15,7 @@ export default function HomePage() {
         <h1 className="text-2xl font-bold">OG Image Studio</h1>
         <AuthButtons />
       </header>
-      <section className="mt-8 grid grid-cols-1 gap-8 md:grid-cols-2">
+      <section className="mt-8 grid grid-cols-1 gap-8 md:grid-cols-3">
         <div>
           <EditorControls />
           <div className="mt-6">
@@ -26,6 +27,9 @@ export default function HomePage() {
           <p className="mt-4 text-xs text-gray-500">
             Faça login para persistir suas criações e desbloquear funcionalidades avançadas.
           </p>
+        </div>
+        <div>
+          <PresetsPanel />
         </div>
       </section>
     </main>
