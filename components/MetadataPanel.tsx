@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from 'react';
 import { useMetadataStore } from 'lib/metadataStore';
 
 /**
@@ -8,6 +9,7 @@ import { useMetadataStore } from 'lib/metadataStore';
  * architecture where metadata can evolve independently from visual settings.
  */
 export default function MetadataPanel() {
+  const [url, setUrl] = useState('');
   const {
     description,
     image,
@@ -17,12 +19,49 @@ export default function MetadataPanel() {
     setDescription,
     setImage,
     setFavicon,
-    setSiteName
+    setSiteName,
+    setWarnings
   } = useMetadataStore();
+
+  async function handleFetch() {
+    if (!url) return;
+    try {
+      const res = await fetch(`/api/scrape?url=${encodeURIComponent(url)}`);
+      const data = await res.json();
+      setSiteName(data.title || '');
+      setImage(data.image || '');
+      setFavicon(data.favicon || '');
+      setWarnings(data.warnings || []);
+    } catch (err: any) {
+      setWarnings([err?.message || 'Failed to fetch metadata']);
+    }
+  }
 
   return (
     <div className="space-y-4">
       <h2 className="text-lg font-semibold">Metadata</h2>
+      <div>
+        <label className="block text-sm font-medium text-gray-700" htmlFor="url">
+          URL
+        </label>
+        <div className="mt-1 flex gap-2">
+          <input
+            id="url"
+            type="url"
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            placeholder="https://exemplo.com"
+          />
+          <button
+            type="button"
+            onClick={handleFetch}
+            className="rounded-md bg-blue-600 px-3 py-2 text-sm font-medium text-white hover:bg-blue-700"
+          >
+            Fetch metadata
+          </button>
+        </div>
+      </div>
       <div>
         <label className="block text-sm font-medium text-gray-700" htmlFor="siteName">
           Nome do site
