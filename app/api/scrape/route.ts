@@ -7,6 +7,15 @@ export async function GET(req: Request) {
   if (!target) {
     return NextResponse.json({ error: 'Missing url' }, { status: 400 });
   }
+  let parsed: URL;
+  try {
+    parsed = new URL(target);
+  } catch {
+    return NextResponse.json({ error: 'Invalid url' }, { status: 400 });
+  }
+  if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') {
+    return NextResponse.json({ error: 'URL must use http or https' }, { status: 400 });
+  }
   try {
     const result = await scrape(target);
     const title = result.meta.og.title ?? result.meta.twitter.title ?? result.meta.basic.title ?? '';
