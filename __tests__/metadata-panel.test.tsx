@@ -15,7 +15,6 @@ describe('MetadataPanel', () => {
   });
 
   afterEach(() => {
-    // @ts-expect-error allow cleanup
     delete global.fetch;
   });
 
