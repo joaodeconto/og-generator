@@ -16,6 +16,8 @@ Este repositório contém o esqueleto do **OG Image Studio**, uma aplicação Ne
 
 ## Configuração de Autenticação
 
+O repositório inclui um arquivo `.env.example` que lista todas as variáveis de ambiente necessárias para os provedores de autenticação. Use-o como modelo para criar seu `.env.local`.
+
 1. Copie o arquivo `.env.example` para `.env.local`:
 
    ```bash
@@ -43,7 +45,7 @@ Este repositório contém o esqueleto do **OG Image Studio**, uma aplicação Ne
   - `editorStore.ts`: estado global do editor utilizando Zustand.
 - `types/next-auth.d.ts`: estende os tipos do NextAuth para incluir `id` e `provider` na sessão.
 - `tailwind.config.ts` e `postcss.config.js`: configuração do Tailwind.
-- `.env.example`: exemplo de variáveis de ambiente necessárias.
+- `.env.example`: exemplo de variáveis de ambiente necessárias; copie para `.env.local` e preencha com suas credenciais.
 
 ## Próximos Passos
 
