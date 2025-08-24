@@ -32,6 +32,7 @@ Este repositório contém o esqueleto do **OG Image Studio**, uma aplicação Ne
   - `layout.tsx`: carrega estilos globais e injeta o `SessionProvider`.
   - `page.tsx`: página principal com o editor e preview da imagem.
   - `api/auth/[...nextauth]/route.ts`: rota de autenticação do NextAuth.
+  - `api/remove-bg/route.ts`: remove o fundo de uma imagem enviado via POST.
 - `components/`: componentes reutilizáveis.
   - `Providers.tsx`: wrapper com `SessionProvider`.
   - `AuthButtons.tsx`: botões de login/logout.
@@ -44,6 +45,12 @@ Este repositório contém o esqueleto do **OG Image Studio**, uma aplicação Ne
 - `types/next-auth.d.ts`: estende os tipos do NextAuth para incluir `id` e `provider` na sessão.
 - `tailwind.config.ts` e `postcss.config.js`: configuração do Tailwind.
 - `.env.example`: exemplo de variáveis de ambiente necessárias.
+
+## Remoção de fundo
+
+O projeto utiliza a biblioteca `@imgly/background-removal` para eliminar o fundo de logos enviados pelo usuário. Por padrão, o cliente tenta enviar a imagem para a API `POST /api/remove-bg`, que executa a remoção no servidor e retorna a imagem tratada. Caso a rota não esteja disponível ou ocorra algum erro, a operação é realizada no próprio navegador.
+
+A remoção no servidor costuma ser mais rápida e evita limitações de recursos do navegador, porém consome processamento no backend. A execução no cliente reduz a carga do servidor, mas pode ser significativamente mais lenta em dispositivos modestos.
 
 ## Próximos Passos
 

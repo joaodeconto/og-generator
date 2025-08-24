@@ -29,6 +29,29 @@ export default function CanvasStage() {
     maskLogo
   } = useEditorStore();
   const [logoDataUrl, setLogoDataUrl] = useState<string | undefined>(undefined);
+  const [preferServerBg, setPreferServerBg] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    if (typeof fetch === 'undefined') {
+      setPreferServerBg(false);
+      return;
+    }
+    fetch('/api/remove-bg', { method: 'OPTIONS' })
+      .then((res) => {
+        if (!cancelled) {
+          setPreferServerBg(res.status !== 404);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setPreferServerBg(false);
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   // Prepare logo image applying optional background removal and inversion
   useEffect(() => {
@@ -46,7 +69,7 @@ export default function CanvasStage() {
 
       try {
         if (removeLogoBg) {
-          source = await removeImageBackground(source);
+          source = await removeImageBackground(source, preferServerBg);
         } else if (source instanceof Blob) {
           source = await blobToDataURL(source);
         }
@@ -69,7 +92,7 @@ export default function CanvasStage() {
     return () => {
       cancelled = true;
     };
-  }, [logoFile, logoUrl, removeLogoBg, invertLogo]);
+  }, [logoFile, logoUrl, removeLogoBg, invertLogo, preferServerBg]);
 
   // Determine CSS classes for themes and layout
   const themeClasses = theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-white text-gray-900';
