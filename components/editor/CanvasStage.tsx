@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { useEditorStore } from "../../state/editorStore";
+import { useEditorStore } from "lib/editorStore";
 
 export default function CanvasStage() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);

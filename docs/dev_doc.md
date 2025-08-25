@@ -11,7 +11,7 @@ OGGenerator is a one‑page (expandable) app to **compose Open Graph images** wi
 **MVP Goals**
 
 * Authenticated session (Google, GitHub, LinkedIn, Twitter/X, Facebook; *Instagram: see note below*).
-* Editor with: title, subtitle, theme (light/dark), layout (left/center), background (color/gradient/image), size presets, and **logo editing** (translate, scale, remove BG, invert B/W).
+* Editor with: title, subtitle, theme (light/dark), layout (left/center), background (color/gradient/image), size presets, and **logo editing** (upload via file/paste/URL, translate, scale, remove BG, invert B/W, mask).
 * Export PNG (1200×630 default; extras 1600×900, 1920×1005) and copy meta tags.
 * Basic persistence (local + per‑user cloud).
 
@@ -319,10 +319,10 @@ pnpm dev
 
 ### Sprint 3 — Logo Tools (2–3 days)
 
-* [ ] Upload: drag‑and‑drop + paste + URL.
-* [ ] Translate + scale + mask (circle) interaction.
-* [ ] **Remove Background** via WASM in WebWorker (lazy‑loaded).
-* [ ] **Invert B/W** filter + toggle.
+* [ ] Upload: drag‑and‑drop + paste + URL (file input, paste and URL wired; drag‑and‑drop pending).
+* [ ] Translate + scale + mask (circle) interaction (scale slider and mask toggle added; drag translate pending).
+* [x] **Remove Background** via WASM in WebWorker (toggle integrated with helper).
+* [x] **Invert B/W** filter + toggle.
 
 ### Sprint 4 — Export & Meta (1–2 days)
 
