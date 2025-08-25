@@ -60,14 +60,13 @@ describe('Toolbar shortcuts', () => {
         expected,
       ),
     );
+    expect(writeText).toHaveBeenCalledTimes(1);
     fireEvent.keyDown(window, { key: 'c', ctrlKey: true });
     await waitFor(() =>
       expect((navigator.clipboard as any).writeText).toHaveBeenLastCalledWith(
         expected,
       ),
     );
-    expect(writeText).toHaveBeenCalledTimes(1);
-    fireEvent.keyDown(window, { key: 'c', ctrlKey: true });
     expect(writeText).toHaveBeenCalledTimes(2);
   });
 

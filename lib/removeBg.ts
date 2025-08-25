@@ -1,6 +1,12 @@
 let worker: Worker | null = null;
 let messageId = 0;
 
+interface WorkerResponse {
+  id: number;
+  dataUrl?: string;
+  error?: string;
+}
+
 /**
  * Remove the background of an image using a dedicated WebWorker.
  *
@@ -13,7 +19,7 @@ export function removeImageBackground(source: Blob | string): Promise<string> {
   }
   const id = ++messageId;
   return new Promise((resolve, reject) => {
-    const handleMessage = (event: MessageEvent<any>) => {
+    const handleMessage = (event: MessageEvent<WorkerResponse>) => {
       if (event.data.id !== id) return;
       worker?.removeEventListener("message", handleMessage);
       worker?.removeEventListener("error", handleError);

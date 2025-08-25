@@ -2,26 +2,24 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import ExportPanel from '../components/editor/panels/ExportPanel';
 import { useEditorStore } from '../lib/editorStore';
 import { exportElementAsPng } from '../lib/images';
-import { copyMetaTags } from '../lib/meta';
+import { buildMetaTags } from '../lib/metaTags';
 
 jest.mock('../lib/images', () => ({
   exportElementAsPng: jest.fn(),
 }));
 
-jest.mock('../lib/meta', () => ({
-  copyMetaTags: jest.fn(),
-}));
 
 describe('ExportPanel', () => {
   beforeEach(() => {
     useEditorStore.setState({ title: 'T', subtitle: 'S' });
     document.body.innerHTML = '<div id="og-canvas"></div>';
+    Object.assign(navigator, { clipboard: { writeText: jest.fn().mockResolvedValue(undefined) } });
   });
 
   it('exports canvas as PNG', () => {
     const mock = exportElementAsPng as jest.Mock;
     render(<ExportPanel />);
-    fireEvent.click(screen.getByRole('button', { name: /export png/i }));
+    fireEvent.click(screen.getByRole('button', { name: /export image as png/i }));
     expect(mock).toHaveBeenCalledWith(
       document.getElementById('og-canvas'),
       { width: 1200, height: 630 },
@@ -30,9 +28,9 @@ describe('ExportPanel', () => {
   });
 
   it('copies meta tags', () => {
-    const mock = copyMetaTags as jest.Mock;
     render(<ExportPanel />);
+    const expected = buildMetaTags({ title: 'T', description: 'S' });
     fireEvent.click(screen.getByRole('button', { name: /copy meta/i }));
-    expect(mock).toHaveBeenCalledWith({ title: 'T', description: 'S' });
+    expect((navigator.clipboard as any).writeText).toHaveBeenCalledWith(expected);
   });
 });
