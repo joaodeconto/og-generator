@@ -11,6 +11,8 @@ import type { Preset } from './randomStyle';
 export interface EditorState {
   title: string;
   subtitle: string;
+  titleFontSize: number;
+  subtitleFontSize: number;
   theme: 'light' | 'dark';
   layout: 'left' | 'center';
   accentColor: string;
@@ -26,6 +28,8 @@ export interface EditorState {
   // actions
   setTitle: (value: string) => void;
   setSubtitle: (value: string) => void;
+  setTitleFontSize: (size: number) => void;
+  setSubtitleFontSize: (size: number) => void;
   setTheme: (value: 'light' | 'dark') => void;
   setLayout: (value: 'left' | 'center') => void;
   setAccentColor: (value: string) => void;
@@ -44,6 +48,8 @@ export interface EditorState {
 export const useEditorStore = create<EditorState>((set) => ({
   title: '',
   subtitle: '',
+  titleFontSize: 48,
+  subtitleFontSize: 24,
   theme: 'light',
   layout: 'left',
   accentColor: '#3b82f6',
@@ -55,6 +61,8 @@ export const useEditorStore = create<EditorState>((set) => ({
   presets: [],
   setTitle: (value) => set({ title: value }),
   setSubtitle: (value) => set({ subtitle: value }),
+  setTitleFontSize: (size) => set({ titleFontSize: size }),
+  setSubtitleFontSize: (size) => set({ subtitleFontSize: size }),
   setTheme: (value) => set({ theme: value }),
   setLayout: (value) => set({ layout: value }),
   setAccentColor: (value) => set({ accentColor: value }),

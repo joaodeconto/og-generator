@@ -15,6 +15,8 @@ export default function CanvasStage() {
   const {
     title,
     subtitle,
+    titleFontSize,
+    subtitleFontSize,
     theme,
     layout,
     accentColor,
@@ -96,12 +98,12 @@ export default function CanvasStage() {
         className={`absolute inset-0 flex flex-col justify-center px-12 py-8 space-y-4 ${layoutClasses}`}
       >
         <h1
-          className="text-3xl md:text-5xl font-bold leading-tight break-words"
-          style={{ color: accentColor }}
+          className="font-bold leading-tight break-words"
+          style={{ color: accentColor, fontSize: `${titleFontSize}px` }}
         >
           {title || 'Seu título aqui'}
         </h1>
-        <p className="text-lg md:text-2xl max-w-prose">
+        <p className="max-w-prose" style={{ fontSize: `${subtitleFontSize}px` }}>
           {subtitle || 'Subtítulo ou descrição aqui'}
         </p>
       </div>
