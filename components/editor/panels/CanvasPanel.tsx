@@ -1,5 +1,5 @@
 "use client";
-import { useEditorStore } from "../../../state/editorStore";
+import { useEditorStore } from 'lib/editorStore';
 
 export default function CanvasPanel() {
   const {
