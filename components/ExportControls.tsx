@@ -4,6 +4,7 @@ import { useEditorStore } from 'lib/editorStore';
 import { useState } from 'react';
 import { exportElementAsPng, ImageSize } from 'lib/images';
 import { generateRandomStyle, type RandomStyle } from 'lib/randomStyle';
+import { buildMetaTags } from 'lib/metaTags';
 
 /**
  * Buttons to export the generated Open Graph image and copy the associated
@@ -23,12 +24,7 @@ export default function ExportControls() {
 
 
   const handleCopyMeta = async () => {
-    const tags = [
-      `<meta property="og:title" content="${title}" />`,
-      `<meta property="og:description" content="${subtitle}" />`,
-      `<meta property="og:type" content="website" />`,
-      `<meta name="twitter:card" content="summary_large_image" />`
-    ].join('\n');
+    const tags = buildMetaTags({ title, description: subtitle });
     try {
       await navigator.clipboard.writeText(tags);
       alert('Tags OG copiadas para a área de transferência!');

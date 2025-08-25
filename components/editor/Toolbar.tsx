@@ -1,11 +1,17 @@
 "use client";
 
 import { useEffect } from "react";
+import { useEditorStore } from 'lib/editorStore';
+import { buildMetaTags } from 'lib/metaTags';
 
 export default function Toolbar() {
+  const { title, subtitle } = useEditorStore();
   const handleUndo = () => console.log("undo");
   const handleRedo = () => console.log("redo");
-  const handleCopyMeta = () => console.log("copy meta");
+  const handleCopyMeta = () => {
+    const tags = buildMetaTags({ title, description: subtitle });
+    navigator.clipboard.writeText(tags).then(() => console.log("copy meta")).catch(console.error);
+  };
   const handleExport = () => console.log("export");
   const handleSave = () => console.log("save");
 

@@ -3,13 +3,17 @@ import Toolbar from '../components/editor/Toolbar';
 
 describe('Toolbar shortcuts', () => {
   let logSpy: jest.SpyInstance;
+  let writeText: jest.Mock;
 
   beforeEach(() => {
     logSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
+    writeText = jest.fn().mockResolvedValue(undefined);
+    Object.assign(navigator, { clipboard: { writeText } });
   });
 
   afterEach(() => {
     logSpy.mockRestore();
+    writeText.mockReset();
   });
 
   it('handles undo via click and shortcut', () => {
@@ -31,9 +35,9 @@ describe('Toolbar shortcuts', () => {
   it('handles copy meta via click and shortcut', () => {
     render(<Toolbar />);
     fireEvent.click(screen.getByRole('button', { name: 'Copy Meta' }));
-    expect(logSpy).toHaveBeenLastCalledWith('copy meta');
+    expect(writeText).toHaveBeenCalledTimes(1);
     fireEvent.keyDown(window, { key: 'c', ctrlKey: true });
-    expect(logSpy).toHaveBeenLastCalledWith('copy meta');
+    expect(writeText).toHaveBeenCalledTimes(2);
   });
 
   it('handles save via click and shortcut', () => {
