@@ -70,6 +70,8 @@ cp .env.example .env.local
 
 Preencha cada chave com valores obtidos nos provedores OAuth (Google, GitHub, etc.) e defina um `NEXTAUTH_SECRET` forte.
 
+As variáveis são validadas em tempo de inicialização pelo arquivo `lib/env.ts` usando [Zod](https://github.com/colinhacks/zod). A aplicação exibirá erro e não iniciará caso qualquer variável obrigatória esteja ausente ou vazia.
+
 ## Testes
 
 Execute os testes unitários com cobertura e verifique se a documentação está atualizada:
