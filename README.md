@@ -32,7 +32,7 @@ pnpm dev
   - `AuthButtons.tsx`: botões de login/logout
   - `CanvasStage.tsx`: preview da imagem OG
   - `EditorControls.tsx`: formulário para editar conteúdo
-  - `ExportControls.tsx`: exportação de PNG e metatags (export em desenvolvimento)
+  - `ExportControls.tsx`: exportação de PNG (presets @1x/@2x) e metatags
 - `lib/`:
   - `authOptions.ts`: configuração do NextAuth
   - `editorStore.ts`: estado global com Zustand
@@ -51,7 +51,6 @@ Preencha cada chave com valores obtidos nos provedores OAuth (Google, GitHub, et
 
 ## Roadmap e Recursos Futuros
 
-- Exportação direta para PNG com alta resolução
 - Presets automáticos de layout e cores ("Surpreenda‑me")
 - Persistência das configurações no `localStorage`
 - Página de login personalizada

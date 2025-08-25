@@ -56,7 +56,7 @@ OGGenerator is a one‑page (expandable) app to **compose Open Graph images** wi
 │  ├─ lib/
 │  │  ├─ auth.ts                                  # NextAuth config
 │  │  ├─ storage.ts                               # KV/S3 helpers
-│  │  ├─ images.ts                                # canvas helpers (scale/export/invert)
+│  │  ├─ images.ts                                # canvas helpers (scale/export/invert, font-ready @2x)
 │  │  ├─ removeBg.ts                              # WASM loader + pipeline
 │  │  └─ meta.ts                                  # build OG/Twitter meta
 │  ├─ state/
@@ -387,7 +387,7 @@ pnpm build
 ## 17) Troubleshooting
 
 * **OAuth callback error**: ensure provider console has the exact redirect URL.
-* **Fonts not applied in export**: use `document.fonts.ready` and/or pre‑rasterize text.
+* **Fonts not applied in export**: the export utility awaits `document.fonts.ready`, but ensure custom fonts are loaded.
 * **WASM background removal slow**: run in Worker and lazy‑load the model (\~5–15MB). Cache after first run.
 * **SVG injection risk**: sanitize or rasterize into canvas before any edit.
 
