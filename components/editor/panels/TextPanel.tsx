@@ -11,9 +11,9 @@ export default function TextPanel() {
         <textarea className="mt-1 w-full rounded-lg border bg-background px-3 py-2" rows={3} placeholder="Short description" />
       </label>
       <div className="grid grid-cols-3 gap-2">
-        <button className="btn">XS</button>
-        <button className="btn">MD</button>
-        <button className="btn">XL</button>
+        <button className="btn" aria-label="Extra small title size">XS</button>
+        <button className="btn" aria-label="Medium title size">MD</button>
+        <button className="btn" aria-label="Extra large title size">XL</button>
       </div>
     </section>
   );

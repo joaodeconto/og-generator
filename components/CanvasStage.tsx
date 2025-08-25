@@ -23,6 +23,8 @@ export default function CanvasStage() {
     logoUrl,
     logoPosition,
     logoScale,
+    setLogoPosition,
+    setLogoScale,
     invertLogo,
     removeLogoBg,
     maskLogo
@@ -74,11 +76,35 @@ export default function CanvasStage() {
   const themeClasses = theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-white text-gray-900';
   const layoutClasses = layout === 'center' ? 'items-center text-center' : 'items-start text-left';
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (
+      e.key === 'ArrowUp' ||
+      e.key === 'ArrowDown' ||
+      e.key === 'ArrowLeft' ||
+      e.key === 'ArrowRight'
+    ) {
+      e.preventDefault();
+      if (e.shiftKey && (e.key === 'ArrowUp' || e.key === 'ArrowDown')) {
+        const delta = e.key === 'ArrowUp' ? 0.05 : -0.05;
+        const next = Math.min(3, Math.max(0.2, logoScale + delta));
+        setLogoScale(next);
+      } else {
+        const dx = e.key === 'ArrowLeft' ? -1 : e.key === 'ArrowRight' ? 1 : 0;
+        const dy = e.key === 'ArrowUp' ? -1 : e.key === 'ArrowDown' ? 1 : 0;
+        setLogoPosition(logoPosition.x + dx, logoPosition.y + dy);
+      }
+    }
+  };
+
   return (
     <div
       id="og-canvas"
-      className={`relative w-full h-0 pt-[52.5%] overflow-hidden rounded-lg shadow-md border ${themeClasses}`}
+      className={`relative w-full h-0 pt-[52.5%] overflow-hidden rounded-lg shadow-md border ${themeClasses} focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ring`}
       style={{ borderColor: accentColor }}
+      tabIndex={0}
+      role="img"
+      aria-label="OG image preview"
+      onKeyDown={handleKeyDown}
     >
       {/* Banner */}
       {bannerUrl && (

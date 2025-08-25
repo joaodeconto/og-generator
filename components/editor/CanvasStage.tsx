@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { useEditorStore } from "../../state/editorStore";
+import { useEditorStore } from "lib/editorStore";
 
 export default function CanvasStage() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -46,7 +46,12 @@ export default function CanvasStage() {
   }, [zoom, theme, layout, accentColor]);
 
   return (
-    <div ref={containerRef} className="flex h-full w-full items-center justify-center overflow-hidden">
+    <div
+      ref={containerRef}
+      className="flex h-full w-full items-center justify-center overflow-hidden"
+      role="img"
+      aria-label="Canvas preview"
+    >
       <canvas
         ref={canvasRef}
         width={base.w}

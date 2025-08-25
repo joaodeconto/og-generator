@@ -39,6 +39,15 @@ pnpm dev
 - `types/next-auth.d.ts`: tipagens adicionais para sessão
 - `tailwind.config.ts` e `postcss.config.js`: configuração de estilos
 
+## Atalhos de Teclado
+
+- **Cmd/Ctrl+Z**: desfazer
+- **Cmd/Ctrl+Shift+Z**: refazer
+- **Cmd/Ctrl+C**: copiar metatags
+- **Cmd/Ctrl+S**: salvar
+- **Setas**: mover o logo
+- **Shift+Setas para cima/baixo**: redimensionar o logo
+
 ## Variáveis de Ambiente
 
 O arquivo `.env.example` lista todas as variáveis necessárias. Copie para `.env.local` e complete com suas credenciais:
