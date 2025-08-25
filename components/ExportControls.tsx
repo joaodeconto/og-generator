@@ -4,6 +4,7 @@ import { useEditorStore } from 'lib/editorStore';
 import { useState } from 'react';
 import { exportElementAsPng, ImageSize } from 'lib/images';
 import { generateRandomStyle, type RandomStyle } from 'lib/randomStyle';
+import { toast } from './ToastProvider';
 
 /**
  * Buttons to export the generated Open Graph image and copy the associated
@@ -31,25 +32,26 @@ export default function ExportControls() {
     ].join('\n');
     try {
       await navigator.clipboard.writeText(tags);
-      alert('Tags OG copiadas para a área de transferência!');
+      toast({ message: 'Tags OG copiadas para a área de transferência!' });
     } catch (err) {
-      console.error(err);
-      alert('Falha ao copiar as tags OG.');
+      const message = err instanceof Error ? err.message : 'Falha ao copiar as tags OG.';
+      toast({ message, variant: 'error' });
     }
   };
 
   const handleExport = async () => {
     const element = document.getElementById('og-canvas');
     if (!element) {
-      alert('Não foi possível encontrar o canvas para exportação.');
+      toast({ message: 'Não foi possível encontrar o canvas para exportação.', variant: 'error' });
       return;
     }
     try {
       const size = sizePresets[selectedSize];
       await exportElementAsPng(element, size, `og-image-${selectedSize}.png`);
+      toast({ message: 'Imagem exportada.' });
     } catch (err) {
-      console.error(err);
-      alert('Falha ao exportar a imagem.');
+      const message = err instanceof Error ? err.message : 'Falha ao exportar a imagem.';
+      toast({ message, variant: 'error' });
     }
   };
 

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useMetadataStore } from 'lib/metadataStore';
 import { useEditorStore } from 'lib/editorStore';
+import { toast } from './ToastProvider';
 
 /**
  * Panel for editing metadata related to the current Open Graph image. By
@@ -43,6 +44,7 @@ export default function MetadataPanel() {
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'Failed to fetch metadata';
       setWarnings([message]);
+      toast({ message, variant: 'error' });
     }
   }
 

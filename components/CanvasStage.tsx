@@ -4,6 +4,7 @@ import { useEditorStore } from 'lib/editorStore';
 import { useEffect, useState } from 'react';
 import { invertImageColors, blobToDataURL } from 'lib/images';
 import { removeImageBackground } from 'lib/removeBg';
+import { toast } from './ToastProvider';
 
 /**
  * A simple visual representation of the generated Open Graph image. This
@@ -58,7 +59,8 @@ export default function CanvasStage() {
           setLogoDataUrl(source as string);
         }
       } catch (e) {
-        console.error(e);
+        const message = e instanceof Error ? e.message : 'Erro ao processar a imagem.';
+        toast({ message, variant: 'error' });
         if (!cancelled) {
           setLogoDataUrl(undefined);
         }
@@ -90,7 +92,7 @@ export default function CanvasStage() {
         />
       )}
       {/* Overlay to darken/lighten banner for contrast */}
-      {bannerUrl && <div className={`absolute inset-0 ${theme === 'dark' ? 'bg-black/50' : 'bg-white/60'}`} />} 
+      {bannerUrl && <div className={`absolute inset-0 ${theme === 'dark' ? 'bg-black/50' : 'bg-white/60'}`} />}
       {/* Content container */}
       <div
         className={`absolute inset-0 flex flex-col justify-center px-12 py-8 space-y-4 ${layoutClasses}`}

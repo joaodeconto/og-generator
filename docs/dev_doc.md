@@ -393,4 +393,12 @@ pnpm build
 
 ---
 
+## 18) Error Handling
+
+* `ErrorBoundary` envolve o `EditorShell` exibindo um fallback amigável.
+* `ToastProvider` fornece notificações para falhas em remoção de fundo, exportação e busca de metadata.
+
+---
+
 **End of base doc.**
+
