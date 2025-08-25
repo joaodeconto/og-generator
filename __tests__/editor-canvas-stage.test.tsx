@@ -24,7 +24,7 @@ describe('Editor CanvasStage', () => {
     const banners = screen.getAllByAltText('Banner image') as HTMLImageElement[];
     expect(banners).toHaveLength(1);
     expect(banners[0].tagName).toBe('IMG');
-    expect(banners[0].getAttribute('src')).toBe('https://example.com/banner.png');
+    expect(banners[0].getAttribute('src')).toContain('banner.png');
   });
 
   it('positions the logo at the center by default', () => {

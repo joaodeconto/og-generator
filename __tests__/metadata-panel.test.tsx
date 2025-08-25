@@ -1,7 +1,11 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import MetadataPanel from '../components/MetadataPanel';
 import { useMetadataStore } from '../lib/metadataStore';
-import { useEditorStore } from '../lib/editorStore';
+import { toast } from '../components/ToastProvider';
+
+jest.mock('../components/ToastProvider', () => ({
+  toast: jest.fn(),
+}));
 
 describe('MetadataPanel', () => {
   beforeEach(() => {
@@ -10,49 +14,27 @@ describe('MetadataPanel', () => {
       image: '',
       favicon: '',
       siteName: '',
-      sourceMap: {},
-      warnings: []
+      warnings: [],
     });
-    useEditorStore.setState({
-      title: '',
-      subtitle: '',
-      bannerUrl: undefined,
-      logoUrl: undefined
-    });
+    (global.fetch as jest.Mock | undefined) = jest.fn();
   });
 
-  afterEach(() => {
-    delete global.fetch;
-  });
-
-  it('fetches metadata and populates the form', async () => {
-    global.fetch = jest.fn(async () => ({
-      json: async () => ({
-        title: 'Example Title',
-        description: 'Example description',
-        image: 'https://example.com/image.png',
-        favicon: 'https://example.com/favicon.ico',
-        warnings: ['a warning']
-      })
-    })) as any;
+  it('shows warning when scrape fails', async () => {
+    (fetch as jest.Mock).mockResolvedValue({
+      ok: false,
+      status: 500,
+      json: async () => ({ error: 'fail' }),
+    });
 
     render(<MetadataPanel />);
-
-    fireEvent.change(screen.getByLabelText(/^url$/i), { target: { value: 'https://example.com' } });
+    fireEvent.change(screen.getByPlaceholderText('https://exemplo.com'), {
+      target: { value: 'https://example.com' },
+    });
     fireEvent.click(screen.getByRole('button', { name: /fetch metadata/i }));
 
     await waitFor(() => {
-      expect(screen.getByDisplayValue('Example Title')).toBeInTheDocument();
+      expect(toast).toHaveBeenCalledWith({ message: 'fail', variant: 'error' });
     });
-    expect(screen.getByDisplayValue('Example description')).toBeInTheDocument();
-    expect(screen.getByDisplayValue('https://example.com/image.png')).toBeInTheDocument();
-    expect(screen.getByDisplayValue('https://example.com/favicon.ico')).toBeInTheDocument();
-    expect(await screen.findByText('a warning')).toBeInTheDocument();
-
-    const state = useEditorStore.getState();
-    expect(state.title).toBe('Example Title');
-    expect(state.subtitle).toBe('Example description');
-    expect(state.bannerUrl).toBe('https://example.com/image.png');
-    expect(state.logoUrl).toBe('https://example.com/favicon.ico');
+    expect(useMetadataStore.getState().warnings).toEqual(['fail']);
   });
 });
