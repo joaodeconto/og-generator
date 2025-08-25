@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import ExportPanel from '../components/editor/panels/ExportPanel';
 import { useEditorStore } from '../lib/editorStore';
 import { exportElementAsPng } from '../lib/images';
-import { buildMetaTags } from '../lib/metaTags';
+import { buildMetaTags } from '../lib/meta';
 
 jest.mock('../lib/images', () => ({
   exportElementAsPng: jest.fn(),

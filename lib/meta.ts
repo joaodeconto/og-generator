@@ -1,8 +1,10 @@
 export interface MetaOptions {
-  title: string;
-  description: string;
+  title?: string;
+  description?: string;
   image?: string;
   url?: string;
+  siteName?: string;
+  twitterSite?: string;
 }
 
 /**
@@ -22,26 +24,44 @@ export function escapeHtml(str: string): string {
 /**
  * Build a block of Open Graph and Twitter meta tags.
  */
-export function buildMetaTags({ title, description, image, url }: MetaOptions): string {
-  const safeTitle = escapeHtml(title);
-  const safeDescription = escapeHtml(description);
+export function buildMetaTags({
+  title,
+  description,
+  image,
+  url,
+  siteName,
+  twitterSite,
+}: MetaOptions): string {
+  const safeTitle = title ? escapeHtml(title) : undefined;
+  const safeDescription = description ? escapeHtml(description) : undefined;
   const safeImage = image ? escapeHtml(image) : undefined;
   const safeUrl = url ? escapeHtml(url) : undefined;
+  const safeSiteName = siteName ? escapeHtml(siteName) : undefined;
+  const safeTwitterSite = twitterSite ? escapeHtml(twitterSite) : undefined;
 
-  const tags: string[] = [
-    `<meta property="og:title" content="${safeTitle}" />`,
-    `<meta property="og:description" content="${safeDescription}" />`,
-    `<meta property="og:type" content="website" />`,
-    `<meta name="twitter:card" content="summary_large_image" />`,
-    `<meta name="twitter:title" content="${safeTitle}" />`,
-    `<meta name="twitter:description" content="${safeDescription}" />`,
-  ];
+  const tags: string[] = [];
+  if (safeTitle) {
+    tags.push(`<meta property="og:title" content="${safeTitle}" />`);
+    tags.push(`<meta name="twitter:title" content="${safeTitle}" />`);
+  }
+  if (safeDescription) {
+    tags.push(`<meta property="og:description" content="${safeDescription}" />`);
+    tags.push(`<meta name="twitter:description" content="${safeDescription}" />`);
+  }
+  tags.push(`<meta property="og:type" content="website" />`);
+  if (safeUrl) {
+    tags.push(`<meta property="og:url" content="${safeUrl}" />`);
+  }
+  if (safeSiteName) {
+    tags.push(`<meta property="og:site_name" content="${safeSiteName}" />`);
+  }
   if (safeImage) {
     tags.push(`<meta property="og:image" content="${safeImage}" />`);
     tags.push(`<meta name="twitter:image" content="${safeImage}" />`);
   }
-  if (safeUrl) {
-    tags.push(`<meta property="og:url" content="${safeUrl}" />`);
+  tags.push(`<meta name="twitter:card" content="summary_large_image" />`);
+  if (safeTwitterSite) {
+    tags.push(`<meta name="twitter:site" content="${safeTwitterSite}" />`);
   }
   return tags.join('\n');
 }

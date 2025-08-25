@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useEditorStore } from "lib/editorStore";
 import { exportElementAsPng, type ImageSize } from "lib/images";
-import { buildMetaTags } from 'lib/metaTags';
+import { buildMetaTags } from "lib/meta";
 
 const SIZE_PRESETS: Record<string, ImageSize> = {
   "1200x630": { width: 1200, height: 630 },
