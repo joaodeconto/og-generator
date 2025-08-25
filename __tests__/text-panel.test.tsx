@@ -23,7 +23,7 @@ describe('TextPanel', () => {
 
   it('adjusts font sizes via size buttons', () => {
     render(<TextPanel />);
-    fireEvent.click(screen.getAllByText('XL')[0]);
+    fireEvent.click(screen.getByText('XL'));
     const state = useEditorStore.getState();
     expect(state.titleFontSize).toBe(64);
     expect(state.subtitleFontSize).toBe(32);

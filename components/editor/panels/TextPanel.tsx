@@ -46,10 +46,6 @@ export default function TextPanel() {
         <button className="btn" aria-label="Extra small title size" onClick={() => applySize("xs")}>XS</button>
         <button className="btn" aria-label="Medium title size" onClick={() => applySize("md")}>MD</button>
         <button className="btn" aria-label="Extra large title size" onClick={() => applySize("xl")}>XL</button>
-
-        <button className="btn" aria-label="Extra small title size">XS</button>
-        <button className="btn" aria-label="Medium title size">MD</button>
-        <button className="btn" aria-label="Extra large title size">XL</button>
       </div>
     </section>
   );
