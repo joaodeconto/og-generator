@@ -5,6 +5,7 @@ import LinkedinProvider from 'next-auth/providers/linkedin';
 import TwitterProvider from 'next-auth/providers/twitter';
 import FacebookProvider from 'next-auth/providers/facebook';
 import InstagramProvider from 'next-auth/providers/instagram';
+import type { Provider } from 'next-auth/providers';
 import {
   GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET,
@@ -27,37 +28,54 @@ import {
  * options so they can be reused in both the API route and server components
  * via `getServerSession`.
  */
-export const authOptions: NextAuthOptions = {
-  // Configure one or more authentication providers
-  providers: [
-    GoogleProvider({
-      clientId: GOOGLE_CLIENT_ID,
-      clientSecret: GOOGLE_CLIENT_SECRET,
-      authorization: { params: { prompt: "consent", access_type: "offline", response_type: "code" } }
-    }),
-    GithubProvider({
-      clientId: GITHUB_CLIENT_ID,
-      clientSecret: GITHUB_CLIENT_SECRET,
-    }),
-    LinkedinProvider({
-      clientId: LINKEDIN_CLIENT_ID,
-      clientSecret: LINKEDIN_CLIENT_SECRET,
-      authorization: { params: { scope: "openid profile email" } }
-    }),
+const providers: Provider[] = [
+  GoogleProvider({
+    clientId: GOOGLE_CLIENT_ID,
+    clientSecret: GOOGLE_CLIENT_SECRET,
+    authorization: { params: { prompt: 'consent', access_type: 'offline', response_type: 'code' } }
+  }),
+  GithubProvider({
+    clientId: GITHUB_CLIENT_ID,
+    clientSecret: GITHUB_CLIENT_SECRET,
+  }),
+  LinkedinProvider({
+    clientId: LINKEDIN_CLIENT_ID,
+    clientSecret: LINKEDIN_CLIENT_SECRET,
+    authorization: { params: { scope: 'openid profile email' } }
+  }),
+];
+
+if (TWITTER_CONSUMER_KEY && TWITTER_CONSUMER_SECRET) {
+  providers.push(
     TwitterProvider({
       clientId: TWITTER_CONSUMER_KEY,
       clientSecret: TWITTER_CONSUMER_SECRET,
-      version: '1.0A'
-    }),
+      version: '1.0A',
+    })
+  );
+}
+
+if (FACEBOOK_CLIENT_ID && FACEBOOK_CLIENT_SECRET) {
+  providers.push(
     FacebookProvider({
       clientId: FACEBOOK_CLIENT_ID,
-      clientSecret: FACEBOOK_CLIENT_SECRET
-    }),
+      clientSecret: FACEBOOK_CLIENT_SECRET,
+    })
+  );
+}
+
+if (INSTAGRAM_CLIENT_ID && INSTAGRAM_CLIENT_SECRET) {
+  providers.push(
     InstagramProvider({
       clientId: INSTAGRAM_CLIENT_ID,
-      clientSecret: INSTAGRAM_CLIENT_SECRET
+      clientSecret: INSTAGRAM_CLIENT_SECRET,
     })
-  ],
+  );
+}
+
+export const authOptions: NextAuthOptions = {
+  // Configure one or more authentication providers
+  providers,
   secret: NEXTAUTH_SECRET,
   session: {
     strategy: 'jwt'

@@ -7,12 +7,12 @@ const envSchema = z.object({
   GITHUB_CLIENT_SECRET: z.string().min(1),
   LINKEDIN_CLIENT_ID: z.string().min(1),
   LINKEDIN_CLIENT_SECRET: z.string().min(1),
-  TWITTER_CONSUMER_KEY: z.string().min(1),
-  TWITTER_CONSUMER_SECRET: z.string().min(1),
-  FACEBOOK_CLIENT_ID: z.string().min(1),
-  FACEBOOK_CLIENT_SECRET: z.string().min(1),
-  INSTAGRAM_CLIENT_ID: z.string().min(1),
-  INSTAGRAM_CLIENT_SECRET: z.string().min(1),
+  TWITTER_CONSUMER_KEY: z.string().min(1).optional(),
+  TWITTER_CONSUMER_SECRET: z.string().min(1).optional(),
+  FACEBOOK_CLIENT_ID: z.string().min(1).optional(),
+  FACEBOOK_CLIENT_SECRET: z.string().min(1).optional(),
+  INSTAGRAM_CLIENT_ID: z.string().min(1).optional(),
+  INSTAGRAM_CLIENT_SECRET: z.string().min(1).optional(),
   NEXTAUTH_SECRET: z.string().min(1),
 });
 
