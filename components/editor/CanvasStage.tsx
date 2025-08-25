@@ -1,11 +1,13 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import { useEditorStore } from "../../state/editorStore";
 
 export default function CanvasStage() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [zoom, setZoom] = useState(1);
   const base = { w: 1200, h: 630 };
+  const { theme, layout, accentColor } = useEditorStore();
 
   useEffect(() => {
     const el = containerRef.current;
@@ -26,19 +28,22 @@ export default function CanvasStage() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = "#0b0c0f";
+    ctx.fillStyle = theme === "dark" ? "#0b0c0f" : "#ffffff";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = "white";
+    ctx.fillStyle = theme === "dark" ? "#ffffff" : "#000000";
     ctx.font = "bold 48px system-ui, -apple-system, Segoe UI, Roboto";
-    ctx.fillText("OGGenerator — Title", 64, 180);
+    const titleX = layout === "center" ? canvas.width / 2 : 64;
+    const subtitleX = titleX;
+    ctx.textAlign = layout === "center" ? "center" : "left";
+    ctx.fillText("OGGenerator — Title", titleX, 180);
     ctx.font = "24px system-ui, -apple-system, Segoe UI, Roboto";
-    ctx.fillStyle = "#D1D5DB";
-    ctx.fillText("Subtitle goes here", 64, 240);
+    ctx.fillStyle = accentColor;
+    ctx.fillText("Subtitle goes here", subtitleX, 240);
   };
 
   useEffect(() => {
     draw();
-  }, [zoom]);
+  }, [zoom, theme, layout, accentColor]);
 
   return (
     <div ref={containerRef} className="flex h-full w-full items-center justify-center overflow-hidden">
