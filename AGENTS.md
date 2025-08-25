@@ -39,7 +39,7 @@ src/components/editor/panels/CanvasPanel.tsx
 src/components/editor/panels/TextPanel.tsx
 src/components/editor/panels/LogoPanel.tsx
 src/components/editor/panels/ExportPanel.tsx
-src/state/editorStore.ts
+lib/editorStore.ts
 ```
 
 ---
