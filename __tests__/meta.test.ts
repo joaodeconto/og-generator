@@ -17,6 +17,12 @@ describe('meta helpers', () => {
     expect(writeText).toHaveBeenCalled();
   });
 
+  it('propagates clipboard errors', async () => {
+    const writeText = jest.fn().mockRejectedValue(new Error('denied'));
+    Object.assign(navigator, { clipboard: { writeText } });
+    await expect(copyMetaTags({ title: 't' })).rejects.toThrow('denied');
+  });
+
   it('adds url tag when url is provided', () => {
     const tags = buildMetaTags({ title: 'T', description: 'D', url: 'https://x.com' });
     expect(tags).toContain('<meta property="og:url" content="https://x.com" />');

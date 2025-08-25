@@ -68,6 +68,9 @@ export function buildMetaTags({
 
 export async function copyMetaTags(options: MetaOptions): Promise<void> {
   const tags = buildMetaTags(options);
-  await navigator.clipboard.writeText(tags);
-
+  try {
+    await navigator.clipboard.writeText(tags);
+  } catch (err) {
+    return Promise.reject(err);
+  }
 }
