@@ -312,7 +312,7 @@ pnpm dev
 
 ### Sprint 2 — Editor Core (2–3 days)
 
-* [ ] CanvasStage with background (solid/gradient/image) + presets.
+* [x] CanvasStage wired to editor store with banner, title/subtitle and logo processing.
 * [ ] Text layers (Title/Subtitle) with clamp + balance.
 * [ ] Layout presets (left/center), 8px baseline grid.
 * [ ] Local autosave (debounced) and keyboard shortcuts.
