@@ -30,7 +30,7 @@ OGGenerator is a one‑page (expandable) app to **compose Open Graph images** wi
 * **Image Processing:** HTMLCanvas + OffscreenCanvas + WebWorker. For **background removal**, use `@imgly/background-removal` (WASM U^2‑Net) or `background-removal` (WASM).
 * **Validation/Config:** Zod + TypeScript.
 * **Telemetry:** Vercel Analytics (optional: PostHog if desired).
-* **Testing:** Vitest + React Testing Library.
+* **Testing:** Jest + React Testing Library.
 
 ---
 
@@ -289,7 +289,7 @@ pnpm dev
 
 ## 12) Testing
 
-* Unit: utils (meta builder, image ops) via Vitest.
+* Unit: utils (meta builder, image ops) via Jest.
 * Component: ControlsPanel, CanvasStage with React Testing Library + JSDOM.
 * E2E: Playwright for auth flow (Google + GitHub at least) and PNG export.
 

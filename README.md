@@ -49,6 +49,15 @@ cp .env.example .env.local
 
 Preencha cada chave com valores obtidos nos provedores OAuth (Google, GitHub, etc.) e defina um `NEXTAUTH_SECRET` forte.
 
+## Testes
+
+Execute os testes unitários com cobertura e verifique se a documentação está atualizada:
+
+```bash
+pnpm test   # roda Jest com coleta de cobertura
+pnpm docs:guard   # garante que docs/log, dev_doc ou README foram atualizados
+```
+
 ## Roadmap e Recursos Futuros
 
 - Exportação direta para PNG com alta resolução
