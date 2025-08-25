@@ -43,5 +43,14 @@ describe('removeImageBackground', () => {
     const { removeImageBackground } = await import('../lib/removeBg');
     await expect(removeImageBackground('img')).rejects.toThrow('fail');
   });
+
+  it('reuses existing worker on subsequent calls', async () => {
+    mockWorker({ dataUrl: 'again' });
+    const { removeImageBackground } = await import('../lib/removeBg');
+    await removeImageBackground('first');
+    const result = await removeImageBackground('second');
+    expect(result).toBe('again');
+    expect(Worker).toHaveBeenCalledTimes(1);
+  });
 });
 
