@@ -1,21 +1,30 @@
+
 "use client";
 
+import { useEffect, useRef, useState } from 'react';
 import { useEditorStore } from 'lib/editorStore';
-import { useEffect, useState } from 'react';
 import { invertImageColors, blobToDataURL } from 'lib/images';
 import { removeImageBackground } from 'lib/removeBg';
 import { toast } from './ToastProvider';
 
 /**
- * A simple visual representation of the generated Open Graph image. This
- * component is intentionally basic: it lays out the title, subtitle and
- * uploaded logo on top of an optional banner. When used in combination with
- * EditorControls it allows the user to configure the look of their OG image.
+ * CanvasStage used within the editor. It mirrors the rendering logic of the
+ * public CanvasStage component while fitting the result inside the available
+ * space via CSS scaling. Title, subtitle, banner and logo all derive from the
+ * editor store.
  */
+const BASE_WIDTH = 1200;
+const BASE_HEIGHT = 630;
+
 export default function CanvasStage() {
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const [zoom, setZoom] = useState(1);
+  const base = { w: 1200, h: 630 };
   const {
     title,
     subtitle,
+    titleFontSize,
+    subtitleFontSize,
     theme,
     layout,
     accentColor,
@@ -29,6 +38,19 @@ export default function CanvasStage() {
     maskLogo
   } = useEditorStore();
   const [logoDataUrl, setLogoDataUrl] = useState<string | undefined>(undefined);
+
+  // Resize observer to scale the canvas preview to fit its container
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el || typeof ResizeObserver === 'undefined') return;
+    const ro = new ResizeObserver(() => {
+      const { clientWidth, clientHeight } = el;
+      const scale = Math.min(clientWidth / BASE_WIDTH, clientHeight / BASE_HEIGHT);
+      setZoom(scale * 0.98);
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
 
   // Prepare logo image applying optional background removal and inversion
   useEffect(() => {
@@ -72,60 +94,67 @@ export default function CanvasStage() {
     };
   }, [logoFile, logoUrl, removeLogoBg, invertLogo]);
 
-  // Determine CSS classes for themes and layout
   const themeClasses = theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-white text-gray-900';
   const layoutClasses = layout === 'center' ? 'items-center text-center' : 'items-start text-left';
 
   return (
-    <div
-      id="og-canvas"
-      className={`relative w-full h-0 pt-[52.5%] overflow-hidden rounded-lg shadow-md border ${themeClasses}`}
-      style={{ borderColor: accentColor }}
-    >
-      {/* Banner */}
-      {bannerUrl && (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={bannerUrl}
-          alt="Banner image"
-          className="absolute inset-0 w-full h-full object-cover"
-        />
-      )}
-      {/* Overlay to darken/lighten banner for contrast */}
-      {bannerUrl && <div className={`absolute inset-0 ${theme === 'dark' ? 'bg-black/50' : 'bg-white/60'}`} />}
-      {/* Content container */}
+    <div ref={containerRef} className="flex h-full w-full items-center justify-center overflow-hidden">
       <div
-        className={`absolute inset-0 flex flex-col justify-center px-12 py-8 space-y-4 ${layoutClasses}`}
+        id="og-canvas"
+        className={`relative rounded-lg shadow-md border ${themeClasses}`}
+        style={{
+          width: BASE_WIDTH,
+          height: BASE_HEIGHT,
+          transform: `scale(${zoom})`,
+          transformOrigin: 'top left',
+          borderColor: accentColor
+        }}
       >
-        <h1
-          className="text-3xl md:text-5xl font-bold leading-tight break-words"
-          style={{ color: accentColor }}
-        >
-          {title || 'Seu título aqui'}
-        </h1>
-        <p className="text-lg md:text-2xl max-w-prose">
-          {subtitle || 'Subtítulo ou descrição aqui'}
-        </p>
-      </div>
-      {/* Logo overlay */}
-      {logoDataUrl && (
-        <div
-          className="absolute"
-          style={{
-            top: `${logoPosition.y}%`,
-            left: `${logoPosition.x}%`,
-            transform: `translate(-50%, -50%) scale(${logoScale})`
-          }}
-        >
-          {/* We ignore type errors because Next.js <Image> requires fixed width/height or fill. */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
+        {/* Banner */}
+        {bannerUrl && (
+          // eslint-disable-next-line @next/next/no-img-element
           <img
-            src={logoDataUrl}
-            alt="Logo"
-            className={`object-contain w-24 h-24 ${maskLogo ? 'rounded-full' : ''} shadow`}
+            src={bannerUrl}
+            alt="Banner image"
+            className="absolute inset-0 w-full h-full object-cover"
           />
+        )}
+        {/* Overlay to darken/lighten banner for contrast */}
+        {bannerUrl && <div className={`absolute inset-0 ${theme === 'dark' ? 'bg-black/50' : 'bg-white/60'}`} />}
+        {/* Content container */}
+        <div
+          className={`absolute inset-0 flex flex-col justify-center px-12 py-8 space-y-4 ${layoutClasses}`}
+        >
+
+          <h1
+            className="font-bold leading-tight break-words"
+            style={{ color: accentColor, fontSize: `${titleFontSize}px` }}
+          >
+            {title}
+          </h1>
+          <p className="text-lg md:text-2xl max-w-prose">
+            {subtitle}
+          </p>
         </div>
-      )}
+        {/* Logo overlay */}
+        {logoDataUrl && (
+          <div
+            className="absolute"
+            style={{
+              top: `${logoPosition.y}%`,
+              left: `${logoPosition.x}%`,
+              transform: `translate(-50%, -50%) scale(${logoScale})`
+            }}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={logoDataUrl}
+              alt="Logo"
+              className={`object-contain w-24 h-24 ${maskLogo ? 'rounded-full' : ''} shadow`}
+            />
+          </div>
+        )}
+      </div>
     </div>
   );
 }
