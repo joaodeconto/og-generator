@@ -10,6 +10,12 @@ const config = {
     '^lib/(.*)$': '<rootDir>/lib/$1',
     '^app/(.*)$': '<rootDir>/app/$1',
   },
+  coverageThreshold: {
+    global: {
+      branches: 60,
+      lines: 70,
+    },
+  },
 };
 
 export default createJestConfig(config);
