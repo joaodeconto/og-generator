@@ -42,8 +42,7 @@ pnpm dev
   - `EditorControls.tsx`: formulário para editar conteúdo
   - `editor/Inspector.tsx`: painel lateral com abas (Canvas, Text, Logo, Metadata, Presets, Export)
   - `MetadataPanel.tsx` e `PresetsPanel.tsx`: painéis reutilizados nas respectivas abas
-  - `ExportControls.tsx`: exportação de PNG e metatags (export em desenvolvimento)
-
+  - `ExportControls.tsx`: exportação de PNG (presets @1x/@2x) e metatags
 - `lib/`:
   - `authOptions.ts`: configuração do NextAuth
   - `editorStore.ts`: estado global com Zustand
@@ -80,7 +79,6 @@ pnpm docs:guard   # garante que docs/log, dev_doc ou README foram atualizados
 
 ## Roadmap e Recursos Futuros
 
-- Exportação direta para PNG com alta resolução
 - Presets automáticos de layout e cores ("Surpreenda‑me")
 - Página de login personalizada
 - Melhorias no editor de logo (inversão de cores)

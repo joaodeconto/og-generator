@@ -1,9 +1,10 @@
-import {
-  blobToDataURL,
-  invertImageColors,
-  sanitizeSvg,
-  svgToPng,
-} from '../lib/images';
+
+import { blobToDataURL, invertImageColors, exportElementAsPng, sanitizeSvg, svgToPng } from '../lib/images';
+import * as htmlToImage from 'html-to-image';
+
+jest.mock('html-to-image', () => ({
+  toPng: jest.fn().mockResolvedValue('data:image/png;base64,'),
+}));
 
 describe('image utilities', () => {
   it('converts Blob to data URL', async () => {
@@ -26,9 +27,10 @@ describe('image utilities', () => {
       width: 0,
       height: 0,
     } as any;
+    const createElement = document.createElement.bind(document);
     jest.spyOn(document, 'createElement').mockImplementation((tag: string) => {
       if (tag === 'canvas') return mockCanvas;
-      return document.createElement(tag) as any;
+      return createElement(tag);
     });
 
     class MockImage {
@@ -126,5 +128,33 @@ describe('image utilities', () => {
 
     const blob = await svgToPng('<svg xmlns="http://www.w3.org/2000/svg"></svg>');
     expect(blob.type).toBe('image/png');
+
+    it('waits for fonts and respects pixelRatio when exporting', async () => {
+      const element = document.createElement('div');
+      element.getBoundingClientRect = () => ({ width: 100, height: 50 } as any);
+
+      let resolveFonts: () => void;
+      // @ts-ignore
+      document.fonts = { ready: new Promise<void>((r) => (resolveFonts = r)) };
+
+      const exportPromise = exportElementAsPng(
+        element,
+        { width: 200, height: 100 },
+        'test.png',
+        { pixelRatio: 2 }
+      );
+
+      const toPngMock = htmlToImage.toPng as jest.Mock;
+      expect(toPngMock).not.toHaveBeenCalled();
+
+      resolveFonts();
+      await exportPromise;
+
+      expect(toPngMock).toHaveBeenCalledWith(
+        element,
+        expect.objectContaining({ pixelRatio: 2 })
+      );
+    });
   });
-});
+})
+

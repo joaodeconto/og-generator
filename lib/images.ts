@@ -12,11 +12,18 @@ export interface ImageSize {
  * @param size    Desired output resolution
  * @param filename Name for the downloaded file
  */
+export interface ExportOptions {
+  pixelRatio?: number;
+}
+
 export async function exportElementAsPng(
   element: HTMLElement,
   size: ImageSize,
-  filename = 'og-image.png'
+  filename = 'og-image.png',
+  { pixelRatio = 1 }: ExportOptions = {}
 ): Promise<void> {
+  await document.fonts.ready;
+
   const { width: originalWidth, height: originalHeight } =
     element.getBoundingClientRect();
 
@@ -32,7 +39,7 @@ export async function exportElementAsPng(
       width: `${originalWidth}px`,
       height: `${originalHeight}px`
     },
-    pixelRatio: 1
+    pixelRatio
   });
 
   const link = document.createElement('a');

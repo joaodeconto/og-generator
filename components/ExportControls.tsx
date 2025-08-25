@@ -20,6 +20,7 @@ export default function ExportControls() {
   };
 
   const [selectedSize, setSelectedSize] = useState<keyof typeof sizePresets>('1200x630');
+  const [selectedScale, setSelectedScale] = useState(1);
   const { title, subtitle, theme, layout, accentColor, setTheme, setLayout, setAccentColor } = useEditorStore();
   const [prevStyle, setPrevStyle] = useState<RandomStyle | null>(null);
 
@@ -43,7 +44,12 @@ export default function ExportControls() {
     }
     try {
       const size = sizePresets[selectedSize];
-      await exportElementAsPng(element, size, `og-image-${selectedSize}.png`);
+      await exportElementAsPng(
+        element,
+        size,
+        `og-image-${selectedSize}@${selectedScale}x.png`,
+        { pixelRatio: selectedScale }
+      );
       toast({ message: 'Imagem exportada.' });
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Falha ao exportar a imagem.';
@@ -79,6 +85,15 @@ export default function ExportControls() {
             {key}
           </option>
         ))}
+      </select>
+      <select
+        aria-label="resolução"
+        value={selectedScale}
+        onChange={(e) => setSelectedScale(Number(e.target.value))}
+        className="rounded-md border border-gray-300 bg-white px-2 py-2 text-sm"
+      >
+        <option value={1}>@1x</option>
+        <option value={2}>@2x</option>
       </select>
       <button
         onClick={handleExport}
