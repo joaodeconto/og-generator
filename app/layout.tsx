@@ -1,8 +1,7 @@
 import 'app/globals.css';
 import { ReactNode } from 'react';
 import Providers from 'components/Providers';
-import { getServerSession } from 'next-auth';
-import { authOptions } from 'lib/authOptions';
+import { auth } from 'lib/auth';
 
 export const metadata = {
   title: 'OG Image Generator',
@@ -13,8 +12,7 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
-  // Get the user's session on the server so it can be passed into SessionProvider
-  const session = await getServerSession(authOptions);
+  const session = await auth();
   return (
     <html lang="en" className="h-full bg-white">
       <body className="min-h-full text-gray-900 antialiased">

@@ -1,38 +1,40 @@
-import { z } from 'zod';
+import { z } from "zod";
 
-const envSchema = z.object({
-  GOOGLE_CLIENT_ID: z.string().min(1),
-  GOOGLE_CLIENT_SECRET: z.string().min(1),
-  GITHUB_CLIENT_ID: z.string().min(1),
-  GITHUB_CLIENT_SECRET: z.string().min(1),
-  LINKEDIN_CLIENT_ID: z.string().min(1),
-  LINKEDIN_CLIENT_SECRET: z.string().min(1),
-  TWITTER_CONSUMER_KEY: z.string().min(1).optional(),
-  TWITTER_CONSUMER_SECRET: z.string().min(1).optional(),
-  FACEBOOK_CLIENT_ID: z.string().min(1).optional(),
-  FACEBOOK_CLIENT_SECRET: z.string().min(1).optional(),
-  INSTAGRAM_CLIENT_ID: z.string().min(1).optional(),
-  INSTAGRAM_CLIENT_SECRET: z.string().min(1).optional(),
-  NEXTAUTH_SECRET: z.string().min(1),
+const clean = (v?: string) => (v?.trim() ? v.trim() : undefined);
+
+const base = z.object({
+  NEXTAUTH_SECRET: z.string().min(1, "NEXTAUTH_SECRET is required"),
+  NEXTAUTH_URL: z.string().url().optional(),
+  GOOGLE_CLIENT_ID: z.string().optional(),
+  GOOGLE_CLIENT_SECRET: z.string().optional(),
+  GITHUB_ID: z.string().optional(),
+  GITHUB_SECRET: z.string().optional(),
+  TWITTER_CONSUMER_KEY: z.string().optional(),
+  TWITTER_CONSUMER_SECRET: z.string().optional(),
+  TWITTER_CLIENT_ID: z.string().optional(),
+  TWITTER_CLIENT_SECRET: z.string().optional(),
+  FACEBOOK_CLIENT_ID: z.string().optional(),
+  FACEBOOK_CLIENT_SECRET: z.string().optional(),
+  INSTAGRAM_CLIENT_ID: z.string().optional(),
+  INSTAGRAM_CLIENT_SECRET: z.string().optional(),
 });
 
-const env = envSchema.parse(process.env);
+export const env = base.parse({
+  NEXTAUTH_SECRET: clean(process.env.NEXTAUTH_SECRET),
+  NEXTAUTH_URL: clean(process.env.NEXTAUTH_URL),
 
-export const {
-  GOOGLE_CLIENT_ID,
-  GOOGLE_CLIENT_SECRET,
-  GITHUB_CLIENT_ID,
-  GITHUB_CLIENT_SECRET,
-  LINKEDIN_CLIENT_ID,
-  LINKEDIN_CLIENT_SECRET,
-  TWITTER_CONSUMER_KEY,
-  TWITTER_CONSUMER_SECRET,
-  FACEBOOK_CLIENT_ID,
-  FACEBOOK_CLIENT_SECRET,
-  INSTAGRAM_CLIENT_ID,
-  INSTAGRAM_CLIENT_SECRET,
-  NEXTAUTH_SECRET,
-} = env;
+  GOOGLE_CLIENT_ID: clean(process.env.GOOGLE_CLIENT_ID),
+  GOOGLE_CLIENT_SECRET: clean(process.env.GOOGLE_CLIENT_SECRET),
+  GITHUB_ID: clean(process.env.GITHUB_ID),
+  GITHUB_SECRET: clean(process.env.GITHUB_SECRET),
 
-export type Env = z.infer<typeof envSchema>;
-export default env;
+  TWITTER_CONSUMER_KEY: clean(process.env.TWITTER_CONSUMER_KEY),
+  TWITTER_CONSUMER_SECRET: clean(process.env.TWITTER_CONSUMER_SECRET),
+  TWITTER_CLIENT_ID: clean(process.env.TWITTER_CLIENT_ID),
+  TWITTER_CLIENT_SECRET: clean(process.env.TWITTER_CLIENT_SECRET),
+
+  FACEBOOK_CLIENT_ID: clean(process.env.FACEBOOK_CLIENT_ID),
+  FACEBOOK_CLIENT_SECRET: clean(process.env.FACEBOOK_CLIENT_SECRET),
+  INSTAGRAM_CLIENT_ID: clean(process.env.INSTAGRAM_CLIENT_ID),
+  INSTAGRAM_CLIENT_SECRET: clean(process.env.INSTAGRAM_CLIENT_SECRET),
+});

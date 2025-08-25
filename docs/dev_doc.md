@@ -10,7 +10,7 @@ OGGenerator is a one‑page (expandable) app to **compose Open Graph images** wi
 
 **MVP Goals**
 
-* Authenticated session via Google, GitHub e LinkedIn. Twitter/X, Facebook e Instagram são opcionais (ver nota abaixo).
+* Authenticated session via Google and GitHub. Twitter/X and Facebook are optional.
 * Editor with: title, subtitle, theme (light/dark), layout (left/center), background (color/gradient/image), size presets, and **logo editing** (upload via file/paste/URL, translate, scale, remove BG, invert B/W, mask).
 * Export PNG (1200×630 default; extras 1600×900, 1920×1005) and copy meta tags.
 * Basic persistence (local + per‑user cloud).
@@ -84,7 +84,7 @@ The editor's right-hand inspector groups controls into individual panels. Tabs a
 
 ## 4) Authentication (NextAuth.js)
 
-**Providers planned:** Google, GitHub, LinkedIn (padrão). Twitter/X, Facebook e Instagram são opcionais.
+**Providers planned:** Google and GitHub by default. Twitter/X and Facebook are optional.
 
 > **Instagram note**: Instagram doesn’t provide a standard OAuth flow for *sign‑in* via NextAuth. Practical approach: use **Facebook Login** (Meta) and connect the Instagram account via Instagram Graph/Basic Display API for media access. If sign‑in via Instagram is mandatory, you’ll need a custom provider using Instagram Basic Display (limited, not suitable for secure login). Recommendation: **enable "Connect Instagram"** after login, using Facebook token exchange.
 
@@ -100,11 +100,9 @@ GOOGLE_CLIENT_ID=...
 GOOGLE_CLIENT_SECRET=...
 GITHUB_ID=...
 GITHUB_SECRET=...
-LINKEDIN_ID=...
-LINKEDIN_SECRET=...
-TWITTER_CLIENT_ID=...
+TWITTER_CLIENT_ID=... # opcional
 TWITTER_CLIENT_SECRET=...
-FACEBOOK_CLIENT_ID=...
+FACEBOOK_CLIENT_ID=... # opcional
 FACEBOOK_CLIENT_SECRET=...
 
 # (Os blocos acima são opcionais; remova‑os se não for habilitar esses provedores.)
@@ -128,12 +126,26 @@ S3_BUCKET=...
 import NextAuth from "next-auth";
 import Google from "next-auth/providers/google";
 import GitHub from "next-auth/providers/github";
-import LinkedIn from "next-auth/providers/linkedin";
 import Twitter from "next-auth/providers/twitter";
 import Facebook from "next-auth/providers/facebook";
+import { env } from "./env";
 
-export const { handlers, auth, signIn, signOut } = NextAuth({
-  providers: [Google, GitHub, LinkedIn, Twitter, Facebook],
+const providers: any[] = [];
+
+if (env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET)
+  providers.push(Google({ clientId: env.GOOGLE_CLIENT_ID, clientSecret: env.GOOGLE_CLIENT_SECRET }));
+
+if (env.GITHUB_ID && env.GITHUB_SECRET)
+  providers.push(GitHub({ clientId: env.GITHUB_ID, clientSecret: env.GITHUB_SECRET }));
+
+if (env.TWITTER_CLIENT_ID && env.TWITTER_CLIENT_SECRET)
+  providers.push(Twitter({ clientId: env.TWITTER_CLIENT_ID, clientSecret: env.TWITTER_CLIENT_SECRET }));
+
+if (env.FACEBOOK_CLIENT_ID && env.FACEBOOK_CLIENT_SECRET)
+  providers.push(Facebook({ clientId: env.FACEBOOK_CLIENT_ID, clientSecret: env.FACEBOOK_CLIENT_SECRET }));
+
+export const { handlers, auth } = NextAuth({
+  providers,
   callbacks: {
     async session({ session, token }) {
       if (token?.sub) (session as any).userId = token.sub;
@@ -312,7 +324,7 @@ pnpm dev
 
 ### Sprint 1 — Auth & Storage (1–2 days)
 
-* [ ] Wire LinkedIn, Twitter/X, Facebook providers.
+* [ ] Wire Twitter/X and Facebook providers.
 * [ ] Session header (avatar, menu, sign‑out).
 * [ ] Choose storage strategy (KV + Blob *or* Supabase) and implement abstraction.
 * [ ] Save/load **Design** documents per user.
