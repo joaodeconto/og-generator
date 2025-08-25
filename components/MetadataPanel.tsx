@@ -40,8 +40,9 @@ export default function MetadataPanel() {
       setSubtitle(data.description || '');
       setBannerUrl(data.image || undefined);
       setLogoUrl(data.favicon || undefined);
-    } catch (err: any) {
-      setWarnings([err?.message || 'Failed to fetch metadata']);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Failed to fetch metadata';
+      setWarnings([message]);
     }
   }
 

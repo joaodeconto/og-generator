@@ -40,7 +40,8 @@ export async function GET(req: Request) {
     const favicon = resolve(result.meta.basic.favicon);
     const warnings = result.diagnostics.warnings ?? [];
     return NextResponse.json({ title, description, image, favicon, warnings });
-  } catch (err: any) {
-    return NextResponse.json({ error: err?.message || 'Failed to scrape' }, { status: 500 });
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : 'Failed to scrape';
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
