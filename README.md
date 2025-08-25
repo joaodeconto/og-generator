@@ -53,9 +53,21 @@ Preencha cada chave com valores obtidos nos provedores OAuth (Google, GitHub, et
 
 - Exportação direta para PNG com alta resolução
 - Presets automáticos de layout e cores ("Surpreenda‑me")
-- Persistência das configurações no `localStorage`
 - Página de login personalizada
 - Melhorias no editor de logo (remoção de fundo e inversão de cores)
+
+## Testes
+
+```bash
+pnpm test
+```
+
+## Atalhos de Teclado
+
+- **Desfazer:** Ctrl/Cmd + Z
+- **Refazer:** Ctrl/Cmd + Shift + Z
+- **Copiar metatags:** Ctrl/Cmd + C
+- **Salvar preset:** Ctrl/Cmd + S
 
 ## Licença
 
