@@ -1,24 +1,27 @@
 describe('authOptions', () => {
   const originalEnv = process.env;
-  const validEnv = {
+  const requiredEnv = {
     GOOGLE_CLIENT_ID: 'id',
     GOOGLE_CLIENT_SECRET: 'secret',
     GITHUB_CLIENT_ID: 'id',
     GITHUB_CLIENT_SECRET: 'secret',
     LINKEDIN_CLIENT_ID: 'id',
     LINKEDIN_CLIENT_SECRET: 'secret',
+    NEXTAUTH_SECRET: 'secret',
+  };
+
+  const optionalEnv = {
     TWITTER_CONSUMER_KEY: 'key',
     TWITTER_CONSUMER_SECRET: 'secret',
     FACEBOOK_CLIENT_ID: 'id',
     FACEBOOK_CLIENT_SECRET: 'secret',
     INSTAGRAM_CLIENT_ID: 'id',
     INSTAGRAM_CLIENT_SECRET: 'secret',
-    NEXTAUTH_SECRET: 'secret',
   };
 
   beforeEach(() => {
     jest.resetModules();
-    process.env = { ...originalEnv, ...validEnv };
+    process.env = { ...originalEnv, ...requiredEnv, ...optionalEnv };
   });
 
   afterEach(() => {
@@ -71,9 +74,20 @@ describe('authOptions', () => {
   });
 
   it('throws when required env vars are missing', () => {
-    const { GOOGLE_CLIENT_ID, ...rest } = validEnv;
+    const { GOOGLE_CLIENT_ID, ...rest } = { ...requiredEnv, ...optionalEnv };
     process.env = { ...originalEnv, ...rest };
+    delete (process.env as any).GOOGLE_CLIENT_ID;
     jest.resetModules();
     expect(() => require('../lib/authOptions')).toThrow();
+  });
+
+  it('omits optional providers when credentials are missing', () => {
+    process.env = { ...originalEnv, ...requiredEnv };
+    jest.resetModules();
+    const { authOptions } = require('../lib/authOptions');
+    const providerIds = authOptions.providers.map((p: any) => p.id);
+    expect(providerIds).not.toContain('twitter');
+    expect(providerIds).not.toContain('facebook');
+    expect(providerIds).not.toContain('instagram');
   });
 });

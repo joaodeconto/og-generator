@@ -1,16 +1,20 @@
 # agent\_docs.md — Docs & QA Agent for OGGenerator
 
-> Purpose: Keep **documentation in lockstep with code**. This agent writes concise change logs, updates the developer doc, refreshes the README with instructions/TODOs, and ensures **tests** exist (and pass) for every feature. It also enforces these rules in CI.
+> Purpose: Keep **documentation in lockstep with code**. This agent writes concise change logs, updates the developer doc, refreshes the README with instructions/TODOs, and ensures **tests** exist (and pass) for every feature. It also enforces these rules in CI. Plan, execute, implement and Fix features. 
 
 ---
 
 ## 0) Mission & Scope
 
+* Read documentation. 
 * **Document main changes** in `docs/log/` per PR/merge.
 * **Update** `docs/dev_doc.md` whenever decisions or implementations land.
 * **Refresh README.md** with install/run instructions, TODOs, and usage details.
 * Ensure **tests** are present: unit, component, and e2e.
 * Provide **automation** (scripts + CI) so missing docs/tests fail the build.
+* Fix bugs and inconsistencies
+* Suggest improvements
+
 
 ---
 
@@ -68,7 +72,6 @@ The agent ensures these always exist and are fresh:
 1. **Quickstart** (install, env, dev server)
 2. **Features** (checkboxes; match current status)
 3. **How it works** (editor layout, canvas, logo tools)
-4. **Keyboard Shortcuts**
 5. **Env Vars** (NextAuth + storage)
 6. **Testing** (commands + structure)
 7. **Roadmap & Status** (mirrors `docs/dev_doc.md` MVP checklist)
@@ -128,72 +131,6 @@ The agent ensures these always exist and are fresh:
 | Auth (NextAuth Google/GitHub)              | —             | —         | ✅   |
 | Export (PNG sizes + download)              | —             | —         | ✅   |
 | Meta copy (clipboard)                      | —             | —         | ✅   |
-
----
-
-## 6) CI: Docs & Tests Enforcement
-
-**.github/workflows/ci.yml (snippet)**
-
-```yml
-name: CI
-on:
-  pull_request:
-    paths: [ 'src/**', 'lib/**', 'state/**', 'workers/**', 'docs/**', 'README.md' ]
-  push:
-    branches: [ main ]
-
-jobs:
-  build-test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-      - run: pnpm i --frozen-lockfile=false
-      - run: pnpm typecheck && pnpm lint
-      - run: pnpm test -- --coverage --run
-      - name: Docs guard
-        run: pnpm docs:guard
-```
-
-**scripts/docs-guard.ts (pseudo)**
-
-```ts
-import { execSync } from 'node:child_process';
-const diff = execSync('git diff --name-only origin/${{ github.base_ref }}').toString().split('\n');
-const codeTouched = diff.some(p => /^(src|lib|state|workers)\//.test(p));
-const docsTouched = diff.some(p => /^docs\/log\//.test(p)) || diff.includes('docs/dev_doc.md') || diff.includes('README.md');
-if (codeTouched && !docsTouched) {
-  console.error('Docs guard: Code changed but docs/log or dev_doc/README not updated.');
-  process.exit(1);
-}
-```
-
-**package.json (scripts)**
-
-```json
-{
-  "scripts": {
-    "docs:log": "tsx scripts/docs-log.ts",
-    "docs:guard": "tsx scripts/docs-guard.ts",
-    "test": "vitest",
-    "test:unit": "vitest run",
-    "test:e2e": "playwright test"
-  }
-}
-```
-
-**scripts/docs-log.ts (skeleton)**
-
-```ts
-import { writeFileSync, mkdirSync } from 'node:fs';
-import { execSync } from 'node:child_process';
-const date = new Date().toISOString().slice(0,10);
-mkdirSync(`docs/log`, { recursive: true });
-const summary = execSync('git log -1 --pretty=%B').toString().trim();
-const body = `# ${date}\n\n## Summary\n- ${summary}\n\n## Changed\n- (auto-fill from PR description or commits)\n`;
-writeFileSync(`docs/log/${date}.md`, body, { flag: 'a' });
-```
 
 ---
 
