@@ -3,7 +3,6 @@
 import { useEditorStore } from 'lib/editorStore';
 import { useState } from 'react';
 import { exportElementAsPng, ImageSize } from 'lib/images';
-import { useSession } from 'next-auth/react';
 import { generateRandomStyle, type RandomStyle } from 'lib/randomStyle';
 
 /**
@@ -20,7 +19,6 @@ export default function ExportControls() {
 
   const [selectedSize, setSelectedSize] = useState<keyof typeof sizePresets>('1200x630');
   const { title, subtitle, theme, layout, accentColor, setTheme, setLayout, setAccentColor } = useEditorStore();
-  const { data: session } = useSession();
   const [prevStyle, setPrevStyle] = useState<RandomStyle | null>(null);
 
 
