@@ -11,7 +11,7 @@ OGGenerator is a one‑page (expandable) app to **compose Open Graph images** wi
 **MVP Goals**
 
 * Authenticated session (Google, GitHub, LinkedIn, Twitter/X, Facebook; *Instagram: see note below*).
-* Editor with: title, subtitle, theme (light/dark), layout (left/center), background (color/gradient/image), size presets, and **logo editing** (translate, scale, remove BG, invert B/W).
+* Editor with: title, subtitle, theme (light/dark), layout (left/center), background (color/gradient/image), size presets, and **logo editing** (upload via file/paste/URL, translate, scale, remove BG, invert B/W, mask).
 * Export PNG (1200×630 default; extras 1600×900, 1920×1005) and copy meta tags.
 * Basic persistence (local + per‑user cloud).
 
@@ -24,7 +24,7 @@ OGGenerator is a one‑page (expandable) app to **compose Open Graph images** wi
 * **Auth:** NextAuth.js (Auth.js) with OAuth providers (see configuration below).
 * **Storage:**
 
-  * Local state: Zustand or React Context.
+  * Local state: Zustand with undo/redo history and localStorage persistence.
   * Cloud: Vercel KV/Upstash **or** Supabase (auth‑agnostic) **or** Planetscale/Neon (if SQL preferred).
   * Object storage for uploads (logo): Vercel Blob **or** Supabase Storage/S3‑compatible bucket.
 * **Image Processing:** HTMLCanvas + OffscreenCanvas + WebWorker. For **background removal**, use `@imgly/background-removal` (WASM U^2‑Net) or `background-removal` (WASM).
@@ -60,7 +60,7 @@ OGGenerator is a one‑page (expandable) app to **compose Open Graph images** wi
 │  │  ├─ removeBg.ts                              # WASM loader + pipeline
 │  │  └─ meta.ts                                  # build OG/Twitter meta
 │  ├─ state/
-│  │  └─ editorStore.ts                           # Zustand store (title, subtitle, theme, etc.)
+│  │  └─ editorStore.ts                           # Zustand store (title, subtitle, font sizes, theme, etc.)
 │  ├─ workers/
 │  │  └─ export.worker.ts                         # off-thread PNG export
 │  └─ types/
@@ -74,6 +74,10 @@ OGGenerator is a one‑page (expandable) app to **compose Open Graph images** wi
 ├─ package.json
 └─ README.md
 ```
+
+### Inspector Tabs
+
+The editor's right-hand inspector groups controls into individual panels. Tabs are now available for **Canvas**, **Text**, **Logo**, **Metadata**, **Presets**, and **Export**, each rendering its respective `*Panel` component.
 
 ---
 
@@ -312,17 +316,17 @@ pnpm dev
 
 ### Sprint 2 — Editor Core (2–3 days)
 
-* [ ] CanvasStage with background (solid/gradient/image) + presets.
+* [x] CanvasStage wired to editor store with banner, title/subtitle and logo processing.
 * [ ] Text layers (Title/Subtitle) with clamp + balance.
 * [ ] Layout presets (left/center), 8px baseline grid.
 * [ ] Local autosave (debounced) and keyboard shortcuts.
 
 ### Sprint 3 — Logo Tools (2–3 days)
 
-* [ ] Upload: drag‑and‑drop + paste + URL.
-* [ ] Translate + scale + mask (circle) interaction.
-* [ ] **Remove Background** via WASM in WebWorker (lazy‑loaded).
-* [ ] **Invert B/W** filter + toggle.
+* [ ] Upload: drag‑and‑drop + paste + URL (file input, paste and URL wired; drag‑and‑drop pending).
+* [ ] Translate + scale + mask (circle) interaction (scale slider and mask toggle added; drag translate pending).
+* [x] **Remove Background** via WASM in WebWorker (toggle integrated with helper).
+* [x] **Invert B/W** filter + toggle.
 
 ### Sprint 4 — Export & Meta (1–2 days)
 
@@ -393,4 +397,12 @@ pnpm build
 
 ---
 
+## 18) Error Handling
+
+* `ErrorBoundary` envolve o `EditorShell` exibindo um fallback amigável.
+* `ToastProvider` fornece notificações para falhas em remoção de fundo, exportação e busca de metadata.
+
+---
+
 **End of base doc.**
+
