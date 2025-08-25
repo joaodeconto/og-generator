@@ -13,12 +13,18 @@ describe('CanvasStage', () => {
     });
   });
 
-  it('renders banner image using img tag', () => {
+  it('renders a single banner image using img tag', () => {
     render(<CanvasStage />);
     const banners = screen.getAllByAltText('Banner image') as HTMLImageElement[];
-    expect(banners[0]).toBeInTheDocument();
+    expect(banners).toHaveLength(1);
     expect(banners[0].tagName).toBe('IMG');
     expect(banners[0].getAttribute('src')).toBe('https://example.com/banner.png');
+  });
+
+  it('exports element has fixed base dimensions', () => {
+    render(<CanvasStage />);
+    const canvas = document.getElementById('og-canvas') as HTMLElement;
+    expect(canvas).toHaveStyle({ width: '1200px', height: '630px' });
   });
 
   it('positions the logo at the center by default', () => {
