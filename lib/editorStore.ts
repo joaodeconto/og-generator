@@ -46,7 +46,7 @@ export const useEditorStore = create<EditorState>((set) => ({
   theme: 'light',
   layout: 'left',
   accentColor: '#3b82f6',
-  logoPosition: { x: 0, y: 0 },
+  logoPosition: { x: 50, y: 50 },
   logoScale: 1,
   invertLogo: false,
   removeLogoBg: false,
