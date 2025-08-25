@@ -24,7 +24,6 @@ export default function CanvasStage() {
     title,
     subtitle,
     titleFontSize,
-    subtitleFontSize,
     theme,
     layout,
     accentColor,

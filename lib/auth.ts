@@ -1,11 +1,17 @@
 import NextAuth from "next-auth";
+import type { Session } from "next-auth";
+import type { Provider } from "next-auth/providers";
 import Google from "next-auth/providers/google";
 import GitHub from "next-auth/providers/github";
 import Twitter from "next-auth/providers/twitter";
 import Facebook from "next-auth/providers/facebook";
 import { env } from "./env";
 
-export const providers: any[] = [];
+interface ExtendedSession extends Session {
+  userId?: string;
+}
+
+export const providers: Provider[] = [];
 
 if (env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET) {
   providers.push(
@@ -35,8 +41,9 @@ export const { handlers, auth } = NextAuth({
   providers,
   callbacks: {
     async session({ session, token }) {
-      if (token?.sub) (session as any).userId = token.sub;
-      return session;
+      const s = session as ExtendedSession;
+      if (token?.sub) s.userId = token.sub;
+      return s;
     },
   },
 });

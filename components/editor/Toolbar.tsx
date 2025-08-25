@@ -19,14 +19,13 @@ export default function Toolbar() {
 
   const handleUndo = useCallback(() => undo(), [undo]);
   const handleRedo = useCallback(() => redo(), [redo]);
-  const handleCopyMeta = async () => {
+  const handleCopyMeta = useCallback(async () => {
     try {
       await copyMetaTags({ title, description: subtitle });
-      console.log("copy meta");
     } catch (err) {
       console.error(err);
     }
-  };
+  }, [title, subtitle]);
   const handleExport = useCallback(async () => {
     const element = document.getElementById("og-canvas");
     if (!element) return;
