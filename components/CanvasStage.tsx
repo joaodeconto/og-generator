@@ -1,6 +1,7 @@
 
 "use client";
 
+import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import { useEditorStore } from 'lib/editorStore';
 import { invertImageColors, blobToDataURL } from 'lib/images';
@@ -139,10 +140,10 @@ export default function CanvasStage() {
         }}
       >
         {bannerUrl && (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
+          <Image
             src={bannerUrl}
             alt="Banner image"
+            fill
             className="absolute inset-0 w-full h-full object-cover"
           />
         )}
@@ -169,10 +170,11 @@ export default function CanvasStage() {
               transform: `translate(-50%, -50%) scale(${logoScale})`
             }}
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            <Image
               src={logoDataUrl}
               alt="Logo"
+              width={96}
+              height={96}
               className={`object-contain w-24 h-24 ${maskLogo ? 'rounded-full' : ''} shadow`}
             />
           </div>
