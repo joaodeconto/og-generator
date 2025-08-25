@@ -48,6 +48,36 @@ describe('image utilities', () => {
     expect(inverted.startsWith('data:image/png;base64,')).toBe(true);
   });
 
+  it('rejects when canvas context is missing', async () => {
+    const redPixel = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8Xw8AAoMBgSDAvzcAAAAASUVORK5CYII=';
+
+    const mockCanvas = {
+      getContext: () => null,
+      width: 0,
+      height: 0,
+    } as any;
+
+    jest.spyOn(document, 'createElement').mockImplementation((tag: string) => {
+      if (tag === 'canvas') return mockCanvas;
+      return document.createElement(tag) as any;
+    });
+
+    class MockImage {
+      width = 1;
+      height = 1;
+      crossOrigin = '';
+      onload: (() => void) | null = null;
+      onerror: ((err?: any) => void) | null = null;
+      set src(_value: string) {
+        this.onload && this.onload();
+      }
+    }
+    // @ts-ignore
+    global.Image = MockImage;
+
+    await expect(invertImageColors(redPixel)).rejects.toThrow('Failed to obtain canvas context');
+  });
+
   it('sanitizes SVG content', () => {
     const dirty =
       '<svg><script>alert(1)</script><rect onclick="foo()" fill="red" /></svg>';
