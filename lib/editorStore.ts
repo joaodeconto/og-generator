@@ -103,6 +103,8 @@ export const useEditorStore = create<EditorState>()(
         ...initialState,
         setTitle: (value) => apply({ title: value }),
         setSubtitle: (value) => apply({ subtitle: value }),
+        setTitleFontSize: (size) => apply({ titleFontSize: size }),
+        setSubtitleFontSize: (size) => apply({ subtitleFontSize: size }),
         setTheme: (value) => apply({ theme: value }),
         setLayout: (value) => apply({ layout: value }),
         setAccentColor: (value) => apply({ accentColor: value }),

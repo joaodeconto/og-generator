@@ -22,13 +22,13 @@ export default function LogoPanel() {
   const handlePaste = async () => {
     try {
       if (navigator.clipboard && "read" in navigator.clipboard) {
-        // @ts-ignore ClipboardItem type
+        // @ts-error ClipboardItem type
         const items = await navigator.clipboard.read();
         for (const item of items) {
-          // @ts-ignore ClipboardItem types
+          // @ts-error ClipboardItem types
           const type = item.types.find((t: string) => t.startsWith("image/"));
           if (type) {
-            // @ts-ignore ClipboardItem getType
+            // @ts-error ClipboardItem getType
             const blob = await item.getType(type);
             const file = new File([blob], "pasted-image" + type.replace("image/", "."), { type });
             setLogoFile(file);

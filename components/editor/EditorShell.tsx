@@ -1,6 +1,6 @@
 "use client";
 import Toolbar from "./Toolbar";
-import CanvasStage from "./CanvasStage";
+import CanvasStage from "../CanvasStage";
 import Inspector from "./Inspector";
 
 export default function EditorShell() {
