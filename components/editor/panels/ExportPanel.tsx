@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useEditorStore } from "lib/editorStore";
 import { exportElementAsPng, type ImageSize } from "lib/images";
-import { buildMetaTags } from "lib/meta";
+import { copyMetaTags } from "lib/meta";
 
 const SIZE_PRESETS: Record<string, ImageSize> = {
   "1200x630": { width: 1200, height: 630 },
@@ -32,9 +32,12 @@ export default function ExportPanel() {
     }
   };
 
-  const handleCopyMeta = () => {
-    const tags = buildMetaTags({ title, description: subtitle });
-    navigator.clipboard.writeText(tags).catch(console.error);
+  const handleCopyMeta = async () => {
+    try {
+      await copyMetaTags({ title, description: subtitle });
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (

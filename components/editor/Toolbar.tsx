@@ -3,7 +3,7 @@
 import { useCallback, useEffect } from "react";
 import { useEditorStore } from "lib/editorStore";
 import { exportElementAsPng } from "lib/images";
-import { buildMetaTags } from "lib/meta";
+import { copyMetaTags } from "lib/meta";
 
 export default function Toolbar() {
   const {
@@ -19,9 +19,13 @@ export default function Toolbar() {
 
   const handleUndo = useCallback(() => undo(), [undo]);
   const handleRedo = useCallback(() => redo(), [redo]);
-  const handleCopyMeta = () => {
-    const tags = buildMetaTags({ title, description: subtitle });
-    navigator.clipboard.writeText(tags).then(() => console.log("copy meta")).catch(console.error);
+  const handleCopyMeta = async () => {
+    try {
+      await copyMetaTags({ title, description: subtitle });
+      console.log("copy meta");
+    } catch (err) {
+      console.error(err);
+    }
   };
   const handleExport = useCallback(async () => {
     const element = document.getElementById("og-canvas");
