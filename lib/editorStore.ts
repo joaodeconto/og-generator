@@ -67,30 +67,41 @@ export const useEditorStore = create<EditorState>()(
       const past: EditorData[] = [];
       const future: EditorData[] = [];
 
-      const stripActions = (state: EditorState): EditorData => {
-        const {
-          setTitle,
-          setSubtitle,
-          setTheme,
-          setLayout,
-          setAccentColor,
-          setBannerUrl,
-          setLogoFile,
-          setLogoUrl,
-          setLogoPosition,
-          setLogoScale,
-          toggleInvertLogo,
-          toggleRemoveLogoBg,
-          toggleMaskLogo,
-          addPreset,
-          applyPreset,
-          undo,
-          redo,
-          reset,
-          ...data
-        } = state;
-        return data;
-      };
+      const stripActions = ({
+        title,
+        subtitle,
+        titleFontSize,
+        subtitleFontSize,
+        theme,
+        layout,
+        accentColor,
+        bannerUrl,
+        logoFile,
+        logoUrl,
+        logoPosition,
+        logoScale,
+        invertLogo,
+        removeLogoBg,
+        maskLogo,
+        presets,
+      }: EditorState): EditorData => ({
+        title,
+        subtitle,
+        titleFontSize,
+        subtitleFontSize,
+        theme,
+        layout,
+        accentColor,
+        bannerUrl,
+        logoFile,
+        logoUrl,
+        logoPosition,
+        logoScale,
+        invertLogo,
+        removeLogoBg,
+        maskLogo,
+        presets,
+      });
 
       const apply = (partial: Partial<EditorData>) =>
         set((state) => {
