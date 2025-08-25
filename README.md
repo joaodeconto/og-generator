@@ -57,4 +57,4 @@ O repositório inclui um arquivo `.env.example` que lista todas as variáveis de
 
 ## Licença
 
-Este projeto está em fase inicial e não possui uma licença definida. Adicione uma se necessário.
+Este projeto está licenciado sob a licença MIT. Consulte o arquivo [LICENSE](LICENSE) para mais detalhes.
