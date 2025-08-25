@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import type { Preset } from './randomStyle';
 
+
 /**
  * Definition of the editor's state. This store manages the current values of
  * fields used to generate an Open Graph image as well as transforms applied

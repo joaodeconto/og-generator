@@ -20,5 +20,8 @@ export async function removeImageBackground(source: Blob | string): Promise<stri
   }
 
   const blob = await removeBackground(source);
+  if (!(blob instanceof Blob)) {
+    throw new Error("removeBackground did not return a Blob");
+  }
   return blobToDataURL(blob);
 }
