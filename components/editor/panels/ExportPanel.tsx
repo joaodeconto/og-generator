@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useEditorStore } from "lib/editorStore";
 import { exportElementAsPng, type ImageSize } from "lib/images";
 import { copyMetaTags } from "lib/meta";
+import { toast } from "components/ToastProvider";
 
 const SIZE_PRESETS: Record<string, ImageSize> = {
   "1200x630": { width: 1200, height: 630 },
@@ -35,7 +36,9 @@ export default function ExportPanel() {
   const handleCopyMeta = async () => {
     try {
       await copyMetaTags({ title, description: subtitle });
+      toast({ message: "Meta tags copied" });
     } catch (err) {
+      toast({ message: "Failed to copy meta tags", variant: "error" });
       console.error(err);
     }
   };
