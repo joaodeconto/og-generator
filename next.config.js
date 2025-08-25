@@ -8,7 +8,9 @@ const nextConfig = {
       'cdn.linkedin.com',
       'pbs.twimg.com',
       'graph.facebook.com',
-      'cdninstagram.com']
+      'cdninstagram.com',
+      'cdn.openai.com'
+    ]
   }
 };
 

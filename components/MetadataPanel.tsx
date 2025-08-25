@@ -30,6 +30,13 @@ export default function MetadataPanel() {
     if (!url) return;
     try {
       const res = await fetch(`/api/scrape?url=${encodeURIComponent(url)}`);
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({ error: 'Failed to fetch metadata' }));
+        const message = data.error || 'Failed to fetch metadata';
+        setWarnings([message]);
+        toast({ message, variant: 'error' });
+        return;
+      }
       const data = await res.json();
       setSiteName(data.title || '');
       setDescription(data.description || '');

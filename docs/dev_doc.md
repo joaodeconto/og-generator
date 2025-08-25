@@ -87,7 +87,7 @@ OGGenerator is a one‑page (expandable) app to **compose Open Graph images** wi
 
 ### Inspector Tabs
 
-The editor's right-hand inspector groups controls into individual panels. Tabs are now available for **Canvas**, **Text**, **Logo**, **Metadata**, **Presets**, and **Export**, each rendering its respective `*Panel` component.
+The editor's right-hand inspector groups controls into individual panels. Tabs are now available for **Canvas**, **Text**, **Logo**, **Metadata**, **Presets**, and **Export**, each rendering its respective `*Panel` component. The Metadata tab fetches page information via `/api/scrape` and shows a toast warning if the request fails.
 
 ---
 

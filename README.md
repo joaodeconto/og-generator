@@ -110,11 +110,14 @@ pnpm docs:guard   # garante que docs/log, dev_doc ou README foram atualizados
 - Melhorias no editor de logo (inversão de cores)
 - Arrastar e soltar de logo e outras melhorias
 
-
 - **Desfazer:** Ctrl/Cmd + Z
 - **Refazer:** Ctrl/Cmd + Shift + Z
 - **Copiar metatags:** Ctrl/Cmd + C
-- **Salvar preset:** Ctrl/Cmd + S        
+- **Salvar preset:** Ctrl/Cmd + S
+## Problemas Conhecidos
+
+- Alguns sites bloqueiam a coleta de metadados; quando isso ocorre o painel de Metadata exibe um toast de erro.
+
 ## Licença
 
 Projeto licenciado sob MIT. Consulte [LICENSE](LICENSE) para mais detalhes.
