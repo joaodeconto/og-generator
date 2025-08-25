@@ -1,24 +1,122 @@
 "use client";
+import { useEditorStore } from "lib/editorStore";
+import type { ChangeEvent } from "react";
+
 export default function LogoPanel() {
+  const {
+    setLogoFile,
+    setLogoUrl,
+    toggleRemoveLogoBg,
+    toggleInvertLogo,
+    toggleMaskLogo,
+    logoScale,
+    setLogoScale,
+    setLogoPosition,
+  } = useEditorStore();
+
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) setLogoFile(file);
+  };
+
+  const handlePaste = async () => {
+    try {
+      if (navigator.clipboard && "read" in navigator.clipboard) {
+        // @ts-error ClipboardItem type
+        const items = await navigator.clipboard.read();
+        for (const item of items) {
+          // @ts-error ClipboardItem types
+          const type = item.types.find((t: string) => t.startsWith("image/"));
+          if (type) {
+            // @ts-error ClipboardItem getType
+            const blob = await item.getType(type);
+            const file = new File([blob], "pasted-image" + type.replace("image/", "."), { type });
+            setLogoFile(file);
+            return;
+          }
+        }
+      }
+      if (navigator.clipboard && navigator.clipboard.readText) {
+        const text = await navigator.clipboard.readText();
+        if (text.startsWith("http")) {
+          setLogoUrl(text);
+        }
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleUrl = () => {
+    const url = prompt("Image URL");
+    if (url) setLogoUrl(url);
+  };
+
+  const handleReset = () => {
+    setLogoScale(1);
+    setLogoPosition(50, 50);
+  };
+
+  const handleCenter = () => {
+    setLogoPosition(50, 50);
+  };
+
   return (
     <section className="space-y-3">
       <div className="flex items-center gap-2">
-        <input type="file" accept="image/png,image/svg+xml" />
-        <button className="btn">Paste</button>
-        <button className="btn">From URL</button>
+        <label htmlFor="logo-upload" className="sr-only">
+          Upload logo
+        </label>
+        <input
+          id="logo-upload"
+          type="file"
+          accept="image/png,image/svg+xml"
+          onChange={handleFileChange}
+          aria-label="Upload logo file"
+        />
+        <button className="btn" aria-label="Paste logo from clipboard" onClick={handlePaste}>
+          Paste
+        </button>
+        <button className="btn" aria-label="Load logo from URL" onClick={handleUrl}>
+          From URL
+        </button>
       </div>
       <div className="grid grid-cols-3 gap-2">
-        <button className="btn">Remove BG</button>
-        <button className="btn">Invert B/W</button>
-        <button className="btn">Mask: Circle</button>
+        <button className="btn" aria-label="Remove background from logo" onClick={toggleRemoveLogoBg}>
+          Remove BG
+        </button>
+        <button className="btn" aria-label="Invert logo colors" onClick={toggleInvertLogo}>
+          Invert B/W
+        </button>
+        <button className="btn" aria-label="Mask logo as circle" onClick={toggleMaskLogo}>
+
+          Mask: Circle
+        </button>
       </div>
       <div>
-        <label className="text-sm">Scale</label>
-        <input type="range" min={0.2} max={3} step={0.01} className="w-full" />
+        <label htmlFor="logo-scale" className="text-sm">
+          Scale
+        </label>
+        <input
+          id="logo-scale"
+          type="range"
+          min={0.2}
+          max={3}
+          step={0.01}
+          className="w-full"
+          value={logoScale}
+          onChange={(e) => setLogoScale(parseFloat(e.target.value))}
+        />
       </div>
       <div className="grid grid-cols-2 gap-2">
-        <button className="btn">Reset</button>
-        <button className="btn">Center</button>
+        <button className="btn" aria-label="Reset logo adjustments" onClick={handleReset}>
+          Reset
+        </button>
+      </div>
+      <div className="grid grid-cols-2 gap-2">        
+        <button className="btn" onClick={handleCenter} aria-label="Center logo on canvas">
+          Center
+        </button>
       </div>
     </section>
   );

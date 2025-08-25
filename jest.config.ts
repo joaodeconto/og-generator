@@ -1,4 +1,4 @@
-import nextJest from 'next/jest';
+import nextJest from 'next/jest.js';
 
 const createJestConfig = nextJest({ dir: './' });
 
@@ -9,6 +9,12 @@ const config = {
     '^components/(.*)$': '<rootDir>/components/$1',
     '^lib/(.*)$': '<rootDir>/lib/$1',
     '^app/(.*)$': '<rootDir>/app/$1',
+  },
+  coverageThreshold: {
+    global: {
+      branches: 60,
+      lines: 70,
+    },
   },
 };
 

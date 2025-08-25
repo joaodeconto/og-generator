@@ -1,5 +1,10 @@
 import EditorShell from "components/editor/EditorShell";
+import ErrorBoundary from "components/ErrorBoundary";
 
 export default function Page() {
-  return <EditorShell />;
+  return (
+    <ErrorBoundary>
+      <EditorShell />
+    </ErrorBoundary>
+  );
 }
