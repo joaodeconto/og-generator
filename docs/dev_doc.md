@@ -60,7 +60,7 @@ OGGenerator is a one‑page (expandable) app to **compose Open Graph images** wi
 │  │  ├─ removeBg.ts                              # WASM loader + pipeline
 │  │  └─ meta.ts                                  # build OG/Twitter meta
 │  ├─ state/
-│  │  └─ editorStore.ts                           # Zustand store (title, subtitle, theme, etc.)
+│  │  └─ editorStore.ts                           # Zustand store (title, subtitle, font sizes, theme, etc.)
 │  ├─ workers/
 │  │  └─ export.worker.ts                         # off-thread PNG export
 │  └─ types/
@@ -312,7 +312,7 @@ pnpm dev
 
 ### Sprint 2 — Editor Core (2–3 days)
 
-* [ ] CanvasStage with background (solid/gradient/image) + presets.
+* [x] CanvasStage wired to editor store with banner, title/subtitle and logo processing.
 * [ ] Text layers (Title/Subtitle) with clamp + balance.
 * [ ] Layout presets (left/center), 8px baseline grid.
 * [ ] Local autosave (debounced) and keyboard shortcuts.
