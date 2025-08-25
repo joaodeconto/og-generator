@@ -3,6 +3,8 @@ declare module 'html-to-image' {
 }
 
 declare module '@imgly/background-removal' {
-  export function removeBackground(...args: unknown[]): Promise<unknown>;
+  export function removeBackground(
+    source: string | Blob,
+    config?: unknown
+  ): Promise<Blob>;
 }
-
