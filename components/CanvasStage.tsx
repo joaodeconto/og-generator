@@ -19,7 +19,6 @@ const BASE_HEIGHT = 630;
 export default function CanvasStage() {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [zoom, setZoom] = useState(1);
-  const base = { w: 1200, h: 630 };
   const {
     title,
     subtitle,
@@ -121,29 +120,16 @@ export default function CanvasStage() {
 
   return (
     <div
-      id="og-canvas"
-      className={`relative w-full h-0 pt-[52.5%] overflow-hidden rounded-lg shadow-md border ${themeClasses} focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ring`}
-      style={{ borderColor: accentColor }}
+      ref={containerRef}
+      className="relative w-full h-0 pt-[52.5%] overflow-hidden rounded-lg focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ring"
       tabIndex={0}
       role="img"
       aria-label="OG image preview"
       onKeyDown={handleKeyDown}
     >
-      {/* Banner */}
-      {bannerUrl && (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={bannerUrl}
-          alt="Banner image"
-          className="absolute inset-0 w-full h-full object-cover"
-        />
-      )}
-      {/* Overlay to darken/lighten banner for contrast */}
-      {bannerUrl && <div className={`absolute inset-0 ${theme === 'dark' ? 'bg-black/50' : 'bg-white/60'}`} />} 
-      {/* Content container */}
       <div
         id="og-canvas"
-        className={`relative rounded-lg shadow-md border ${themeClasses}`}
+        className={`absolute top-0 left-0 rounded-lg shadow-md border ${themeClasses}`}
         style={{
           width: BASE_WIDTH,
           height: BASE_HEIGHT,
@@ -152,7 +138,6 @@ export default function CanvasStage() {
           borderColor: accentColor
         }}
       >
-        {/* Banner */}
         {bannerUrl && (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -161,13 +146,10 @@ export default function CanvasStage() {
             className="absolute inset-0 w-full h-full object-cover"
           />
         )}
-        {/* Overlay to darken/lighten banner for contrast */}
         {bannerUrl && <div className={`absolute inset-0 ${theme === 'dark' ? 'bg-black/50' : 'bg-white/60'}`} />}
-        {/* Content container */}
         <div
           className={`absolute inset-0 flex flex-col justify-center px-12 py-8 space-y-4 ${layoutClasses}`}
         >
-
           <h1
             className="font-bold leading-tight break-words"
             style={{ color: accentColor, fontSize: `${titleFontSize}px` }}
@@ -178,7 +160,6 @@ export default function CanvasStage() {
             {subtitle}
           </p>
         </div>
-        {/* Logo overlay */}
         {logoDataUrl && (
           <div
             className="absolute"

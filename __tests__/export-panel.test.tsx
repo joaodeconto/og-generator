@@ -27,6 +27,21 @@ describe('ExportPanel', () => {
     );
   });
 
+  it('changes export size when selecting a preset', () => {
+    const mock = exportElementAsPng as jest.Mock;
+    render(<ExportPanel />);
+    const sizeBtn = screen.getByRole('button', { name: /export size 1600 by 900/i });
+    fireEvent.click(sizeBtn);
+    fireEvent.click(screen.getByRole('button', { name: /export image as png/i }));
+    expect(mock).toHaveBeenCalledWith(
+      document.getElementById('og-canvas'),
+      { width: 1600, height: 900 },
+      'og-image-1600x900.png'
+    );
+    expect(sizeBtn).toHaveAttribute('aria-pressed', 'true');
+    expect(sizeBtn).toHaveClass('btn-primary');
+  });
+
   it('copies meta tags', () => {
     render(<ExportPanel />);
     const expected = buildMetaTags({ title: 'T', description: 'S' });
