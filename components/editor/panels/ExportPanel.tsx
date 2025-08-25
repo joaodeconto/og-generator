@@ -40,13 +40,28 @@ export default function ExportPanel() {
   return (
     <section className="space-y-3">
       <div className="grid grid-cols-3 gap-2">
-        <button className="btn" aria-label="Export size 1200 by 630" onClick={setSelected.bind(null, SIZE_PRESETS["1200x630"])}>
+        <button
+          className={`btn ${selected === "1200x630" ? "btn-primary" : ""}`}
+          aria-label="Export size 1200 by 630"
+          aria-pressed={selected === "1200x630"}
+          onClick={() => setSelected("1200x630")}
+        >
           1200×630
         </button>
-        <button className="btn" aria-label="Export size 1600 by 900" onClick={setSelected.bind(null, SIZE_PRESETS["1600x900"])}>
+        <button
+          className={`btn ${selected === "1600x900" ? "btn-primary" : ""}`}
+          aria-label="Export size 1600 by 900"
+          aria-pressed={selected === "1600x900"}
+          onClick={() => setSelected("1600x900")}
+        >
           1600×900
         </button>
-        <button className="btn" aria-label="Export size 1920 by 1005" onClick={setSelected.bind(null, SIZE_PRESETS["1920x1005"])}>
+        <button
+          className={`btn ${selected === "1920x1005" ? "btn-primary" : ""}`}
+          aria-label="Export size 1920 by 1005"
+          aria-pressed={selected === "1920x1005"}
+          onClick={() => setSelected("1920x1005")}
+        >
           1920×1005
         </button>
       </div>
