@@ -36,9 +36,9 @@ self.addEventListener("message", async (event: MessageEvent<{ id: number; source
       throw new Error("removeBackground did not return a Blob");
     }
     const dataUrl = await blobToDataURL(blob);
-    (self as any).postMessage({ id, dataUrl });
-  } catch (error: any) {
-    (self as any).postMessage({ id, error: error?.message || String(error) });
+    (self as unknown as Worker).postMessage({ id, dataUrl });
+  } catch (error) {
+    (self as unknown as Worker).postMessage({ id, error: (error as Error).message || String(error) });
   }
 });
 

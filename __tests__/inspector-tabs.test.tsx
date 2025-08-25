@@ -42,7 +42,7 @@ describe('Inspector tabs', () => {
 
   it('updates metadata store via Metadata tab', () => {
     render(<Inspector />);
-    fireEvent.click(screen.getByRole('button', { name: /metadata/i }));
+    fireEvent.click(screen.getByRole('tab', { name: /metadata/i }));
     fireEvent.change(screen.getByLabelText(/nome do site/i), {
       target: { value: 'My Site' }
     });
@@ -51,7 +51,7 @@ describe('Inspector tabs', () => {
 
   it('generates and applies preset via Presets tab', () => {
     render(<Inspector />);
-    fireEvent.click(screen.getByRole('button', { name: /presets/i }));
+    fireEvent.click(screen.getByRole('tab', { name: /presets/i }));
     fireEvent.click(
       screen.getByRole('button', { name: /gerar preset aleatório/i })
     );

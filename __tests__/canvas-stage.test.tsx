@@ -15,10 +15,10 @@ describe('CanvasStage', () => {
 
   it('renders banner image using img tag', () => {
     render(<CanvasStage />);
-    const banner = screen.getByAltText('Banner image') as HTMLImageElement;
-    expect(banner).toBeInTheDocument();
-    expect(banner.tagName).toBe('IMG');
-    expect(banner.getAttribute('src')).toBe('https://example.com/banner.png');
+    const banners = screen.getAllByAltText('Banner image') as HTMLImageElement[];
+    expect(banners[0]).toBeInTheDocument();
+    expect(banners[0].tagName).toBe('IMG');
+    expect(banners[0].getAttribute('src')).toBe('https://example.com/banner.png');
   });
 
   it('positions the logo at the center by default', () => {
