@@ -7,6 +7,7 @@ import { generateRandomStyle, type RandomStyle } from 'lib/randomStyle';
 import { toast } from './ToastProvider';
 import { buildMetaTags } from 'lib/meta';
 
+
 /**
  * Buttons to export the generated Open Graph image and copy the associated
  * meta tags. Allows downloading the canvas as a PNG in different resolutions.

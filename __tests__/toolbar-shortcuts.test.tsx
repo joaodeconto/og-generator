@@ -9,11 +9,19 @@ jest.mock('../lib/images', () => ({
 }));
 
 describe('Toolbar shortcuts', () => {
+
+  let logSpy: jest.SpyInstance;
+  let writeText: jest.Mock;
+
   beforeEach(() => {
-    useEditorStore.getState().reset();
-    Object.assign(navigator, {
-      clipboard: { writeText: jest.fn().mockResolvedValue(undefined) },
-    });
+    logSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
+    writeText = jest.fn().mockResolvedValue(undefined);
+    Object.assign(navigator, { clipboard: { writeText } });
+  });
+
+  afterEach(() => {
+    logSpy.mockRestore();
+    writeText.mockReset();
   });
 
   it('handles undo via click and shortcut', () => {
@@ -58,6 +66,9 @@ describe('Toolbar shortcuts', () => {
         expected,
       ),
     );
+    expect(writeText).toHaveBeenCalledTimes(1);
+    fireEvent.keyDown(window, { key: 'c', ctrlKey: true });
+    expect(writeText).toHaveBeenCalledTimes(2);
   });
 
   it('handles save via click and shortcut', () => {

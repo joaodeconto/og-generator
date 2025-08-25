@@ -40,12 +40,14 @@ pnpm dev
   - `AuthButtons.tsx`: botões de login/logout
   - `CanvasStage.tsx`: preview da imagem OG
   - `EditorControls.tsx`: formulário para editar conteúdo
+  - `ExportControls.tsx`: exportação de PNG e cópia de metatags
   - `editor/Inspector.tsx`: painel lateral com abas (Canvas, Text, Logo, Metadata, Presets, Export)
   - `MetadataPanel.tsx` e `PresetsPanel.tsx`: painéis reutilizados nas respectivas abas
-  - `ExportControls.tsx`: exportação de PNG (presets @1x/@2x) e metatags
+
 - `lib/`:
   - `authOptions.ts`: configuração do NextAuth
   - `editorStore.ts`: estado global com Zustand
+  - `metaTags.ts`: utilitário para gerar tags OG/Twitter
 - `types/next-auth.d.ts`: tipagens adicionais para sessão
 - `tailwind.config.ts` e `postcss.config.js`: configuração de estilos
 
