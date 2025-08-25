@@ -21,4 +21,17 @@ describe('meta helpers', () => {
     const tags = buildMetaTags({ title: 'T', description: 'D', url: 'https://x.com' });
     expect(tags).toContain('<meta property="og:url" content="https://x.com" />');
   });
+
+  it('escapes special HTML characters', () => {
+    const tags = buildMetaTags({
+      title: 'Tom & "Jerry" <Best>',
+      description: 'It\'s > all "fun" & games',
+      image: 'img?id=1&mode=<',
+      url: 'https://x.com/?q=a&b',
+    });
+    expect(tags).toContain('<meta property="og:title" content="Tom &amp; &quot;Jerry&quot; &lt;Best&gt;" />');
+    expect(tags).toContain('<meta property="og:description" content="It&#39;s &gt; all &quot;fun&quot; &amp; games" />');
+    expect(tags).toContain('<meta property="og:image" content="img?id=1&amp;mode=&lt;" />');
+    expect(tags).toContain('<meta property="og:url" content="https://x.com/?q=a&amp;b" />');
+  });
 });

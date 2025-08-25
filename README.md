@@ -18,6 +18,7 @@ Aplicação Next.js para criar imagens Open Graph personalizadas. Utiliza React,
 - Editor de logo com upload por arquivo, colagem ou URL
 - Remoção de fundo, inversão B/W e máscara circular do logo
 - Controles de escala e centralização do logo
+- Sanitização de campos de metadados
 
 ## Instalação e Uso
 
@@ -47,9 +48,24 @@ pnpm dev
 - `lib/`:
   - `authOptions.ts`: configuração do NextAuth
   - `editorStore.ts`: estado global com Zustand
+  - `meta.ts`: constrói e copia metatags com sanitização de HTML
   - `metaTags.ts`: utilitário para gerar tags OG/Twitter
-- `types/next-auth.d.ts`: tipagens adicionais para sessão
-- `tailwind.config.ts` e `postcss.config.js`: configuração de estilos
+  - `types/next-auth.d.ts`: tipagens adicionais para sessão
+  - `tailwind.config.ts` e `postcss.config.js`: configuração de estilos
+
+## Sanitização de Entrada
+
+Strings usadas em metatags passam por `escapeHtml` para evitar quebra de HTML e possíveis injeções.
+
+```ts
+import { buildMetaTags } from './lib/meta';
+
+const tags = buildMetaTags({
+  title: 'Tom & "Jerry" <3',
+  description: 'It\'s > all & fun',
+});
+// content="Tom &amp; &quot;Jerry&quot; &lt;3" etc.
+```
 
 ## Atalhos de Teclado
 
