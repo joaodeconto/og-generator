@@ -82,9 +82,9 @@ O arquivo `.env.example` lista todas as variáveis necessárias. Copie para `.en
 cp .env.example .env.local
 ```
 
-Preencha cada chave com valores obtidos nos provedores OAuth (Google, GitHub, etc.) e defina um `NEXTAUTH_SECRET` forte.
+Preencha cada chave com valores obtidos nos provedores OAuth (Google, GitHub, etc.) e defina um `NEXTAUTH_SECRET` forte. As credenciais de Twitter, Facebook e Instagram são **opcionais**; se ausentes, os botões de login desses provedores não aparecerão.
 
-As variáveis são validadas em tempo de inicialização pelo arquivo `lib/env.ts` usando [Zod](https://github.com/colinhacks/zod). A aplicação exibirá erro e não iniciará caso qualquer variável obrigatória esteja ausente ou vazia.
+As variáveis são validadas em tempo de inicialização pelo arquivo `lib/env.ts` usando [Zod](https://github.com/colinhacks/zod). A aplicação exibirá erro e não iniciará caso alguma variável **obrigatória** esteja ausente ou vazia.
 
 ## Testes
 

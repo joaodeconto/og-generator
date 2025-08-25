@@ -10,7 +10,7 @@ OGGenerator is a one‑page (expandable) app to **compose Open Graph images** wi
 
 **MVP Goals**
 
-* Authenticated session (Google, GitHub, LinkedIn, Twitter/X, Facebook; *Instagram: see note below*).
+* Authenticated session via Google, GitHub e LinkedIn. Twitter/X, Facebook e Instagram são opcionais (ver nota abaixo).
 * Editor with: title, subtitle, theme (light/dark), layout (left/center), background (color/gradient/image), size presets, and **logo editing** (upload via file/paste/URL, translate, scale, remove BG, invert B/W, mask).
 * Export PNG (1200×630 default; extras 1600×900, 1920×1005) and copy meta tags.
 * Basic persistence (local + per‑user cloud).
@@ -84,7 +84,7 @@ The editor's right-hand inspector groups controls into individual panels. Tabs a
 
 ## 4) Authentication (NextAuth.js)
 
-**Providers planned:** Google, GitHub, LinkedIn, Twitter/X, Facebook.
+**Providers planned:** Google, GitHub, LinkedIn (padrão). Twitter/X, Facebook e Instagram são opcionais.
 
 > **Instagram note**: Instagram doesn’t provide a standard OAuth flow for *sign‑in* via NextAuth. Practical approach: use **Facebook Login** (Meta) and connect the Instagram account via Instagram Graph/Basic Display API for media access. If sign‑in via Instagram is mandatory, you’ll need a custom provider using Instagram Basic Display (limited, not suitable for secure login). Recommendation: **enable "Connect Instagram"** after login, using Facebook token exchange.
 
@@ -106,6 +106,8 @@ TWITTER_CLIENT_ID=...
 TWITTER_CLIENT_SECRET=...
 FACEBOOK_CLIENT_ID=...
 FACEBOOK_CLIENT_SECRET=...
+
+# (Os blocos acima são opcionais; remova‑os se não for habilitar esses provedores.)
 
 # Storage options (pick one strategy)
 VERCEL_BLOB_READ_WRITE_TOKEN=...
