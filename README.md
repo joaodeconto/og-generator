@@ -9,6 +9,7 @@ Aplicação Next.js para criar imagens Open Graph personalizadas. Utiliza React,
 - Tailwind CSS
 - Zustand para estado global
 - NextAuth para autenticação
+- Remoção de fundo via WebWorker com modelo WASM
 - Sistema de toasts para notificações e Error Boundary para capturar falhas
 - Jest e Testing Library para testes
 
@@ -82,17 +83,9 @@ pnpm docs:guard   # garante que docs/log, dev_doc ou README foram atualizados
 - Exportação direta para PNG com alta resolução
 - Presets automáticos de layout e cores ("Surpreenda‑me")
 - Página de login personalizada
-- Melhorias no editor de logo (remoção de fundo e inversão de cores)
-- Sanitização automática de SVGs de logo convertendo para PNG
+- Melhorias no editor de logo (inversão de cores)
 - Arrastar e soltar de logo e outras melhorias
 
-## Testes
-
-```bash
-pnpm test
-```
-
-## Atalhos de Teclado
 
 - **Desfazer:** Ctrl/Cmd + Z
 - **Refazer:** Ctrl/Cmd + Shift + Z
