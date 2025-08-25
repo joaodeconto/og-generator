@@ -19,10 +19,10 @@ describe('Editor CanvasStage', () => {
     expect(screen.getByText('Subheading')).toBeInTheDocument();
   });
 
-  it('renders banner image using img tag', () => {
+  it('renders a single banner image using img tag', () => {
     render(<CanvasStage />);
     const banners = screen.getAllByAltText('Banner image') as HTMLImageElement[];
-    expect(banners[0]).toBeInTheDocument();
+    expect(banners).toHaveLength(1);
     expect(banners[0].tagName).toBe('IMG');
     expect(banners[0].getAttribute('src')).toBe('https://example.com/banner.png');
   });
