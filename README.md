@@ -40,8 +40,7 @@ pnpm dev
   - `Providers.tsx`: wrapper com SessionProvider e ToastProvider
   - `AuthButtons.tsx`: botões de login/logout
   - `CanvasStage.tsx`: preview da imagem OG
-  - `EditorControls.tsx`: formulário para editar conteúdo
-  - `ExportControls.tsx`: exportação de PNG e cópia de metatags
+  - `editor/Toolbar.tsx`: ações de desfazer, refazer, exportar e copiar metatags
   - `editor/Inspector.tsx`: painel lateral com abas (Canvas, Text, Logo, Metadata, Presets, Export)
   - `MetadataPanel.tsx` e `PresetsPanel.tsx`: painéis reutilizados nas respectivas abas
 
@@ -85,6 +84,8 @@ cp .env.example .env.local
 ```
 
 Preencha cada chave com valores obtidos nos provedores OAuth (Google, GitHub, etc.) e defina um `NEXTAUTH_SECRET` forte.
+
+As variáveis são validadas em tempo de inicialização pelo arquivo `lib/env.ts` usando [Zod](https://github.com/colinhacks/zod). A aplicação exibirá erro e não iniciará caso qualquer variável obrigatória esteja ausente ou vazia.
 
 ## Testes
 
