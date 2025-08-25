@@ -1,21 +1,50 @@
 "use client";
 
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
+import { useEditorStore } from "lib/editorStore";
+import { exportElementAsPng } from "lib/images";
+import { buildMetaTags } from "lib/meta";
 
 export default function Toolbar() {
-  const handleUndo = () => console.log("undo");
-  const handleRedo = () => console.log("redo");
-  const handleCopyMeta = () => console.log("copy meta");
-  const handleExport = () => console.log("export");
-  const handleSave = () => console.log("save");
+  const {
+    undo,
+    redo,
+    addPreset,
+    theme,
+    layout,
+    accentColor,
+    title,
+    subtitle,
+  } = useEditorStore();
+
+  const handleUndo = useCallback(() => undo(), [undo]);
+  const handleRedo = useCallback(() => redo(), [redo]);
+  const handleCopyMeta = useCallback(async () => {
+    const tags = buildMetaTags({ title, description: subtitle });
+    try {
+      await navigator.clipboard.writeText(tags);
+    } catch (err) {
+      console.error(err);
+    }
+  }, [title, subtitle]);
+  const handleExport = useCallback(async () => {
+    const element = document.getElementById("og-canvas");
+    if (!element) return;
+    try {
+      await exportElementAsPng(element, { width: 1200, height: 630 });
+    } catch (err) {
+      console.error(err);
+    }
+  }, []);
+  const handleSave = useCallback(() => {
+    addPreset({ theme, layout, accentColor });
+  }, [addPreset, theme, layout, accentColor]);
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       const isMod = e.metaKey || e.ctrlKey;
       if (!isMod) return;
-
       const key = e.key.toLowerCase();
-
       if (key === "z") {
         e.preventDefault();
         if (e.shiftKey) {

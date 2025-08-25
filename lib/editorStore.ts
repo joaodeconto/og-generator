@@ -1,14 +1,9 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 import type { Preset } from './randomStyle';
 
-
-/**
- * Definition of the editor's state. This store manages the current values of
- * fields used to generate an Open Graph image as well as transforms applied
- * to the uploaded logo. Individual fields are updated via dedicated setter
- * actions to make state changes predictable and easy to trace.
- */
-export interface EditorState {
+// State without actions for history snapshots
+interface EditorData {
   title: string;
   subtitle: string;
   titleFontSize: number;
@@ -25,7 +20,9 @@ export interface EditorState {
   removeLogoBg: boolean;
   maskLogo: boolean;
   presets: Preset[];
-  // actions
+}
+
+export interface EditorState extends EditorData {
   setTitle: (value: string) => void;
   setSubtitle: (value: string) => void;
   setTitleFontSize: (size: number) => void;
@@ -43,9 +40,12 @@ export interface EditorState {
   toggleMaskLogo: () => void;
   addPreset: (preset: Preset) => void;
   applyPreset: (preset: Preset) => void;
+  undo: () => void;
+  redo: () => void;
+  reset: () => void;
 }
 
-export const useEditorStore = create<EditorState>((set) => ({
+const initialState: EditorData = {
   title: '',
   subtitle: '',
   titleFontSize: 48,
@@ -59,27 +59,107 @@ export const useEditorStore = create<EditorState>((set) => ({
   removeLogoBg: false,
   maskLogo: false,
   presets: [],
-  setTitle: (value) => set({ title: value }),
-  setSubtitle: (value) => set({ subtitle: value }),
-  setTitleFontSize: (size) => set({ titleFontSize: size }),
-  setSubtitleFontSize: (size) => set({ subtitleFontSize: size }),
-  setTheme: (value) => set({ theme: value }),
-  setLayout: (value) => set({ layout: value }),
-  setAccentColor: (value) => set({ accentColor: value }),
-  setBannerUrl: (value) => set({ bannerUrl: value }),
-  setLogoFile: (file) => set({ logoFile: file, logoUrl: undefined }),
-  setLogoUrl: (url) => set({ logoUrl: url, logoFile: undefined }),
-  setLogoPosition: (x, y) => set({ logoPosition: { x, y } }),
-  setLogoScale: (scale) => set({ logoScale: scale }),
-  toggleInvertLogo: () => set((state) => ({ invertLogo: !state.invertLogo })),
-  toggleRemoveLogoBg: () => set((state) => ({ removeLogoBg: !state.removeLogoBg })),
-  toggleMaskLogo: () => set((state) => ({ maskLogo: !state.maskLogo })),
-  addPreset: (preset) =>
-    set((state) => ({ presets: [...state.presets, preset] })),
-  applyPreset: (preset) =>
-    set({
-      theme: preset.theme,
-      layout: preset.layout,
-      accentColor: preset.accentColor
-    })
-}));
+};
+
+export const useEditorStore = create<EditorState>()(
+  persist(
+    (set, get) => {
+      const past: EditorData[] = [];
+      const future: EditorData[] = [];
+
+      const stripActions = (state: EditorState): EditorData => {
+        const {
+          setTitle,
+          setSubtitle,
+          setTheme,
+          setLayout,
+          setAccentColor,
+          setBannerUrl,
+          setLogoFile,
+          setLogoUrl,
+          setLogoPosition,
+          setLogoScale,
+          toggleInvertLogo,
+          toggleRemoveLogoBg,
+          toggleMaskLogo,
+          addPreset,
+          applyPreset,
+          undo,
+          redo,
+          reset,
+          ...data
+        } = state;
+        return data;
+      };
+
+      const apply = (partial: Partial<EditorData>) =>
+        set((state) => {
+          past.push(stripActions(state));
+          future.length = 0;
+          return { ...state, ...partial };
+        });
+
+      return {
+        ...initialState,
+        setTitle: (value) => apply({ title: value }),
+        setSubtitle: (value) => apply({ subtitle: value }),
+        setTheme: (value) => apply({ theme: value }),
+        setLayout: (value) => apply({ layout: value }),
+        setAccentColor: (value) => apply({ accentColor: value }),
+        setBannerUrl: (value) => apply({ bannerUrl: value }),
+        setLogoFile: (file) => apply({ logoFile: file, logoUrl: undefined }),
+        setLogoUrl: (url) => apply({ logoUrl: url, logoFile: undefined }),
+        setLogoPosition: (x, y) => apply({ logoPosition: { x, y } }),
+        setLogoScale: (scale) => apply({ logoScale: scale }),
+        toggleInvertLogo: () => apply({ invertLogo: !get().invertLogo }),
+        toggleRemoveLogoBg: () => apply({ removeLogoBg: !get().removeLogoBg }),
+        toggleMaskLogo: () => apply({ maskLogo: !get().maskLogo }),
+        addPreset: (preset) =>
+          set((state) => ({ presets: [...state.presets, preset] })),
+        applyPreset: (preset) =>
+          apply({
+            theme: preset.theme,
+            layout: preset.layout,
+            accentColor: preset.accentColor,
+          }),
+        undo: () =>
+          set((state) => {
+            const previous = past.pop();
+            if (!previous) return state;
+            future.push(stripActions(state));
+            return { ...state, ...previous };
+          }),
+        redo: () =>
+          set((state) => {
+            const next = future.pop();
+            if (!next) return state;
+            past.push(stripActions(state));
+            return { ...state, ...next };
+          }),
+        reset: () => {
+          past.length = 0;
+          future.length = 0;
+          set(initialState);
+        },
+      };
+    },
+    {
+      name: 'editor-store',
+      partialize: (state) => ({
+        title: state.title,
+        subtitle: state.subtitle,
+        theme: state.theme,
+        layout: state.layout,
+        accentColor: state.accentColor,
+        bannerUrl: state.bannerUrl,
+        logoUrl: state.logoUrl,
+        logoPosition: state.logoPosition,
+        logoScale: state.logoScale,
+        invertLogo: state.invertLogo,
+        removeLogoBg: state.removeLogoBg,
+        maskLogo: state.maskLogo,
+        presets: state.presets,
+      }),
+    }
+  )
+);

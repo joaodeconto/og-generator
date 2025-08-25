@@ -24,7 +24,7 @@ OGGenerator is a one‑page (expandable) app to **compose Open Graph images** wi
 * **Auth:** NextAuth.js (Auth.js) with OAuth providers (see configuration below).
 * **Storage:**
 
-  * Local state: Zustand or React Context.
+  * Local state: Zustand with undo/redo history and localStorage persistence.
   * Cloud: Vercel KV/Upstash **or** Supabase (auth‑agnostic) **or** Planetscale/Neon (if SQL preferred).
   * Object storage for uploads (logo): Vercel Blob **or** Supabase Storage/S3‑compatible bucket.
 * **Image Processing:** HTMLCanvas + OffscreenCanvas + WebWorker. For **background removal**, use `@imgly/background-removal` (WASM U^2‑Net) or `background-removal` (WASM).
