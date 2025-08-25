@@ -9,6 +9,7 @@ Aplicação Next.js para criar imagens Open Graph personalizadas. Utiliza React,
 - Tailwind CSS
 - Zustand para estado global
 - NextAuth para autenticação
+- Sistema de toasts para notificações e Error Boundary para capturar falhas
 - Jest e Testing Library para testes
 
 ## Recursos
@@ -34,7 +35,7 @@ pnpm dev
   - `page.tsx`: página principal com editor e preview
   - `api/auth/[...nextauth]/route.ts`: rota de autenticação NextAuth
 - `components/`: componentes reutilizáveis
-  - `Providers.tsx`: wrapper com SessionProvider
+  - `Providers.tsx`: wrapper com SessionProvider e ToastProvider
   - `AuthButtons.tsx`: botões de login/logout
   - `CanvasStage.tsx`: preview da imagem OG
   - `EditorControls.tsx`: formulário para editar conteúdo
@@ -63,6 +64,8 @@ Preencha cada chave com valores obtidos nos provedores OAuth (Google, GitHub, et
 - Exportação direta para PNG com alta resolução
 - Presets automáticos de layout e cores ("Surpreenda‑me")
 - Página de login personalizada
+- Melhorias no editor de logo (remoção de fundo e inversão de cores)
+- Sanitização automática de SVGs de logo convertendo para PNG
 - Arrastar e soltar de logo e outras melhorias
 
 ## Testes
@@ -76,8 +79,7 @@ pnpm test
 - **Desfazer:** Ctrl/Cmd + Z
 - **Refazer:** Ctrl/Cmd + Shift + Z
 - **Copiar metatags:** Ctrl/Cmd + C
-- **Salvar preset:** Ctrl/Cmd + S
-
+- **Salvar preset:** Ctrl/Cmd + S        
 ## Licença
 
 Projeto licenciado sob MIT. Consulte [LICENSE](LICENSE) para mais detalhes.

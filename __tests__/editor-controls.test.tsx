@@ -1,6 +1,18 @@
-import { render, screen, fireEvent } from '@testing-library/react';
-import EditorControls from '../components/EditorControls';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { useEditorStore } from '../lib/editorStore';
+import * as imageUtils from '../lib/images';
+
+jest.mock('../lib/images', () => {
+  const actual = jest.requireActual('../lib/images');
+  return {
+    ...actual,
+    sanitizeSvg: jest.fn(() => '<svg></svg>'),
+    svgToPng: jest.fn(async () => new Blob(['png'], { type: 'image/png' })),
+    blobToDataURL: jest.fn(async () => 'data:image/png;base64,'),
+  };
+});
+
+import EditorControls from '../components/EditorControls';
 
 describe('EditorControls', () => {
   beforeEach(() => {
@@ -57,5 +69,22 @@ describe('EditorControls', () => {
       target: { value: '1.5' },
     });
     expect(useEditorStore.getState().logoScale).toBe(1.5);
+  });
+
+  it('sanitizes SVG logo uploads', async () => {
+    const svgFile = {
+      name: 'logo.svg',
+      type: 'image/svg+xml',
+      text: jest.fn().mockResolvedValue('<svg></svg>'),
+    } as unknown as File;
+
+    render(<EditorControls />);
+    const input = screen.getByLabelText(/logo \(upload ou url\)/i);
+    fireEvent.change(input, { target: { files: [svgFile] } });
+
+    await waitFor(() => expect(imageUtils.svgToPng).toHaveBeenCalled());
+    const state = useEditorStore.getState();
+    expect(state.logoFile).toBeInstanceOf(File);
+    expect(state.logoFile?.type).toBe('image/png');
   });
 });
