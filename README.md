@@ -47,8 +47,7 @@ pnpm dev
 - `lib/`:
   - `authOptions.ts`: configuração do NextAuth
   - `editorStore.ts`: estado global com Zustand
-  - `meta.ts`: constrói e copia metatags com sanitização de HTML
-  - `metaTags.ts`: utilitário para gerar tags OG/Twitter
+  - `meta.ts`: constrói e copia metatags OG/Twitter com sanitização de HTML
   - `types/next-auth.d.ts`: tipagens adicionais para sessão
   - `tailwind.config.ts` e `postcss.config.js`: configuração de estilos
 
