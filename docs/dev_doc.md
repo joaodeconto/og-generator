@@ -57,8 +57,8 @@ OGGenerator is a one‑page (expandable) app to **compose Open Graph images** wi
 │  │  ├─ auth.ts                                  # NextAuth config
 │  │  ├─ storage.ts                               # KV/S3 helpers
 │  │  ├─ images.ts                                # canvas helpers (scale/export/invert, font-ready @2x)
-│  │  ├─ removeBg.ts                              # WASM loader + pipeline
-│  │  └─ metaTags.ts                              # build OG/Twitter meta tags
+│  │  ├─ meta.ts                                  # build OG/Twitter meta tags
+│  │  └─ removeBg.ts                              # WASM loader + pipeline
 │  ├─ state/
 │  │  └─ editorStore.ts                           # Zustand store (title, subtitle, font sizes, theme, etc.)
 │  ├─ workers/
