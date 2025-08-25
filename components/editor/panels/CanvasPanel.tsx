@@ -1,5 +1,4 @@
 "use client";
-
 import { useEditorStore } from "lib/editorStore";
 
 export default function CanvasPanel() {

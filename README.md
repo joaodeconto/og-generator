@@ -11,6 +11,12 @@ Aplicação Next.js para criar imagens Open Graph personalizadas. Utiliza React,
 - NextAuth para autenticação
 - Jest e Testing Library para testes
 
+## Recursos
+
+- Editor de logo com upload por arquivo, colagem ou URL
+- Remoção de fundo, inversão B/W e máscara circular do logo
+- Controles de escala e centralização do logo
+
 ## Instalação e Uso
 
 Requisitos: Node.js 18+ e pnpm.
@@ -55,7 +61,7 @@ Preencha cada chave com valores obtidos nos provedores OAuth (Google, GitHub, et
 - Presets automáticos de layout e cores ("Surpreenda‑me")
 - Persistência das configurações no `localStorage`
 - Página de login personalizada
-- Melhorias no editor de logo (remoção de fundo e inversão de cores)
+- Arrastar e soltar de logo e outras melhorias
 
 ## Licença
 

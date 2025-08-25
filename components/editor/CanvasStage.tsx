@@ -1,4 +1,6 @@
 
+"use client";
+
 import { useEffect, useRef, useState } from 'react';
 import { useEditorStore } from 'lib/editorStore';
 import { invertImageColors, blobToDataURL } from 'lib/images';
