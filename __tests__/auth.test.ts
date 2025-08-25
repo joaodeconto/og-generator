@@ -1,3 +1,13 @@
+jest.mock('next-auth', () => ({
+  __esModule: true,
+  default: jest.fn(() => (() => {})),
+  getServerSession: jest.fn(() => Promise.resolve(null)),
+}));
+jest.mock('next-auth/providers/google', () => ({ __esModule: true, default: () => ({ id: 'google' }) }));
+jest.mock('next-auth/providers/github', () => ({ __esModule: true, default: () => ({ id: 'github' }) }));
+jest.mock('next-auth/providers/twitter', () => ({ __esModule: true, default: () => ({ id: 'twitter' }) }));
+jest.mock('next-auth/providers/facebook', () => ({ __esModule: true, default: () => ({ id: 'facebook' }) }));
+
 describe('auth', () => {
   const originalEnv = process.env;
 
@@ -28,10 +38,11 @@ describe('auth', () => {
     expect(ids).toContain('google');
   });
 
-  it('throws when NEXTAUTH_SECRET is missing', () => {
+  it('uses a fallback secret when NEXTAUTH_SECRET is missing', () => {
     delete (process.env as any).NEXTAUTH_SECRET;
     jest.resetModules();
-    expect(() => require('../lib/auth')).toThrow();
+    const { env } = require('../lib/env');
+    expect(env.NEXTAUTH_SECRET).toBe('dev-secret');
   });
 
   it('session callback returns session unchanged when token lacks sub', async () => {

@@ -1,5 +1,7 @@
 import NextAuth from "next-auth";
+import { getServerSession } from "next-auth";
 import type { Session } from "next-auth";
+import type { JWT } from "next-auth/jwt";
 import type { Provider } from "next-auth/providers";
 import Google from "next-auth/providers/google";
 import GitHub from "next-auth/providers/github";
@@ -37,13 +39,16 @@ if (env.FACEBOOK_CLIENT_ID && env.FACEBOOK_CLIENT_SECRET) {
   );
 }
 
-export const { handlers, auth } = NextAuth({
+export const authOptions = {
   providers,
   callbacks: {
-    async session({ session, token }) {
+    async session({ session, token }: { session: Session; token: JWT }) {
       const s = session as ExtendedSession;
       if (token?.sub) s.userId = token.sub;
       return s;
     },
   },
-});
+};
+
+export const handlers = NextAuth(authOptions);
+export const auth = () => getServerSession(authOptions);
