@@ -11,3 +11,5 @@ body,
 body {
   font-family: theme('fontFamily.sans');
 }
+.btn { @apply px-3 py-1.5 rounded-lg border bg-muted hover:bg-muted/80 text-sm; }
+.btn-primary { @apply bg-primary text-primary-foreground hover:bg-primary/90; }
