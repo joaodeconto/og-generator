@@ -27,7 +27,7 @@ OGGenerator is a one‑page (expandable) app to **compose Open Graph images** wi
   * Local state: Zustand with undo/redo history and localStorage persistence.
   * Cloud: Vercel KV/Upstash **or** Supabase (auth‑agnostic) **or** Planetscale/Neon (if SQL preferred).
   * Object storage for uploads (logo): Vercel Blob **or** Supabase Storage/S3‑compatible bucket.
-* **Image Processing:** HTMLCanvas + OffscreenCanvas + WebWorker. For **background removal**, use `@imgly/background-removal` (WASM U^2‑Net) or `background-removal` (WASM).
+* **Image Processing:** HTMLCanvas + OffscreenCanvas + WebWorker. For **background removal**, a dedicated worker lazy-loads `@imgly/background-removal` and caches the WASM model.
 * **Validation/Config:** Zod + TypeScript.
 * **Telemetry:** Vercel Analytics (optional: PostHog if desired).
 * **Testing:** Jest + React Testing Library.
@@ -62,7 +62,8 @@ OGGenerator is a one‑page (expandable) app to **compose Open Graph images** wi
 │  ├─ state/
 │  │  └─ editorStore.ts                           # Zustand store (title, subtitle, font sizes, theme, etc.)
 │  ├─ workers/
-│  │  └─ export.worker.ts                         # off-thread PNG export
+│  │  ├─ export.worker.ts                         # off-thread PNG export
+│  │  └─ removeBgWorker.ts                        # background removal worker
 │  └─ types/
 │     └─ index.d.ts
 ├─ public/
@@ -232,7 +233,7 @@ export type Design = {
 
 ## 8) Image Processing Details
 
-* **Remove BG (client)**: `@imgly/background-removal` or `background-removal` (both WASM). Lazy‑load on demand, run in a WebWorker to avoid jank. Cache last mask.
+* **Remove BG (client)**: WebWorker lazy-loads `@imgly/background-removal` and caches the WASM model.
 * **Invert B/W**: convert to grayscale (luma = 0.299R + 0.587G + 0.114B), then `255 - luma` or threshold to produce stencil.
 * **Hi‑DPI Export**: render @ 2× (or 3× for 4k), then scale down to target; embed font (or pre‑rasterize text) to avoid FOUT.
 

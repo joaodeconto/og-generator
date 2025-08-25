@@ -1,44 +1,50 @@
-const mockBlob = new Blob(['mock']);
-
-jest.mock('@imgly/background-removal', () => ({
-  removeBackground: jest.fn(async () => mockBlob),
-}));
-
-jest.mock('../lib/images', () => ({
-  blobToDataURL: jest.fn(async () => 'mock-data-url'),
-}));
-
-import { removeImageBackground } from '../lib/removeBg';
-import { removeBackground } from '@imgly/background-removal';
-import { blobToDataURL } from '../lib/images';
+import { Blob } from 'buffer';
 
 describe('removeImageBackground', () => {
+  let OriginalWorker: any;
+
   beforeEach(() => {
-    jest.clearAllMocks();
+    OriginalWorker = global.Worker;
   });
 
-  it('invokes background removal and returns data URL', async () => {
+  afterEach(() => {
+    global.Worker = OriginalWorker;
+    jest.resetModules();
+  });
+
+  it('delegates processing to worker and resolves with data URL', async () => {
+    const listeners: Record<string, Function[]> = { message: [], error: [] };
+    const mockWorkerInstance = {
+      addEventListener: jest.fn((type: string, cb: any) => {
+        (listeners[type] ||= []).push(cb);
+      }),
+      removeEventListener: jest.fn(),
+      postMessage: jest.fn(({ id }: any) => {
+        listeners.message.forEach((fn) => fn({ data: { id, dataUrl: 'mock-data-url' } }));
+      }),
+    } as unknown as Worker;
+    (global as any).Worker = jest.fn(() => mockWorkerInstance);
+
+    const { removeImageBackground } = await import('../lib/removeBg');
     const src = new Blob(['src']);
     const result = await removeImageBackground(src);
-
-    expect(removeBackground).toHaveBeenCalledWith(src);
-    expect(blobToDataURL).toHaveBeenCalledWith(mockBlob);
     expect(result).toBe('mock-data-url');
   });
 
-  it('overrides navigator.hardwareConcurrency without throwing', async () => {
-    (global as any).crossOriginIsolated = false;
-    const defineSpy = jest.spyOn(Object, 'defineProperty');
+  it('rejects if worker returns error', async () => {
+    const listeners: Record<string, Function[]> = { message: [], error: [] };
+    const mockWorkerInstance = {
+      addEventListener: jest.fn((type: string, cb: any) => {
+        (listeners[type] ||= []).push(cb);
+      }),
+      removeEventListener: jest.fn(),
+      postMessage: jest.fn(({ id }: any) => {
+        listeners.message.forEach((fn) => fn({ data: { id, error: 'fail' } }));
+      }),
+    } as unknown as Worker;
+    (global as any).Worker = jest.fn(() => mockWorkerInstance);
 
-    await expect(removeImageBackground('img')).resolves.toBe('mock-data-url');
-    expect(defineSpy).toHaveBeenCalledWith(
-      navigator,
-      'hardwareConcurrency',
-      expect.objectContaining({ configurable: true, get: expect.any(Function) }),
-    );
-
-    defineSpy.mockRestore();
-    delete (global as any).crossOriginIsolated;
+    const { removeImageBackground } = await import('../lib/removeBg');
+    await expect(removeImageBackground('img')).rejects.toThrow('fail');
   });
 });
-
