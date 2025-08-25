@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useMetadataStore } from 'lib/metadataStore';
+import { useEditorStore } from 'lib/editorStore';
 
 /**
  * Panel for editing metadata related to the current Open Graph image. By
@@ -22,6 +23,7 @@ export default function MetadataPanel() {
     setSiteName,
     setWarnings
   } = useMetadataStore();
+  const { setTitle, setSubtitle, setBannerUrl, setLogoUrl } = useEditorStore();
 
   async function handleFetch() {
     if (!url) return;
@@ -29,9 +31,15 @@ export default function MetadataPanel() {
       const res = await fetch(`/api/scrape?url=${encodeURIComponent(url)}`);
       const data = await res.json();
       setSiteName(data.title || '');
+      setDescription(data.description || '');
       setImage(data.image || '');
       setFavicon(data.favicon || '');
       setWarnings(data.warnings || []);
+      // Populate canvas editor with scraped metadata
+      setTitle(data.title || '');
+      setSubtitle(data.description || '');
+      setBannerUrl(data.image || undefined);
+      setLogoUrl(data.favicon || undefined);
     } catch (err: any) {
       setWarnings([err?.message || 'Failed to fetch metadata']);
     }

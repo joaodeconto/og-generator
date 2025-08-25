@@ -1,6 +1,7 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import MetadataPanel from '../components/MetadataPanel';
 import { useMetadataStore } from '../lib/metadataStore';
+import { useEditorStore } from '../lib/editorStore';
 
 describe('MetadataPanel', () => {
   beforeEach(() => {
@@ -12,6 +13,12 @@ describe('MetadataPanel', () => {
       sourceMap: {},
       warnings: []
     });
+    useEditorStore.setState({
+      title: '',
+      subtitle: '',
+      bannerUrl: undefined,
+      logoUrl: undefined
+    });
   });
 
   afterEach(() => {
@@ -22,6 +29,7 @@ describe('MetadataPanel', () => {
     global.fetch = jest.fn(async () => ({
       json: async () => ({
         title: 'Example Title',
+        description: 'Example description',
         image: 'https://example.com/image.png',
         favicon: 'https://example.com/favicon.ico',
         warnings: ['a warning']
@@ -36,8 +44,15 @@ describe('MetadataPanel', () => {
     await waitFor(() => {
       expect(screen.getByDisplayValue('Example Title')).toBeInTheDocument();
     });
+    expect(screen.getByDisplayValue('Example description')).toBeInTheDocument();
     expect(screen.getByDisplayValue('https://example.com/image.png')).toBeInTheDocument();
     expect(screen.getByDisplayValue('https://example.com/favicon.ico')).toBeInTheDocument();
     expect(await screen.findByText('a warning')).toBeInTheDocument();
+
+    const state = useEditorStore.getState();
+    expect(state.title).toBe('Example Title');
+    expect(state.subtitle).toBe('Example description');
+    expect(state.bannerUrl).toBe('https://example.com/image.png');
+    expect(state.logoUrl).toBe('https://example.com/favicon.ico');
   });
 });

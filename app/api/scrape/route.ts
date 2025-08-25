@@ -18,11 +18,28 @@ export async function GET(req: Request) {
   }
   try {
     const result = await scrape(target);
-    const title = result.meta.og.title ?? result.meta.twitter.title ?? result.meta.basic.title ?? '';
-    const image = pickBestImage(result.meta) || '';
-    const favicon = result.meta.basic.favicon ?? '';
+    const title =
+      result.meta.og.title ??
+      result.meta.twitter.title ??
+      result.meta.basic.title ??
+      '';
+    const description =
+      result.meta.og.description ??
+      result.meta.twitter.description ??
+      result.meta.basic.description ??
+      '';
+    const resolve = (url?: string) => {
+      if (!url) return '';
+      try {
+        return new URL(url, target).href;
+      } catch {
+        return '';
+      }
+    };
+    const image = resolve(pickBestImage(result.meta));
+    const favicon = resolve(result.meta.basic.favicon);
     const warnings = result.diagnostics.warnings ?? [];
-    return NextResponse.json({ title, image, favicon, warnings });
+    return NextResponse.json({ title, description, image, favicon, warnings });
   } catch (err: any) {
     return NextResponse.json({ error: err?.message || 'Failed to scrape' }, { status: 500 });
   }
