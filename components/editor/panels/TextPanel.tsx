@@ -43,9 +43,13 @@ export default function TextPanel() {
         />
       </label>
       <div className="grid grid-cols-3 gap-2">
-        <button className="btn" onClick={() => applySize("xs")}>XS</button>
-        <button className="btn" onClick={() => applySize("md")}>MD</button>
-        <button className="btn" onClick={() => applySize("xl")}>XL</button>
+        <button className="btn" aria-label="Extra small title size" onClick={() => applySize("xs")}>XS</button>
+        <button className="btn" aria-label="Medium title size" onClick={() => applySize("md")}>MD</button>
+        <button className="btn" aria-label="Extra large title size" onClick={() => applySize("xl")}>XL</button>
+
+        <button className="btn" aria-label="Extra small title size">XS</button>
+        <button className="btn" aria-label="Medium title size">MD</button>
+        <button className="btn" aria-label="Extra large title size">XL</button>
       </div>
     </section>
   );

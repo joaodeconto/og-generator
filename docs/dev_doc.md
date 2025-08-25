@@ -193,7 +193,7 @@ http://localhost:3000/api/auth/callback/<provider>
 **Accessibility/UX**
 
 * Labels + `aria-describedby` for form fields; focus rings; toasts on success.
-* Keyboard: `Ctrl/Cmd+S` export, `Ctrl/Cmd+C` meta, `R` Surprise, `1/2/3` sizes.
+* Keyboard: `Ctrl/Cmd+S` export, `Ctrl/Cmd+C` meta, `R` Surprise, `1/2/3` sizes, arrow keys move logo, `Shift+Arrow` scales logo.
 
 ---
 

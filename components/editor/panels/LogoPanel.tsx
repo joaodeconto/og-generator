@@ -64,32 +64,37 @@ export default function LogoPanel() {
   return (
     <section className="space-y-3">
       <div className="flex items-center gap-2">
+        <label htmlFor="logo-upload" className="sr-only">
+          Upload logo
+        </label>
         <input
+          id="logo-upload"
           type="file"
           accept="image/png,image/svg+xml"
           onChange={handleFileChange}
-          aria-label="Logo file"
+          aria-label="Upload logo file"
         />
-        <button className="btn" onClick={handlePaste}>
+        <button className="btn" aria-label="Paste logo from clipboard" onClick={handlePaste}>
           Paste
         </button>
-        <button className="btn" onClick={handleUrl}>
+        <button className="btn" aria-label="Load logo from URL" onClick={handleUrl}>
           From URL
         </button>
       </div>
       <div className="grid grid-cols-3 gap-2">
-        <button className="btn" onClick={toggleRemoveLogoBg}>
+        <button className="btn" aria-label="Remove background from logo" onClick={toggleRemoveLogoBg}>
           Remove BG
         </button>
-        <button className="btn" onClick={toggleInvertLogo}>
+        <button className="btn" aria-label="Invert logo colors" onClick={toggleInvertLogo}>
           Invert B/W
         </button>
-        <button className="btn" onClick={toggleMaskLogo}>
+        <button className="btn" aria-label="Mask logo as circle" onClick={toggleMaskLogo}>
+
           Mask: Circle
         </button>
       </div>
       <div>
-        <label className="text-sm" htmlFor="logo-scale">
+        <label htmlFor="logo-scale" className="text-sm">
           Scale
         </label>
         <input
@@ -104,10 +109,12 @@ export default function LogoPanel() {
         />
       </div>
       <div className="grid grid-cols-2 gap-2">
-        <button className="btn" onClick={handleReset}>
+        <button className="btn" aria-label="Reset logo adjustments" onClick={handleReset}>
           Reset
         </button>
-        <button className="btn" onClick={handleCenter}>
+      </div>
+      <div className="grid grid-cols-2 gap-2">        
+        <button className="btn" onClick={handleCenter} aria-label="Center logo on canvas">
           Center
         </button>
       </div>
