@@ -56,6 +56,7 @@ Preencha cada chave com valores obtidos nos provedores OAuth (Google, GitHub, et
 - Persistência das configurações no `localStorage`
 - Página de login personalizada
 - Melhorias no editor de logo (remoção de fundo e inversão de cores)
+- Sanitização automática de SVGs de logo convertendo para PNG
 
 ## Licença
 
