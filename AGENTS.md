@@ -83,7 +83,7 @@ The agent ensures these always exist and are fresh:
 ### 4.1 Current Flaws (must fix before MVP)
 
 * [ ] Missing **Zustand** state wiring between `Inspector` and `CanvasStage`.
-* [ ] No **remove‑BG** WebWorker integration (WASM lazy-load + cache).
+* [x] No **remove‑BG** WebWorker integration (WASM lazy-load + cache).
 * [ ] **SVG sanitization** or rasterization path not implemented.
 * [ ] **Export @2x** pipeline lacks font preload/`document.fonts.ready` guard.
 * [ ] **A11y**: ensure labels/ARIA on all controls; keyboard move/scale.

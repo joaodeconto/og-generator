@@ -9,6 +9,7 @@ Aplicação Next.js para criar imagens Open Graph personalizadas. Utiliza React,
 - Tailwind CSS
 - Zustand para estado global
 - NextAuth para autenticação
+- Remoção de fundo via WebWorker com modelo WASM
 - Jest e Testing Library para testes
 
 ## Instalação e Uso
@@ -55,7 +56,7 @@ Preencha cada chave com valores obtidos nos provedores OAuth (Google, GitHub, et
 - Presets automáticos de layout e cores ("Surpreenda‑me")
 - Persistência das configurações no `localStorage`
 - Página de login personalizada
-- Melhorias no editor de logo (remoção de fundo e inversão de cores)
+- Melhorias no editor de logo (inversão de cores)
 
 ## Licença
 

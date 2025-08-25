@@ -1,4 +1,9 @@
 import { render, screen } from '@testing-library/react';
+
+jest.mock('../state/editorStore', () => ({
+  useEditorStore: () => ({}),
+}), { virtual: true });
+
 import Page from '../app/(editor)/page';
 
 describe('Editor page', () => {
