@@ -6,6 +6,8 @@ import type { Preset } from './randomStyle';
 interface EditorData {
   title: string;
   subtitle: string;
+  titleFontSize: number;
+  subtitleFontSize: number;
   theme: 'light' | 'dark';
   layout: 'left' | 'center';
   accentColor: string;
@@ -23,6 +25,8 @@ interface EditorData {
 export interface EditorState extends EditorData {
   setTitle: (value: string) => void;
   setSubtitle: (value: string) => void;
+  setTitleFontSize: (size: number) => void;
+  setSubtitleFontSize: (size: number) => void;
   setTheme: (value: 'light' | 'dark') => void;
   setLayout: (value: 'left' | 'center') => void;
   setAccentColor: (value: string) => void;
@@ -44,6 +48,8 @@ export interface EditorState extends EditorData {
 const initialState: EditorData = {
   title: '',
   subtitle: '',
+  titleFontSize: 48,
+  subtitleFontSize: 24,
   theme: 'light',
   layout: 'left',
   accentColor: '#3b82f6',

@@ -26,3 +26,9 @@ export function buildMetaTags({ title, description, image, url }: MetaOptions): 
   }
   return tags.join('\n');
 }
+
+export async function copyMetaTags(options: MetaOptions): Promise<void> {
+  const tags = buildMetaTags(options);
+  await navigator.clipboard.writeText(tags);
+
+}
