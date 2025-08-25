@@ -94,7 +94,7 @@ Create `.env.local` with:
 
 ```
 NEXTAUTH_URL=https://your-vercel-domain.vercel.app
-NEXTAUTH_SECRET=... # openssl rand -base64 32
+NEXTAUTH_SECRET=... # openssl rand -base64 32 (fallback dev-secret if unset)
 
 GOOGLE_CLIENT_ID=...
 GOOGLE_CLIENT_SECRET=...
