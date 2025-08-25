@@ -285,7 +285,7 @@ pnpm dev
 ## 11) Security & Compliance
 
 * Store only minimal profile data.
-* Sanitize uploaded images (restrict to PNG/SVG; if SVG, sanitize to avoid script injection or rasterize to canvas before use).
+* Sanitize uploaded images (restrict to PNG/SVG; if SVG, sanitize via whitelist and rasterize to PNG with OffscreenCanvas before use).
 * CSRF handled by NextAuth; enforce HTTPS in production.
 * Rate‑limit the remove‑BG API route if enabled.
 

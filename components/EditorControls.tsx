@@ -2,6 +2,7 @@
 
 import { ChangeEvent, DragEvent } from 'react';
 import { useEditorStore } from 'lib/editorStore';
+import { sanitizeSvg, svgToPng, blobToDataURL } from 'lib/images';
 
 /**
  * Form controls for editing the Open Graph image properties. Each input is
@@ -45,13 +46,24 @@ export default function EditorControls() {
     setBannerUrl(url);
   };
 
-  const handleLogoChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleLogoChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) {
       setLogoFile(undefined);
       return;
     }
-    setLogoFile(file);
+    if (
+      file.type === 'image/svg+xml' ||
+      file.name.toLowerCase().endsWith('.svg')
+    ) {
+      const text = await file.text();
+      const sanitized = sanitizeSvg(text);
+      const pngBlob = await svgToPng(sanitized);
+      const pngFile = new File([pngBlob], 'logo.png', { type: 'image/png' });
+      setLogoFile(pngFile);
+    } else {
+      setLogoFile(file);
+    }
   };
 
   const handleBannerUrlChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -59,9 +71,27 @@ export default function EditorControls() {
     setBannerUrl(url || undefined);
   };
 
-  const handleLogoUrlChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleLogoUrlChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const url = e.target.value;
-    setLogoUrl(url || undefined);
+    if (!url) {
+      setLogoUrl(undefined);
+      return;
+    }
+    try {
+      const res = await fetch(url);
+      const type = res.headers.get('content-type') || '';
+      if (type.includes('image/svg')) {
+        const text = await res.text();
+        const sanitized = sanitizeSvg(text);
+        const pngBlob = await svgToPng(sanitized);
+        const dataUrl = await blobToDataURL(pngBlob);
+        setLogoUrl(dataUrl);
+      } else {
+        setLogoUrl(url);
+      }
+    } catch {
+      setLogoUrl(undefined);
+    }
   };
 
   const handleBannerDrop = (e: DragEvent<HTMLDivElement>) => {
@@ -73,11 +103,22 @@ export default function EditorControls() {
     }
   };
 
-  const handleLogoDrop = (e: DragEvent<HTMLDivElement>) => {
+  const handleLogoDrop = async (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     const file = e.dataTransfer.files?.[0];
     if (file) {
-      setLogoFile(file);
+      if (
+        file.type === 'image/svg+xml' ||
+        file.name.toLowerCase().endsWith('.svg')
+      ) {
+        const text = await file.text();
+        const sanitized = sanitizeSvg(text);
+        const pngBlob = await svgToPng(sanitized);
+        const pngFile = new File([pngBlob], 'logo.png', { type: 'image/png' });
+        setLogoFile(pngFile);
+      } else {
+        setLogoFile(file);
+      }
     }
   };
 

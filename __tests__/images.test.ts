@@ -1,4 +1,9 @@
-import { blobToDataURL, invertImageColors } from '../lib/images';
+import {
+  blobToDataURL,
+  invertImageColors,
+  sanitizeSvg,
+  svgToPng,
+} from '../lib/images';
 
 describe('image utilities', () => {
   it('converts Blob to data URL', async () => {
@@ -41,5 +46,55 @@ describe('image utilities', () => {
 
     const inverted = await invertImageColors(redPixel);
     expect(inverted.startsWith('data:image/png;base64,')).toBe(true);
+  });
+
+  it('sanitizes SVG content', () => {
+    const dirty =
+      '<svg><script>alert(1)</script><rect onclick="foo()" fill="red" /></svg>';
+    const clean = sanitizeSvg(dirty);
+    expect(clean).not.toMatch(/script/);
+    expect(clean).not.toMatch(/onclick/);
+    expect(clean).toMatch(/rect/);
+  });
+
+  it('rasterizes sanitized SVG to PNG', async () => {
+    const mockCtx = { drawImage: jest.fn() } as any;
+
+    class MockOffscreenCanvas {
+      width: number;
+      height: number;
+      constructor(width: number, height: number) {
+        this.width = width;
+        this.height = height;
+      }
+      getContext() {
+        return mockCtx;
+      }
+      convertToBlob() {
+        return Promise.resolve(new Blob(['png'], { type: 'image/png' }));
+      }
+    }
+    // @ts-ignore
+    global.OffscreenCanvas = MockOffscreenCanvas;
+
+    class MockImage {
+      width = 1;
+      height = 1;
+      onload: (() => void) | null = null;
+      onerror: ((err?: any) => void) | null = null;
+      set src(_value: string) {
+        this.onload && this.onload();
+      }
+    }
+    // @ts-ignore
+    global.Image = MockImage;
+
+    (global.URL as any).createObjectURL = jest
+      .fn()
+      .mockReturnValue('blob:mock-url');
+    (global.URL as any).revokeObjectURL = jest.fn();
+
+    const blob = await svgToPng('<svg xmlns="http://www.w3.org/2000/svg"></svg>');
+    expect(blob.type).toBe('image/png');
   });
 });

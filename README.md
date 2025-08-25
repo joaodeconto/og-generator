@@ -64,6 +64,8 @@ Preencha cada chave com valores obtidos nos provedores OAuth (Google, GitHub, et
 - Exportação direta para PNG com alta resolução
 - Presets automáticos de layout e cores ("Surpreenda‑me")
 - Página de login personalizada
+- Melhorias no editor de logo (remoção de fundo e inversão de cores)
+- Sanitização automática de SVGs de logo convertendo para PNG
 - Arrastar e soltar de logo e outras melhorias
 
 ## Testes
@@ -77,8 +79,7 @@ pnpm test
 - **Desfazer:** Ctrl/Cmd + Z
 - **Refazer:** Ctrl/Cmd + Shift + Z
 - **Copiar metatags:** Ctrl/Cmd + C
-- **Salvar preset:** Ctrl/Cmd + S
-
+- **Salvar preset:** Ctrl/Cmd + S        
 ## Licença
 
 Projeto licenciado sob MIT. Consulte [LICENSE](LICENSE) para mais detalhes.
