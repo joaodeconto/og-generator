@@ -12,7 +12,7 @@ jest.mock('next/server', () => ({
 jest.mock('@odeconto/scraper', () => ({
   scrape: jest.fn(async () => ({
     meta: {
-      og: { title: 'Example Title' },
+      og: { title: 'Example Title', description: 'Example description' },
       twitter: {},
       basic: { favicon: 'https://example.com/favicon.ico' },
       fallback: {}
@@ -34,6 +34,7 @@ describe('GET /api/scrape', () => {
     const data = await res.json();
     expect(data).toEqual({
       title: 'Example Title',
+      description: 'Example description',
       image: 'https://example.com/image.png',
       favicon: 'https://example.com/favicon.ico',
       warnings: ['warn']
