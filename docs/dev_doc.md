@@ -38,40 +38,49 @@ OGGenerator is a one‑page (expandable) app to **compose Open Graph images** wi
 
 ```
 / (repo root)
-├─ src/
-│  ├─ app/
-│  │  ├─ api/
-│  │  │  ├─ auth/[...nextauth]/route.ts          # NextAuth handlers
-│  │  │  ├─ upload/route.ts                      # signed upload / server utilities
-│  │  │  └─ remove-bg/route.ts                   # optional server-side removal (alt to WASM)
-│  │  ├─ (editor)/page.tsx                       # main editor page
-│  │  ├─ layout.tsx
-│  │  └─ globals.css
-│  ├─ components/
-│  │  ├─ editor/CanvasStage.tsx
-│  │  ├─ editor/ControlsPanel.tsx
-│  │  ├─ editor/LogoLayer.tsx
-│  │  ├─ ui/* (shadcn/ui exports)
-│  │  └─ common/* (Button, Field, Tooltip, Toast)
-│  ├─ lib/
-│  │  ├─ auth.ts                                  # NextAuth config
-│  │  ├─ storage.ts                               # KV/S3 helpers
-│  │  ├─ images.ts                                # canvas helpers (scale/export/invert, font-ready @2x)
-│  │  ├─ meta.ts                                  # build OG/Twitter meta tags
-│  │  └─ removeBg.ts                              # WASM loader + pipeline
-│  ├─ state/
-│  │  └─ editorStore.ts                           # Zustand store (title, subtitle, font sizes, theme, etc.)
-│  ├─ workers/
-│  │  ├─ export.worker.ts                         # off-thread PNG export
-│  │  └─ removeBgWorker.ts                        # background removal worker
-│  └─ types/
-│     └─ index.d.ts
+├─ app/
+│  ├─ api/
+│  │  ├─ auth/[...nextauth]/route.ts          # NextAuth handlers
+│  │  ├─ upload/route.ts                      # signed upload / server utilities
+│  │  └─ remove-bg/route.ts                   # optional server-side removal (alt to WASM)
+│  ├─ (editor)/page.tsx                       # main editor page
+│  ├─ layout.tsx
+│  └─ globals.css
+├─ components/
+│  ├─ AuthButtons.tsx
+│  ├─ CanvasStage.tsx
+│  ├─ ErrorBoundary.tsx
+│  ├─ Providers.tsx
+│  ├─ ToastProvider.tsx
+│  └─ editor/
+│     ├─ EditorShell.tsx
+│     ├─ Inspector.tsx
+│     ├─ Toolbar.tsx
+│     └─ panels/
+│        ├─ CanvasPanel.tsx
+│        ├─ TextPanel.tsx
+│        ├─ LogoPanel.tsx
+│        └─ ExportPanel.tsx
+├─ lib/
+│  ├─ auth.ts                                  # NextAuth config
+│  ├─ editorStore.ts                           # Zustand store + undo/redo
+│  ├─ images.ts                                # canvas helpers (scale/export/invert, font-ready @2x)
+│  ├─ meta.ts                                  # build OG/Twitter meta tags
+│  ├─ randomStyle.ts
+│  └─ removeBg.ts                              # WASM loader + pipeline
+├─ state/
+│  └─ editorStore.ts                           # re-export for convenience
+├─ workers/
+│  ├─ export.worker.ts                         # off-thread PNG export
+│  └─ removeBgWorker.ts                        # background removal worker
+├─ types/
+│  └─ index.d.ts
 ├─ public/
 │  └─ fonts/*
 ├─ .env.local.example
 ├─ tailwind.config.ts
 ├─ postcss.config.js
-├─ next.config.mjs
+├─ next.config.js
 ├─ package.json
 └─ README.md
 ```
@@ -318,42 +327,42 @@ pnpm dev
 
 ### Sprint 0 — Bootstrap (0.5–1 day)
 
-* [ ] Create Next.js (App Router) + TS + Tailwind skeleton.
-* [ ] Install NextAuth + Google & GitHub providers (smoke test).
+* [x] Create Next.js (App Router) + TS + Tailwind skeleton.
+* [x] Install NextAuth + Google & GitHub providers (smoke test).
 * [ ] Add shadcn/ui primitives (Button, Slider, Dialog, Toast, Tooltip).
 
 ### Sprint 1 — Auth & Storage (1–2 days)
 
-* [ ] Wire Twitter/X and Facebook providers.
-* [ ] Session header (avatar, menu, sign‑out).
+* [x] Wire Twitter/X and Facebook providers (see `lib/auth.ts`).
+* [ ] Session header: AuthButtons handles sign-in/out; avatar + menu pending.
 * [ ] Choose storage strategy (KV + Blob *or* Supabase) and implement abstraction.
 * [ ] Save/load **Design** documents per user.
 
 ### Sprint 2 — Editor Core (2–3 days)
 
 * [x] CanvasStage wired to editor store with banner, title/subtitle and logo processing.
-* [ ] Text layers (Title/Subtitle) with clamp + balance.
-* [ ] Layout presets (left/center), 8px baseline grid.
-* [ ] Local autosave (debounced) and keyboard shortcuts.
+* [ ] Text layers (Title/Subtitle) with clamp + balance (basic inputs exist).
+* [x] Layout presets (left/center); 8px baseline grid pending.
+* [x] Local autosave (Zustand persist) and basic keyboard shortcuts for logo.
 
 ### Sprint 3 — Logo Tools (2–3 days)
 
-* [ ] Upload: drag‑and‑drop + paste + URL (file input, paste and URL wired; drag‑and‑drop pending).
-* [ ] Translate + scale + mask (circle) interaction (scale slider and mask toggle added; drag translate pending).
+* [ ] Upload: file input, paste and URL handled; drag‑and‑drop pending.
+* [ ] Translate + scale + mask (circle) — scale slider and mask toggle done; drag translate pending.
 * [x] **Remove Background** via WASM in WebWorker (toggle integrated with helper).
 * [x] **Invert B/W** filter + toggle.
 
 ### Sprint 4 — Export & Meta (1–2 days)
 
 * [ ] Hi‑DPI export (2× then downscale) to PNG.
-* [ ] Size presets (1200×630, 1600×900, 1920×1005).
-* [ ] Copy OG/Twitter meta block + toast feedback.
+* [x] Size presets (1200×630, 1600×900, 1920×1005).
+* [x] Copy OG/Twitter meta block with toast feedback.
 
 ### Sprint 5 — Polish & A11y (1–2 days)
 
-* [ ] Tooltips, focus states, ARIA labels.
-* [ ] Toasts for success/failure; error boundaries.
-* [ ] Preload font; SVG sanitization; rate‑limit on API routes.
+* [ ] Tooltips and polished focus states; basic ARIA labels present.
+* [x] Toasts for success/failure; error boundaries.
+* [ ] Preload font and rate‑limit API routes (SVG sanitization wired).
 * [ ] Minimal analytics (Vercel Analytics).
 
 ### Optional — Instagram Integration (R\&D)
