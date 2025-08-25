@@ -1,6 +1,5 @@
 "use client";
 
-import Image from 'next/image';
 import { useEditorStore } from 'lib/editorStore';
 import { useEffect, useState } from 'react';
 import { invertImageColors, blobToDataURL } from 'lib/images';
@@ -83,11 +82,11 @@ export default function CanvasStage() {
     >
       {/* Banner */}
       {bannerUrl && (
-        <Image
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
           src={bannerUrl}
           alt="Banner image"
-          fill
-          className="object-cover"
+          className="absolute inset-0 w-full h-full object-cover"
         />
       )}
       {/* Overlay to darken/lighten banner for contrast */}

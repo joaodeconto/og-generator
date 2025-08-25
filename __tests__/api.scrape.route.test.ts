@@ -61,4 +61,24 @@ describe('GET /api/scrape', () => {
     const data = await res.json();
     expect(data).toEqual({ error: 'fail' });
   });
+
+  it('resolves relative image and favicon URLs', async () => {
+    (scrape as jest.Mock).mockResolvedValueOnce({
+      meta: {
+        og: {},
+        twitter: {},
+        basic: { favicon: '/favicon.ico' },
+        fallback: {}
+      },
+      diagnostics: { warnings: [], source: {}, timingsMs: { fetch: 0, parse: 0 } }
+    });
+    (pickBestImage as jest.Mock).mockReturnValueOnce('/image.png');
+
+    const { GET } = await import('../app/api/scrape/route');
+    const req = { url: 'http://localhost/api/scrape?url=https://example.com/base' } as Request;
+    const res = await GET(req);
+    const data = await res.json();
+    expect(data.image).toBe('https://example.com/image.png');
+    expect(data.favicon).toBe('https://example.com/favicon.ico');
+  });
 });

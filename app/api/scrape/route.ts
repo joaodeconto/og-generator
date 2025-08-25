@@ -28,8 +28,16 @@ export async function GET(req: Request) {
       result.meta.twitter.description ??
       result.meta.basic.description ??
       '';
-    const image = pickBestImage(result.meta) || '';
-    const favicon = result.meta.basic.favicon ?? '';
+    const resolve = (url?: string) => {
+      if (!url) return '';
+      try {
+        return new URL(url, target).href;
+      } catch {
+        return '';
+      }
+    };
+    const image = resolve(pickBestImage(result.meta));
+    const favicon = resolve(result.meta.basic.favicon);
     const warnings = result.diagnostics.warnings ?? [];
     return NextResponse.json({ title, description, image, favicon, warnings });
   } catch (err: any) {
