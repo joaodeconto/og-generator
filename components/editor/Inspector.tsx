@@ -4,11 +4,15 @@ import CanvasPanel from "./panels/CanvasPanel";
 import TextPanel from "./panels/TextPanel";
 import LogoPanel from "./panels/LogoPanel";
 import ExportPanel from "./panels/ExportPanel";
+import MetadataPanel from "../MetadataPanel";
+import PresetsPanel from "../PresetsPanel";
 
 const tabs = [
   { id: "canvas", label: "Canvas", component: CanvasPanel },
   { id: "text", label: "Text", component: TextPanel },
   { id: "logo", label: "Logo", component: LogoPanel },
+  { id: "metadata", label: "Metadata", component: MetadataPanel },
+  { id: "presets", label: "Presets", component: PresetsPanel },
   { id: "export", label: "Export", component: ExportPanel }
 ];
 
