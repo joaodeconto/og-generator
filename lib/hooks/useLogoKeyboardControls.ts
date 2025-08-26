@@ -4,7 +4,7 @@ interface LogoKeyboardControls {
   logoScale: number;
   logoPosition: { x: number; y: number };
   setLogoScale: (scale: number) => void;
-  setLogoPosition: (x: number, y: number) => void;
+  setLogoPosition: (x: number, y: number, commit?: boolean) => void;
 }
 
 export function useLogoKeyboardControls({

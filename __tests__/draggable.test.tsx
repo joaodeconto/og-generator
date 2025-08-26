@@ -22,10 +22,13 @@ describe('Draggable', () => {
     fireEvent.pointerMove(wrapper, { clientX: 160, clientY: 130 });
     fireEvent.pointerUp(wrapper, { clientX: 160, clientY: 130 });
 
-    expect(onChange).toHaveBeenCalled();
-    const [x, y] = onChange.mock.calls[0];
-    expect(x).not.toBe(50);
-    expect(y).not.toBe(50);
+    expect(onChange).toHaveBeenCalledTimes(2);
+    const first = onChange.mock.calls[0] as [number, number, boolean];
+    const second = onChange.mock.calls[1] as [number, number, boolean];
+    expect(first[2]).toBe(true);
+    expect(second[2]).toBe(false);
+    expect(second[0]).not.toBe(50);
+    expect(second[1]).not.toBe(50);
   });
 
 

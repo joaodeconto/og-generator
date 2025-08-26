@@ -57,4 +57,21 @@ describe('CanvasStage drag', () => {
     fireEvent.pointerUp(wrapper, { clientX: 2000, clientY: 2000 });
   });
 
+  it('saves a single history entry on drag release', () => {
+    render(<CanvasStage />);
+    const logo = screen.getByAltText('Logo');
+    const wrapper = logo.parentElement as HTMLElement;
+
+    fireEvent.pointerDown(wrapper, { clientX: 100, clientY: 100 });
+    fireEvent.pointerMove(wrapper, { clientX: 160, clientY: 130 });
+    fireEvent.pointerMove(wrapper, { clientX: 200, clientY: 160 });
+    fireEvent.pointerUp(wrapper, { clientX: 200, clientY: 160 });
+
+    const afterDrag = useEditorStore.getState().logoPosition;
+    expect(afterDrag.x).toBeGreaterThan(50);
+
+    useEditorStore.getState().undo();
+    const undone = useEditorStore.getState().logoPosition;
+    expect(undone).toEqual({ x: 50, y: 50 });
+  });
 });

@@ -33,8 +33,8 @@ export interface EditorState extends EditorData {
   setSubtitle: (value: string) => void;
   setTitleFontSize: (size: number) => void;
   setSubtitleFontSize: (size: number) => void;
-  setTitlePosition: (x: number, y: number) => void;
-  setSubtitlePosition: (x: number, y: number) => void;
+  setTitlePosition: (x: number, y: number, commit?: boolean) => void;
+  setSubtitlePosition: (x: number, y: number, commit?: boolean) => void;
   setTheme: (value: 'light' | 'dark') => void;
   setLayout: (value: 'left' | 'center' | 'right') => void;
   setVertical: (value: 'top' | 'center' | 'bottom') => void;
@@ -43,7 +43,7 @@ export interface EditorState extends EditorData {
   setBannerUrl: (value: string | undefined) => void;
   setLogoFile: (file: File | undefined) => void;
   setLogoUrl: (url: string | undefined) => void;
-  setLogoPosition: (x: number, y: number) => void;
+  setLogoPosition: (x: number, y: number, commit?: boolean) => void;
   setLogoScale: (scale: number) => void;
   toggleInvertLogo: () => void;
   toggleRemoveLogoBg: () => void;
@@ -143,6 +143,9 @@ export const useEditorStore = create<EditorState>()(
         presets,
       });
 
+      const patch = (partial: Partial<EditorData>) =>
+        set((state) => ({ ...state, ...partial }));
+
       const apply = (partial: Partial<EditorData>) =>
         set((state) => {
           past.push(stripActions(state));
@@ -156,8 +159,10 @@ export const useEditorStore = create<EditorState>()(
         setSubtitle: (value) => apply({ subtitle: value }),
         setTitleFontSize: (size) => apply({ titleFontSize: size }),
         setSubtitleFontSize: (size) => apply({ subtitleFontSize: size }),
-        setTitlePosition: (x, y) => apply({ titlePosition: { x, y } }),
-        setSubtitlePosition: (x, y) => apply({ subtitlePosition: { x, y } }),
+        setTitlePosition: (x, y, commit = true) =>
+          (commit ? apply : patch)({ titlePosition: { x, y } }),
+        setSubtitlePosition: (x, y, commit = true) =>
+          (commit ? apply : patch)({ subtitlePosition: { x, y } }),
         setTheme: (value) => apply({ theme: value }),
         setLayout: (value) => apply({ layout: value }),
         setVertical: (value) => apply({ vertical: value }),
@@ -167,7 +172,8 @@ export const useEditorStore = create<EditorState>()(
         setBannerUrl: (value) => apply({ bannerUrl: value }),
         setLogoFile: (file) => apply({ logoFile: file, logoUrl: undefined }),
         setLogoUrl: (url) => apply({ logoUrl: url, logoFile: undefined }),
-        setLogoPosition: (x, y) => apply({ logoPosition: { x, y } }),
+        setLogoPosition: (x, y, commit = true) =>
+          (commit ? apply : patch)({ logoPosition: { x, y } }),
         setLogoScale: (scale) => apply({ logoScale: scale }),
         toggleInvertLogo: () => apply({ invertLogo: !get().invertLogo }),
         toggleRemoveLogoBg: () => apply({ removeLogoBg: !get().removeLogoBg }),

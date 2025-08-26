@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type ReactNode } from 'react';
+import { useState, useRef, type ReactNode } from 'react';
 
 export const BASE_WIDTH = 1200;
 export const BASE_HEIGHT = 630;
@@ -15,7 +15,7 @@ export default function Draggable({
   baseHeight = BASE_HEIGHT,
 }: {
   position: { x: number; y: number };
-  onChange: (x: number, y: number) => void;
+  onChange: (x: number, y: number, commit?: boolean) => void;
   scale?: number;
   zoom: number;
   children: ReactNode;
@@ -37,8 +37,12 @@ export default function Draggable({
       pointer: { x: e.clientX, y: e.clientY },
       origin: { x: position.x, y: position.y },
     });
+    last.current = { x: position.x, y: position.y };
+    onChange(position.x, position.y, true);
     (e.currentTarget as HTMLElement).setPointerCapture?.(e.pointerId);
   };
+
+  const last = useRef<{ x: number; y: number }>({ x: position.x, y: position.y });
 
   const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
     if (!start) return;
@@ -56,7 +60,8 @@ export default function Draggable({
     const x = clamp(nx, Math.min(halfWidthPct, 100 - halfWidthPct), Math.max(halfWidthPct, 100 - halfWidthPct));
     const y = clamp(ny, Math.min(halfHeightPct, 100 - halfHeightPct), Math.max(halfHeightPct, 100 - halfHeightPct));
 
-    onChange(x, y);
+    last.current = { x, y };
+    onChange(x, y, false);
   };
 
   const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
