@@ -12,8 +12,8 @@ importers:
         specifier: ^1.7.0
         version: 1.7.0(onnxruntime-web@1.21.0-dev.20250206-d981b153d3)
       '@odeconto/scraper':
-        specifier: ^0.1.5
-        version: 0.1.5
+        specifier: ^0.1.20
+        version: 0.1.20
       '@tailwindcss/forms':
         specifier: ^0.5.10
         version: 0.5.10(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@20.19.11)(typescript@5.9.2)))
@@ -857,8 +857,8 @@ packages:
     resolution: {integrity: sha512-nn5ozdjYQpUCZlWGuxcJY/KpxkWQs4DcbMCmKojjyrYDEAGy4Ce19NN4v5MduafTwJlbKc99UA8YhSVqq9yPZA==}
     engines: {node: '>=12.4.0'}
 
-  '@odeconto/scraper@0.1.5':
-    resolution: {integrity: sha512-1VgNFst3Y4CDunPFXnHeiN4bo7GGT8WY0AbhtT7XVduC9kKsudggHre8O2myjC57yeFlJv+oDxYlgtLM0cmNOQ==}
+  '@odeconto/scraper@0.1.20':
+    resolution: {integrity: sha512-p9gWPfRFSyX7Nqo/qGykqTbqLye70xdC2sf1KaHQBKLnqEHJb1YiRz0k+oG5iKsvRIltsJKs+LFEtMdgFmhUew==}
     engines: {node: '>=18.17'}
 
   '@panva/hkdf@1.2.1':
@@ -4206,7 +4206,7 @@ snapshots:
 
   '@nolyfill/is-core-module@1.0.39': {}
 
-  '@odeconto/scraper@0.1.5':
+  '@odeconto/scraper@0.1.20':
     dependencies:
       cheerio: 1.1.2
       undici: 6.21.3

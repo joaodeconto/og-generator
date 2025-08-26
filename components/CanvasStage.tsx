@@ -4,99 +4,13 @@
 import Image from 'next/image';
 import { useMemo } from 'react';
 import { ensureSameOriginImage } from 'lib/urls';
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useEditorStore } from 'lib/editorStore';
 import { invertImageColors, blobToDataURL } from 'lib/images';
 import { removeImageBackground } from 'lib/removeBg';
 import { toast } from './ToastProvider';
-import { useLogoKeyboardControls } from 'lib/hooks/useLogoKeyboardControls';
 
-const BASE_WIDTH = 1200;
-const BASE_HEIGHT = 630;
-
-function Draggable({
-  position,
-  onChange,
-  scale = 1,
-  zoom,
-  children,
-}: {
-  position: { x: number; y: number };
-  onChange: (x: number, y: number) => void;
-  scale?: number;
-  zoom: number;
-  children: ReactNode;
-}) {
-  const [start, setStart] = useState<
-    | {
-      pointer: { x: number; y: number };
-      origin: { x: number; y: number };
-    }
-    | null
-  >(null);
-  const [deform, setDeform] = useState(1);
-  const DEFORM_THRESHOLD = 5;
-
-  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setStart({
-      pointer: { x: e.clientX, y: e.clientY },
-      origin: { x: position.x, y: position.y },
-    });
-    (e.currentTarget as HTMLElement).setPointerCapture?.(e.pointerId);
-  };
-
-  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (!start) return;
-    const dx = e.clientX - start.pointer.x;
-    const dy = e.clientY - start.pointer.y;
-    const el = e.currentTarget as HTMLElement;
-    const currentScale = scale * deform;
-    const width = el.offsetWidth * currentScale;
-    const height = el.offsetHeight * currentScale;
-    const halfWidthPct = (width / BASE_WIDTH) * 50;
-    const halfHeightPct = (height / BASE_HEIGHT) * 50;
-    const nx = start.origin.x + (dx / (BASE_WIDTH * zoom)) * 100;
-    const ny = start.origin.y + (dy / (BASE_HEIGHT * zoom)) * 100;
-    const x = Math.min(100 - halfWidthPct, Math.max(halfWidthPct, nx));
-    const y = Math.min(100 - halfHeightPct, Math.max(halfHeightPct, ny));
-
-    const distLeft = x - halfWidthPct;
-    const distRight = 100 - (x + halfWidthPct);
-    const distTop = y - halfHeightPct;
-    const distBottom = 100 - (y + halfHeightPct);
-    const minDist = Math.min(distLeft, distRight, distTop, distBottom);
-    const nextDeform =
-      minDist < DEFORM_THRESHOLD
-        ? Math.max(minDist / DEFORM_THRESHOLD, 0.2)
-        : 1;
-
-    setDeform(nextDeform);
-    onChange(x, y);
-  };
-
-  const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
-    setStart(null);
-    setDeform(1);
-    (e.currentTarget as HTMLElement).releasePointerCapture?.(e.pointerId);
-  };
-
-  return (
-    <div
-      className={`absolute ${start ? 'outline outline-2 outline-blue-500' : ''}`}
-      style={{
-        top: `${position.y}%`,
-        left: `${position.x}%`,
-        transform: `translate(-50%, -50%) scale(${scale * deform})`,
-      }}
-      onPointerDown={handlePointerDown}
-      onPointerMove={handlePointerMove}
-      onPointerUp={handlePointerUp}
-    >
-      {children}
-    </div>
-  );
-}
+import Draggable, { BASE_WIDTH, BASE_HEIGHT } from './Draggable';
 
 export default function CanvasStage() {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -149,18 +63,19 @@ export default function CanvasStage() {
         return;
       }
 
-      try {
-        // 1) Optional background removal (accepts Blob or string)
-        if (removeLogoBg) {
-          source = await removeImageBackground(source);
-        }
+      try {    
 
-        // 2) Normalize to a same-origin string (data: or /api/img?url=...)
+        //Normalize to a same-origin string (data: or /api/img?url=...)
         let normalized: string;
         if (source instanceof Blob) {
           normalized = await blobToDataURL(source); // becomes data:
         } else {
           normalized = ensureSameOriginImage(source)!; // http(s) → /api/img?... ; data:/relative kept
+        }
+        
+        //Optional background removal (accepts Blob or string)
+        if (removeLogoBg) {
+          source = await removeImageBackground(source);
         }
 
         // 3) Optional inversion (safe now because it's same-origin)
@@ -169,8 +84,9 @@ export default function CanvasStage() {
         }
 
         if (!cancelled) setLogoDataUrl(normalized);
+
       } catch (e) {
-        const message = e instanceof Error ? e.message : 'Erro ao processar a imagem.';
+        const message = e instanceof Error ? e.message : 'Erro ao processar o logo.';
         toast({ message, variant: 'error' });
         if (!cancelled) setLogoDataUrl(undefined);
       }
@@ -223,9 +139,8 @@ export default function CanvasStage() {
             src={bannerSrc}
             alt="Banner image"
             fill
-            crossOrigin="anonymous"
             className="absolute inset-0 w-full h-full object-cover"
-            //unoptimized // avoid double-optimization since we already proxy
+            unoptimized // avoid double-optimization since we already proxy
           />
         )}
         {bannerSrc && <div className={`absolute inset-0 ${theme === 'dark' ? 'bg-black/50' : 'bg-white/60'}`} />}
@@ -262,7 +177,7 @@ export default function CanvasStage() {
               alt="Logo"
               width={96}
               height={96}
-              crossOrigin="anonymous"
+              unoptimized
               className={`object-contain w-24 h-24 ${maskLogo ? 'rounded-full' : ''} shadow`}
             />
           </Draggable>
