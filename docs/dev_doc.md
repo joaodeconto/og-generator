@@ -199,6 +199,7 @@ http://localhost:3000/api/auth/callback/<provider>
 
 * **Translate**: click‑drag in canvas; fine‑tune with arrow keys (Shift = 10×).
 * **Scale**: pinch/scroll over logo; numeric slider with min/max.
+* **Manual Position**: X/Y number inputs in Logo panel update with drag.
 * **Remove Background**: client‑side WASM U^2‑Net; fallback API route.
 * **Invert B/W**: canvas filter (luminance threshold + invert) — preview toggle.
 * **Mask (Circle)**: optional clipPath for avatars.
@@ -351,7 +352,7 @@ pnpm dev
 ### Sprint 3 — Logo Tools (2–3 days)
 
 * [ ] Upload: file input, paste and URL handled; drag‑and‑drop pending.
-* [x] Translate + scale + mask (circle) — drag to translate logo and arrow keys for fine-tuning.
+* [x] Translate + scale + mask (circle) — drag to translate logo and arrow keys for fine-tuning (hoisted draggable wrapper keeps drag state stable).
 * [x] **Remove Background** via WASM in WebWorker (toggle integrated with helper).
 * [x] **Invert B/W** filter + toggle.
 
