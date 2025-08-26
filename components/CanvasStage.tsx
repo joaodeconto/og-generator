@@ -131,7 +131,7 @@ export default function CanvasStage() {
             baseHeight={height}
           >
             <Image
-              src={logoDataUrl}
+              src={logoDataUrl.logoDataUrl}
               alt="Logo"
               width={96}
               height={96}
