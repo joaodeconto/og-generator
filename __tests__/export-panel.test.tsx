@@ -11,6 +11,7 @@ jest.mock('../lib/images', () => ({
 
 describe('ExportPanel', () => {
   beforeEach(() => {
+    useEditorStore.getState().reset();
     useEditorStore.setState({ title: 'T', subtitle: 'S' });
     document.body.innerHTML = '<div id="og-canvas"></div>';
     Object.assign(navigator, { clipboard: { writeText: jest.fn().mockResolvedValue(undefined) } });

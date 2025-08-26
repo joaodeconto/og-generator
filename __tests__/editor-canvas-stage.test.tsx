@@ -4,6 +4,7 @@ import { useEditorStore } from '../lib/editorStore';
 
 describe('Editor CanvasStage', () => {
   beforeEach(() => {
+    useEditorStore.getState().reset();
     useEditorStore.setState({
       title: 'Hello World',
       subtitle: 'Subheading',
