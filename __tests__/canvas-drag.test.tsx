@@ -1,4 +1,4 @@
-import { render, fireEvent, screen } from '@testing-library/react';
+import { act, render, fireEvent, screen } from '@testing-library/react';
 import CanvasStage from '../components/CanvasStage';
 import { useEditorStore } from '../lib/editorStore';
 import { BASE_WIDTH, BASE_HEIGHT } from '../components/Draggable';
@@ -9,11 +9,13 @@ describe('CanvasStage drag', () => {
     (window as any).PointerEvent = MouseEvent;
   });
   beforeEach(() => {
-    useEditorStore.getState().reset();
-    useEditorStore.setState({
-      logoUrl: 'https://example.com/logo.png',
-      logoPosition: { x: 50, y: 50 },
-      logoScale: 1,
+    act(() => {
+      useEditorStore.getState().reset();
+      useEditorStore.setState({
+        logoUrl: 'https://example.com/logo.png',
+        logoPosition: { x: 50, y: 50 },
+        logoScale: 1,
+      });
     });
   });
 
@@ -70,7 +72,9 @@ describe('CanvasStage drag', () => {
     const afterDrag = useEditorStore.getState().logoPosition;
     expect(afterDrag.x).toBeGreaterThan(50);
 
-    useEditorStore.getState().undo();
+    act(() => {
+      useEditorStore.getState().undo();
+    });
     const undone = useEditorStore.getState().logoPosition;
     expect(undone).toEqual({ x: 50, y: 50 });
   });
