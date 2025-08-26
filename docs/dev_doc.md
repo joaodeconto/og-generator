@@ -15,7 +15,7 @@ OGGenerator is a one‑page (expandable) app to **compose Open Graph images** wi
 ## 2) Tech Stack
 
 * **Framework:** Next.js (React, App Router) — SPA feel + API routes for auth and utilities.
-* **Styling:** TailwindCSS + shadcn/ui (optional) for primitives (Toasts, Dialog, Slider).
+* **Styling:** TailwindCSS + shadcn/ui for primitives (Button, Input, Textarea).
 * **Auth:** NextAuth.js (Auth.js) with OAuth providers (see configuration below).
 * **Storage:**
   * Local state: Zustand with undo/redo history and localStorage persistence.
@@ -46,6 +46,10 @@ OGGenerator is a one‑page (expandable) app to **compose Open Graph images** wi
 │  ├─ ErrorBoundary.tsx
 │  ├─ Providers.tsx
 │  ├─ ToastProvider.tsx
+│  ├─ ui/
+│  │  ├─ button.tsx
+│  │  ├─ input.tsx
+│  │  └─ textarea.tsx
 │  └─ editor/
 │     ├─ EditorShell.tsx
 │     ├─ Inspector.tsx
@@ -62,6 +66,7 @@ OGGenerator is a one‑page (expandable) app to **compose Open Graph images** wi
 │  ├─ meta.ts                                  # build OG/Twitter meta tags
 │  ├─ randomStyle.ts
 │  ├─ removeBg.ts                              # WASM loader + pipeline
+│  ├─ utils.ts                                 # className helper
 │  └─ hooks/
 │     └─ useProcessedLogo.ts                   # prepares logo image (BG removal + inversion)
 ├─ state/
@@ -111,7 +116,6 @@ OGGenerator is a one‑page (expandable) app to **compose Open Graph images** wi
 
 ```
 pnpm i
-pnpm dlx shadcn-ui@latest init   # optional UI kit
 pnpm dev
 ```
 
@@ -141,7 +145,7 @@ pnpm dev
 
 ## 13) TODO
 
-* [ ] Add shadcn/ui primitives (Button, Slider, Dialog, Toast, Tooltip).
+* [ ] Add remaining shadcn/ui primitives (Slider, Dialog, Toast, Tooltip). Button/Input/Textarea integrated.
 * [ ] **Session header**: AuthButtons handles sign-in/out; avatar + menu pending.
 * [ ] Choose storage strategy (KV + Blob *or* Supabase) and implement abstraction.
 * [ ] Save/load **Design** documents per user.

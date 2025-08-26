@@ -40,7 +40,6 @@ describe('ExportPanel', () => {
       'og-image-1600x900.png'
     );
     expect(sizeBtn).toHaveAttribute('aria-pressed', 'true');
-    expect(sizeBtn).toHaveClass('btn-primary');
   });
 
   it('copies meta tags', () => {

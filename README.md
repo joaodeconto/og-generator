@@ -23,7 +23,7 @@ pnpm dev
 - [ ] Presets automáticos de layout e cores
 
 ## How it works
-Projeto construído com **Next.js 15** (App Router) e **React 18**. Os estilos são gerenciados com **Tailwind CSS** e o estado global com **Zustand**.  
+Projeto construído com **Next.js 15** (App Router) e **React 18**. Os estilos são gerenciados com **Tailwind CSS** e os componentes básicos usam **shadcn/ui**; o estado global com **Zustand**.
 A autenticacão é feita via **NextAuth** e a remoção de fundo usa um **WebWorker** com modelo WASM.
 
 Estrutura principal:

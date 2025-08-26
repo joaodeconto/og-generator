@@ -1,5 +1,8 @@
 "use client";
 import { useEditorStore } from "lib/editorStore";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
 
 export default function TextPanel() {
   const {
@@ -25,8 +28,8 @@ export default function TextPanel() {
     <section className="space-y-3">
       <label className="block">
         <span className="text-sm">Title</span>
-        <input
-          className="mt-1 w-full rounded-lg border bg-background px-3 py-2"
+        <Input
+          className="mt-1"
           placeholder="Your awesome title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
@@ -34,8 +37,8 @@ export default function TextPanel() {
       </label>
       <label className="block">
         <span className="text-sm">Subtitle</span>
-        <textarea
-          className="mt-1 w-full rounded-lg border bg-background px-3 py-2"
+        <Textarea
+          className="mt-1"
           rows={3}
           placeholder="Short description"
           value={subtitle}
@@ -43,9 +46,15 @@ export default function TextPanel() {
         />
       </label>
       <div className="grid grid-cols-3 gap-2">
-        <button className="btn" aria-label="Extra small title size" onClick={() => applySize("xs")}>XS</button>
-        <button className="btn" aria-label="Medium title size" onClick={() => applySize("md")}>MD</button>
-        <button className="btn" aria-label="Extra large title size" onClick={() => applySize("xl")}>XL</button>
+        <Button aria-label="Extra small title size" onClick={() => applySize("xs")}>
+          XS
+        </Button>
+        <Button aria-label="Medium title size" onClick={() => applySize("md")}>
+          MD
+        </Button>
+        <Button aria-label="Extra large title size" onClick={() => applySize("xl")}>
+          XL
+        </Button>
       </div>
     </section>
   );
