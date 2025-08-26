@@ -202,8 +202,7 @@ http://localhost:3000/api/auth/callback/<provider>
 * **Remove Background**: client‑side WASM U^2‑Net; fallback API route.
 * **Invert B/W**: canvas filter (luminance threshold + invert) — preview toggle.
 * **Mask (Circle)**: optional clipPath for avatars.
-* **Position Presets & Undo/Redo**: quick corner/center placement plus history controls.
-* **Reset**: revert layer transforms.
+* **Position**: X/Y sliders for precise placement; Undo/Redo available via global toolbar.
 
 **Export**
 

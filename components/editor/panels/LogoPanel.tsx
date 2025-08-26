@@ -11,6 +11,7 @@ export default function LogoPanel() {
     toggleMaskLogo,
     logoScale,
     setLogoScale,
+    logoPosition,
     setLogoPosition,
     undo,
     redo,
@@ -58,14 +59,6 @@ export default function LogoPanel() {
     setLogoScale(1);
     setLogoPosition(50, 50);
   };
-
-  const positions = [
-    { label: "Top Left", x: 10, y: 10 },
-    { label: "Top Right", x: 90, y: 10 },
-    { label: "Bottom Left", x: 10, y: 90 },
-    { label: "Bottom Right", x: 90, y: 90 },
-    { label: "Center", x: 50, y: 50 },
-  ];
 
   return (
     <section className="space-y-3">
@@ -115,27 +108,43 @@ export default function LogoPanel() {
           onChange={(e) => setLogoScale(parseFloat(e.target.value))}
         />
       </div>
-      <div className="grid grid-cols-3 gap-2">
-        {positions.map((p) => (
-          <button
-            key={p.label}
-            className="btn"
-            aria-label={`Move logo to ${p.label}`}
-            onClick={() => setLogoPosition(p.x, p.y)}
-          >
-            {p.label}
-          </button>
-        ))}
+      <div>
+        <label htmlFor="logo-x" className="text-sm">
+          X Position
+        </label>
+        <input
+          id="logo-x"
+          type="range"
+          min={0}
+          max={100}
+          step={1}
+          className="w-full"
+          value={logoPosition.x}
+          onChange={(e) =>
+            setLogoPosition(parseFloat(e.target.value), logoPosition.y)
+          }
+        />
       </div>
-      <div className="grid grid-cols-3 gap-2">
+      <div>
+        <label htmlFor="logo-y" className="text-sm">
+          Y Position
+        </label>
+        <input
+          id="logo-y"
+          type="range"
+          min={0}
+          max={100}
+          step={1}
+          className="w-full"
+          value={logoPosition.y}
+          onChange={(e) =>
+            setLogoPosition(logoPosition.x, parseFloat(e.target.value))
+          }
+        />
+      </div>
+      <div>
         <button className="btn" aria-label="Reset logo adjustments" onClick={handleReset}>
           Reset
-        </button>
-        <button className="btn" aria-label="Undo logo action" onClick={undo}>
-          Undo
-        </button>
-        <button className="btn" aria-label="Redo logo action" onClick={redo}>
-          Redo
         </button>
       </div>
     </section>
