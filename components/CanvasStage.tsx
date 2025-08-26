@@ -223,8 +223,10 @@ export default function CanvasStage() {
           />
         )}
         {bannerSrc && <div className={`absolute inset-0 ${theme === 'dark' ? 'bg-black/50' : 'bg-white/60'}`} />}
-        <div
-          className={`absolute inset-0 flex flex-col ${verticalClasses} px-12 py-8 space-y-4 ${layoutClasses}`}
+        <Draggable
+          position={titlePosition}
+          onChange={setTitlePosition}
+          zoom={zoom}
         >
           <h1
             className={`font-bold leading-tight break-words ${textAlignClass}`}
@@ -234,17 +236,14 @@ export default function CanvasStage() {
           </h1>
         </Draggable>
         <Draggable
-          position={titlePosition}
-          onChange={setTitlePosition}
+          position={subtitlePosition}
+          onChange={setSubtitlePosition}
+          zoom={zoom}
         >
           <p className={`text-lg md:text-2xl max-w-prose ${textAlignClass}`}>
             {subtitle}
           </p>
         </Draggable>
-          <Draggable
-          position={subtitlePosition}
-          onChange={setSubtitlePosition}
-        >
         {logoDataUrl && (
           <Draggable
             position={logoPosition}
