@@ -17,6 +17,7 @@ pnpm dev
 - [x] Autenticação com Google e GitHub (NextAuth)
 - [x] Avatar e menu de sessão persistente
 - [ ] Provedores adicionais (Twitter, Facebook, Instagram)
+- [x] Remoção de fundo, inversão B/W e máscara circular do logo
 - [x] Editor com título, subtítulo e logo arrastável
 - [x] Remoção de fundo, inversão B/W e máscara circular do logo (com loading)
 - [ ] Upload de logo via drag-and-drop
@@ -28,6 +29,9 @@ pnpm dev
 ## How it works
 Projeto construído com **Next.js 15** (App Router) e **React 18**. Os estilos são gerenciados com **Tailwind CSS** e o estado global com **Zustand**.
 A autenticacão é feita via **NextAuth**, a remoção de fundo usa um **WebWorker** com modelo WASM e o estado do editor pode ser serializado e salvo em `/api/design`.
+
+
+Os textos de título e subtítulo utilizam CSS `clamp()` e `text-wrap: balance`, mantendo legibilidade em diferentes tamanhos.
 
 Estrutura principal:
 - `app/` – rotas e páginas (editor em `app/(editor)/page.tsx`)
