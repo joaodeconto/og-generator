@@ -21,6 +21,7 @@ export default function CanvasStage() {
     theme,
     layout,
     accentColor,
+    background,
     bannerUrl,
     logoFile,
     logoUrl,
@@ -43,7 +44,7 @@ export default function CanvasStage() {
     removeLogoBg,
     invertLogo,
   });
-  const themeClasses = theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-white text-gray-900';
+  const themeClasses = theme === 'dark' ? 'text-white' : 'text-gray-900';
   const textAlignClass =
     layout === 'center'
       ? 'text-center'
@@ -82,6 +83,7 @@ export default function CanvasStage() {
           transform: `scale(${zoom})`,
           transformOrigin: 'top left',
           borderColor: accentColor,
+          backgroundColor: background
         }}
       >
         {bannerSrc && (

@@ -12,7 +12,7 @@ jest.mock('../lib/images', () => ({
 describe('ExportPanel', () => {
   beforeEach(() => {
     useEditorStore.getState().reset();
-    useEditorStore.setState({ title: 'T', subtitle: 'S' });
+    useEditorStore.setState({ title: 'T', subtitle: 'S', background: '#abcdef' });
     document.body.innerHTML = '<div id="og-canvas"></div>';
     Object.assign(navigator, { clipboard: { writeText: jest.fn().mockResolvedValue(undefined) } });
   });
@@ -24,7 +24,8 @@ describe('ExportPanel', () => {
     expect(mock).toHaveBeenCalledWith(
       document.getElementById('og-canvas'),
       { width: 1200, height: 630 },
-      'og-image-1200x630.png'
+      'og-image-1200x630.png',
+      { backgroundColor: '#abcdef' }
     );
   });
 
@@ -37,7 +38,8 @@ describe('ExportPanel', () => {
     expect(mock).toHaveBeenCalledWith(
       document.getElementById('og-canvas'),
       { width: 1600, height: 900 },
-      'og-image-1600x900.png'
+      'og-image-1600x900.png',
+      { backgroundColor: '#abcdef' }
     );
     expect(sizeBtn).toHaveAttribute('aria-pressed', 'true');
     expect(sizeBtn).toHaveClass('btn-primary');
