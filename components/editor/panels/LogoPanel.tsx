@@ -141,7 +141,7 @@ export default function LogoPanel() {
           min={0.2}
           max={3}
           step={0.01}
-          className="w-full"
+          className="w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           value={logoScale}
           onChange={(e) => setLogoScale(parseFloat(e.target.value))}
         />
@@ -186,7 +186,7 @@ export default function LogoPanel() {
           min={0}
           max={100}
           step={1}
-          className="w-full"
+          className="w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           value={logoPosition.y}
           onChange={(e) =>
             setLogoPosition(logoPosition.x, parseFloat(e.target.value))
@@ -203,7 +203,7 @@ export default function LogoPanel() {
           min={0}
           max={100}
           step={1}
-          className="w-full"
+          className="w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           value={logoPosition.x}
           onChange={(e) =>
             setLogoPosition(parseFloat(e.target.value), logoPosition.y)

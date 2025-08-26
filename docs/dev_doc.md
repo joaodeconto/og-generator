@@ -153,7 +153,7 @@ pnpm dev
 * [ ] Hi‑DPI export (2× then downscale) to PNG.
 * [x] **Size presets**: added dimension presets and updated Canvas
 * [ ] Copy OG/Twitter meta block with toast feedback.
-* [ ] **Tooltips** and polished focus states; basic ARIA labels present.
+* [x] **Tooltips** integrated and focus states polished; basic ARIA labels present.
 * [ ] **Toasts** for every user action.
 * [ ] Minimal **analytics** (Vercel Analytics).
 * [ ] Media import prototype.
@@ -178,4 +178,12 @@ Status: accepted
 Context: Header needed persisted auth state to show avatar dropdown across routes.
 Decision: Introduced `lib/sessionStore` with Zustand `persist` and synced `AuthButtons` via `useSession`.
 Consequences: Session info lives in localStorage and is accessible app-wide; must clear store on sign-out.
+Links: PR TBD
+
+# Integrate shadcn tooltip component
+Date: 2025-08-26
+Status: accepted
+Context: Needed accessible tooltips and visible focus styles for editor controls.
+Decision: Added shadcn/ui Tooltip primitive and audited interactive elements with focus-visible ring styling.
+Consequences: Improved keyboard navigation and discoverability of actions; future components should reuse these patterns.
 Links: PR TBD

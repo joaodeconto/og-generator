@@ -5,6 +5,12 @@ import { useEditorStore } from "lib/editorStore";
 import { exportElementAsPng } from "lib/images";
 import { copyMetaTags } from "lib/meta";
 import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export default function Toolbar() {
   const {
@@ -65,26 +71,53 @@ export default function Toolbar() {
   }, [handleUndo, handleRedo, handleCopyMeta, handleSave]);
 
   return (
-    <header className="flex items-center justify-between border-b bg-background/80 p-2 backdrop-blur">
-      <div className="flex gap-2">
-        <Button aria-label="Undo" title="Undo (Cmd/Ctrl+Z)" onClick={handleUndo}>
-          Undo
-        </Button>
-        <Button aria-label="Redo" title="Redo (Cmd/Ctrl+Shift+Z)" onClick={handleRedo}>
-          Redo
-        </Button>
-      </div>
-      <div className="flex gap-2">
-        <Button aria-label="Copy Meta" title="Copy Meta (Cmd/Ctrl+C)" onClick={handleCopyMeta}>
-          Copy Meta
-        </Button>
-        <Button aria-label="Export" title="Export" onClick={handleExport}>
-          Export
-        </Button>
-        <Button aria-label="Save" title="Save (Cmd/Ctrl+S)" onClick={handleSave}>
-          Save
-        </Button>
-      </div>
-    </header>
+    <TooltipProvider>
+      <header className="flex items-center justify-between border-b bg-background/80 p-2 backdrop-blur">
+        <div className="flex gap-2">
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button aria-label="Undo" onClick={handleUndo}>
+                Undo
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Undo (Cmd/Ctrl+Z)</TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button aria-label="Redo" onClick={handleRedo}>
+                Redo
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Redo (Cmd/Ctrl+Shift+Z)</TooltipContent>
+          </Tooltip>
+        </div>
+        <div className="flex gap-2">
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button aria-label="Copy Meta" onClick={handleCopyMeta}>
+                Copy Meta
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Copy Meta (Cmd/Ctrl+C)</TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button aria-label="Export" onClick={handleExport}>
+                Export
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Export PNG</TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button aria-label="Save" onClick={handleSave}>
+                Save
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Save (Cmd/Ctrl+S)</TooltipContent>
+          </Tooltip>
+        </div>
+      </header>
+    </TooltipProvider>
   );
 }
