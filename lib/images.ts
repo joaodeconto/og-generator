@@ -24,8 +24,9 @@ export async function exportElementAsPng(
 ): Promise<void> {
   await document.fonts.ready;
 
-  const { width: originalWidth, height: originalHeight } =
-    element.getBoundingClientRect();
+  // Use client dimensions so preview zoom transforms do not affect export.
+  const originalWidth = element.clientWidth;
+  const originalHeight = element.clientHeight;
 
   const scaleX = size.width / originalWidth;
   const scaleY = size.height / originalHeight;

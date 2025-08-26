@@ -13,6 +13,8 @@ export default function LogoPanel() {
     setLogoScale,
     logoPosition,
     setLogoPosition,
+    undo,
+    redo,
   } = useEditorStore();
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
