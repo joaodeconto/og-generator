@@ -35,7 +35,7 @@ export default function CanvasStage() {
     removeLogoBg,
     maskLogo
   } = useEditorStore();
-  const logoDataUrl = useProcessedLogo({
+  const { logoDataUrl } = useProcessedLogo({
     logoFile,
     logoUrl,
     removeLogoBg,
