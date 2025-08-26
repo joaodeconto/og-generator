@@ -18,6 +18,7 @@ export default function useProcessedLogo({
   invertLogo,
 }: Options) {
   const [logoDataUrl, setLogoDataUrl] = useState<string | undefined>(undefined);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -26,8 +27,11 @@ export default function useProcessedLogo({
       let source: string | Blob | undefined = logoFile ?? logoUrl;
       if (!source) {
         setLogoDataUrl(undefined);
+        setLoading(false);
         return;
       }
+
+      setLoading(true);
 
       try {
         if (removeLogoBg) {
@@ -50,6 +54,8 @@ export default function useProcessedLogo({
         const message = e instanceof Error ? e.message : 'Erro ao processar a imagem.';
         toast({ message, variant: 'error' });
         if (!cancelled) setLogoDataUrl(undefined);
+      } finally {
+        if (!cancelled) setLoading(false);
       }
     };
 
@@ -59,6 +65,6 @@ export default function useProcessedLogo({
     };
   }, [logoFile, logoUrl, removeLogoBg, invertLogo]);
 
-  return logoDataUrl;
+  return { logoDataUrl, loading };
 }
 
