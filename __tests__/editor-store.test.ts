@@ -22,6 +22,8 @@ describe('editorStore position setters', () => {
   it('updates background color', () => {
     useEditorStore.getState().setBackground('#112233');
     expect(useEditorStore.getState().background).toBe('#112233');
+  });
+
   it('updates canvas size', () => {
     useEditorStore.getState().setSize(1600, 900);
     expect(useEditorStore.getState().width).toBe(1600);
