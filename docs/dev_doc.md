@@ -230,3 +230,19 @@ Context: Right-edge clamping was explicit but other sides relied on implicit beh
 Decision: Compute explicit min/max percentages for both axes and clamp against all four canvas edges.
 Consequences: Dragging stops uniformly at each boundary without visual scaling.
 Links: PR TBD
+
+# Strip boolean props in next/image mock
+Date: 2025-09-10
+Status: accepted
+Context: Jest tests mocked `next/image` with a plain `<img>` element, causing React to warn about `fill` and `unoptimized` boolean attributes.
+Decision: Filter Next.js-specific boolean props from the mock before rendering the `<img>`.
+Consequences: Test runs no longer emit React attribute warnings, keeping logs clean.
+Links: PR TBD
+
+# Wrap Zustand mutations in tests with act
+Date: 2025-09-10
+Status: accepted
+Context: Direct calls to `useEditorStore` setters during tests triggered React warnings about updates outside `act`.
+Decision: Wrap store mutations in `act()` within affected tests.
+Consequences: Ensures state changes are flushed before assertions and eliminates noisy warnings.
+Links: PR TBD

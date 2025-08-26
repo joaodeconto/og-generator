@@ -12,6 +12,7 @@ function Boom() {
 }
 
 test('renders fallback on error', () => {
+  const spy = jest.spyOn(console, 'error').mockImplementation(() => {});
   render(
     <ErrorBoundary fallback={<div>fallback</div>}>
       <Boom />
@@ -19,4 +20,5 @@ test('renders fallback on error', () => {
   );
   expect(screen.getByText('fallback')).toBeInTheDocument();
   expect(toast).toHaveBeenCalled();
+  spy.mockRestore();
 });
