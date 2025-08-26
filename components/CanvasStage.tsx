@@ -4,100 +4,15 @@
 import Image from 'next/image';
 import { useMemo } from 'react';
 import { ensureSameOriginImage } from 'lib/urls';
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { useCanvasZoom } from 'lib/hooks/useCanvasZoom';
+import { useEffect, useRef, useState } from 'react';
 import { useEditorStore } from 'lib/editorStore';
 import useProcessedLogo from 'lib/hooks/useProcessedLogo';
 
-const BASE_WIDTH = 1200;
-const BASE_HEIGHT = 630;
-
-function Draggable({
-  position,
-  onChange,
-  scale = 1,
-  zoom,
-  children,
-}: {
-  position: { x: number; y: number };
-  onChange: (x: number, y: number) => void;
-  scale?: number;
-  zoom: number;
-  children: ReactNode;
-}) {
-  const [start, setStart] = useState<
-    | {
-      pointer: { x: number; y: number };
-      origin: { x: number; y: number };
-    }
-    | null
-  >(null);
-  const [deform, setDeform] = useState(1);
-  const DEFORM_THRESHOLD = 5;
-
-  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setStart({
-      pointer: { x: e.clientX, y: e.clientY },
-      origin: { x: position.x, y: position.y },
-    });
-    (e.currentTarget as HTMLElement).setPointerCapture?.(e.pointerId);
-  };
-
-  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (!start) return;
-    const dx = e.clientX - start.pointer.x;
-    const dy = e.clientY - start.pointer.y;
-    const el = e.currentTarget as HTMLElement;
-    const currentScale = scale * deform;
-    const width = el.offsetWidth * currentScale;
-    const height = el.offsetHeight * currentScale;
-    const halfWidthPct = (width / BASE_WIDTH) * 50;
-    const halfHeightPct = (height / BASE_HEIGHT) * 50;
-    const nx = start.origin.x + (dx / (BASE_WIDTH * zoom)) * 100;
-    const ny = start.origin.y + (dy / (BASE_HEIGHT * zoom)) * 100;
-    const x = Math.min(100 - halfWidthPct, Math.max(halfWidthPct, nx));
-    const y = Math.min(100 - halfHeightPct, Math.max(halfHeightPct, ny));
-
-    const distLeft = x - halfWidthPct;
-    const distRight = 100 - (x + halfWidthPct);
-    const distTop = y - halfHeightPct;
-    const distBottom = 100 - (y + halfHeightPct);
-    const minDist = Math.min(distLeft, distRight, distTop, distBottom);
-    const nextDeform =
-      minDist < DEFORM_THRESHOLD
-        ? Math.max(minDist / DEFORM_THRESHOLD, 0.2)
-        : 1;
-
-    setDeform(nextDeform);
-    onChange(x, y);
-  };
-
-  const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
-    setStart(null);
-    setDeform(1);
-    (e.currentTarget as HTMLElement).releasePointerCapture?.(e.pointerId);
-  };
-
-  return (
-    <div
-      className={`absolute ${start ? 'outline outline-2 outline-blue-500' : ''}`}
-      style={{
-        top: `${position.y}%`,
-        left: `${position.x}%`,
-        transform: `translate(-50%, -50%) scale(${scale * deform})`,
-      }}
-      onPointerDown={handlePointerDown}
-      onPointerMove={handlePointerMove}
-      onPointerUp={handlePointerUp}
-    >
-      {children}
-    </div>
-  );
-}
+import Draggable, { BASE_WIDTH, BASE_HEIGHT } from './Draggable';
 
 export default function CanvasStage() {
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const [zoom, setZoom] = useState(1);
+  const { containerRef, zoom } = useCanvasZoom(BASE_WIDTH, BASE_HEIGHT);
   const {
     title,
     subtitle,
@@ -127,20 +42,6 @@ export default function CanvasStage() {
     invertLogo,
   });
 
-  // Resize observer to scale the canvas preview to fit its container
-  useEffect(() => {
-    const el = containerRef.current;
-    if (!el || typeof ResizeObserver === 'undefined') return;
-    const ro = new ResizeObserver(() => {
-      const { clientWidth, clientHeight } = el;
-      const scale = Math.min(clientWidth / BASE_WIDTH, clientHeight / BASE_HEIGHT);
-      setZoom(scale * 0.98);
-    });
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, []);
-
-
   const themeClasses = theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-white text-gray-900';
   const textAlignClass =
     layout === 'center'
@@ -149,25 +50,12 @@ export default function CanvasStage() {
         ? 'text-right'
         : 'text-left';
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    if (
-      e.key === 'ArrowUp' ||
-      e.key === 'ArrowDown' ||
-      e.key === 'ArrowLeft' ||
-      e.key === 'ArrowRight'
-    ) {
-      e.preventDefault();
-      if (e.shiftKey && (e.key === 'ArrowUp' || e.key === 'ArrowDown')) {
-        const delta = e.key === 'ArrowUp' ? 0.05 : -0.05;
-        const next = Math.min(3, Math.max(0.2, logoScale + delta));
-        setLogoScale(next);
-      } else {
-        const dx = e.key === 'ArrowLeft' ? -1 : e.key === 'ArrowRight' ? 1 : 0;
-        const dy = e.key === 'ArrowUp' ? -1 : e.key === 'ArrowDown' ? 1 : 0;
-        setLogoPosition(logoPosition.x + dx, logoPosition.y + dy);
-      }
-    }
-  };
+  const { onKeyDown } = useLogoKeyboardControls({
+    logoScale,
+    logoPosition,
+    setLogoScale,
+    setLogoPosition,
+  });
 
 
   const bannerSrc = useMemo(() => ensureSameOriginImage(bannerUrl), [bannerUrl]);
@@ -179,7 +67,7 @@ export default function CanvasStage() {
       tabIndex={0}
       role="img"
       aria-label="OG image preview"
-      onKeyDown={handleKeyDown}
+      onKeyDown={onKeyDown}
     >
       <div
         id="og-canvas"
@@ -197,9 +85,8 @@ export default function CanvasStage() {
             src={bannerSrc}
             alt="Banner image"
             fill
-            crossOrigin="anonymous"
             className="absolute inset-0 w-full h-full object-cover"
-            //unoptimized // avoid double-optimization since we already proxy
+            unoptimized // avoid double-optimization since we already proxy
           />
         )}
         {bannerSrc && <div className={`absolute inset-0 ${theme === 'dark' ? 'bg-black/50' : 'bg-white/60'}`} />}
@@ -236,7 +123,7 @@ export default function CanvasStage() {
               alt="Logo"
               width={96}
               height={96}
-              crossOrigin="anonymous"
+              unoptimized
               className={`object-contain w-24 h-24 ${maskLogo ? 'rounded-full' : ''} shadow`}
             />
           </Draggable>

@@ -43,6 +43,7 @@ pnpm dev
   - `Providers.tsx`: wrapper com SessionProvider e ToastProvider
   - `AuthButtons.tsx`: botões de login/logout
   - `CanvasStage.tsx`: preview da imagem OG
+  - `Draggable.tsx`: wrapper arrastável com deformação nas bordas
   - `editor/Toolbar.tsx`: ações de desfazer, refazer, exportar e copiar metatags
   - `editor/Inspector.tsx`: painel lateral com abas (Canvas, Text, Logo, Metadata, Presets, Export)
   - `MetadataPanel.tsx` e `PresetsPanel.tsx`: painéis reutilizados nas respectivas abas

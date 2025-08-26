@@ -49,6 +49,7 @@ OGGenerator is a one‑page (expandable) app to **compose Open Graph images** wi
 ├─ components/
 │  ├─ AuthButtons.tsx
 │  ├─ CanvasStage.tsx
+│  ├─ Draggable.tsx
 │  ├─ ErrorBoundary.tsx
 │  ├─ Providers.tsx
 │  ├─ ToastProvider.tsx
@@ -350,11 +351,13 @@ pnpm dev
 * [x] Title and subtitle positions stored with `{x,y}` coordinates and draggable on canvas.
 * [x] Layout presets (left/center); 8px baseline grid pending.
 * [x] Local autosave (Zustand persist) and basic keyboard shortcuts for logo.
+* [x] Preview zoom managed by `useCanvasZoom` hook (ResizeObserver).
 
 ### Sprint 3 — Logo Tools (2–3 days)
 
 * [ ] Upload: file input, paste and URL handled; drag‑and‑drop pending.
 * [x] Translate + scale + mask (circle) — drag to translate logo and arrow keys for fine-tuning (hoisted draggable wrapper keeps drag state stable).
+* [x] Arrow-key logo controls extracted into `useLogoKeyboardControls` hook.
 * [x] **Remove Background** via WASM in WebWorker (toggle integrated with helper).
 * [x] **Invert B/W** filter + toggle.
 
