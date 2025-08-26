@@ -349,6 +349,7 @@ pnpm dev
 * [x] Title and subtitle positions stored with `{x,y}` coordinates and draggable on canvas.
 * [x] Layout presets (left/center); 8px baseline grid pending.
 * [x] Local autosave (Zustand persist) and basic keyboard shortcuts for logo.
+* [x] Preview zoom managed by `useCanvasZoom` hook (ResizeObserver).
 
 ### Sprint 3 — Logo Tools (2–3 days)
 

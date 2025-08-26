@@ -4,6 +4,7 @@
 import Image from 'next/image';
 import { useMemo } from 'react';
 import { ensureSameOriginImage } from 'lib/urls';
+import { useCanvasZoom } from 'lib/hooks/useCanvasZoom';
 import { useEffect, useRef, useState } from 'react';
 import { useEditorStore } from 'lib/editorStore';
 import { invertImageColors, blobToDataURL } from 'lib/images';
@@ -13,8 +14,7 @@ import { toast } from './ToastProvider';
 import Draggable, { BASE_WIDTH, BASE_HEIGHT } from './Draggable';
 
 export default function CanvasStage() {
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const [zoom, setZoom] = useState(1);
+  const { containerRef, zoom } = useCanvasZoom(BASE_WIDTH, BASE_HEIGHT);
   const {
     title,
     subtitle,
@@ -39,18 +39,6 @@ export default function CanvasStage() {
   } = useEditorStore();
   const [logoDataUrl, setLogoDataUrl] = useState<string | undefined>(undefined);
 
-  // Resize observer to scale the canvas preview to fit its container
-  useEffect(() => {
-    const el = containerRef.current;
-    if (!el || typeof ResizeObserver === 'undefined') return;
-    const ro = new ResizeObserver(() => {
-      const { clientWidth, clientHeight } = el;
-      const scale = Math.min(clientWidth / BASE_WIDTH, clientHeight / BASE_HEIGHT);
-      setZoom(scale * 0.98);
-    });
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, []);
 
   // Prepare logo image applying optional background removal and inversion
   useEffect(() => {
