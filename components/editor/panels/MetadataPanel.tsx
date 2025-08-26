@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useMetadataStore } from 'lib/metadataStore';
 import { useEditorStore } from 'lib/editorStore';
-import { toast } from './ToastProvider';
+import { toast } from 'components/ToastProvider';
 
 /**
  * Panel for editing metadata related to the current Open Graph image. By

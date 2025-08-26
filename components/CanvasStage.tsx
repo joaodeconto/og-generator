@@ -8,12 +8,6 @@ import { invertImageColors, blobToDataURL } from 'lib/images';
 import { removeImageBackground } from 'lib/removeBg';
 import { toast } from './ToastProvider';
 
-/**
- * CanvasStage used within the editor. It mirrors the rendering logic of the
- * public CanvasStage component while fitting the result inside the available
- * space via CSS scaling. Title, subtitle, banner and logo all derive from the
- * editor store.
- */
 const BASE_WIDTH = 1200;
 const BASE_HEIGHT = 630;
 

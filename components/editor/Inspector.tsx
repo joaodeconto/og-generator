@@ -4,8 +4,8 @@ import CanvasPanel from "./panels/CanvasPanel";
 import TextPanel from "./panels/TextPanel";
 import LogoPanel from "./panels/LogoPanel";
 import ExportPanel from "./panels/ExportPanel";
-import MetadataPanel from "../MetadataPanel";
-import PresetsPanel from "../PresetsPanel";
+import MetadataPanel from "./panels/MetadataPanel";
+import PresetsPanel from "./panels/PresetsPanel";
 
 const tabs = [
   { id: "canvas", label: "Canvas", component: CanvasPanel },
