@@ -6,9 +6,7 @@ import { useMemo } from 'react';
 import { ensureSameOriginImage } from 'lib/urls';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { useEditorStore } from 'lib/editorStore';
-import { invertImageColors, blobToDataURL } from 'lib/images';
-import { removeImageBackground } from 'lib/removeBg';
-import { toast } from './ToastProvider';
+import useProcessedLogo from 'lib/hooks/useProcessedLogo';
 
 const BASE_WIDTH = 1200;
 const BASE_HEIGHT = 630;
@@ -122,7 +120,12 @@ export default function CanvasStage() {
     removeLogoBg,
     maskLogo
   } = useEditorStore();
-  const [logoDataUrl, setLogoDataUrl] = useState<string | undefined>(undefined);
+  const logoDataUrl = useProcessedLogo({
+    logoFile,
+    logoUrl,
+    removeLogoBg,
+    invertLogo,
+  });
 
   // Resize observer to scale the canvas preview to fit its container
   useEffect(() => {
@@ -137,47 +140,6 @@ export default function CanvasStage() {
     return () => ro.disconnect();
   }, []);
 
-  // Prepare logo image applying optional background removal and inversion
-  useEffect(() => {
-    let cancelled = false;
-
-    const process = async () => {
-      let source: string | Blob | undefined = logoFile ?? logoUrl;
-      if (!source) {
-        setLogoDataUrl(undefined);
-        return;
-      }
-
-      try {
-        // 1) Optional background removal (accepts Blob or string)
-        if (removeLogoBg) {
-          source = await removeImageBackground(source);
-        }
-
-        // 2) Normalize to a same-origin string (data: or /api/img?url=...)
-        let normalized: string;
-        if (source instanceof Blob) {
-          normalized = await blobToDataURL(source); // becomes data:
-        } else {
-          normalized = ensureSameOriginImage(source)!; // http(s) → /api/img?... ; data:/relative kept
-        }
-
-        // 3) Optional inversion (safe now because it's same-origin)
-        if (invertLogo) {
-          normalized = await invertImageColors(normalized);
-        }
-
-        if (!cancelled) setLogoDataUrl(normalized);
-      } catch (e) {
-        const message = e instanceof Error ? e.message : 'Erro ao processar a imagem.';
-        toast({ message, variant: 'error' });
-        if (!cancelled) setLogoDataUrl(undefined);
-      }
-    };
-
-    process();
-    return () => { cancelled = true; };
-  }, [logoFile, logoUrl, removeLogoBg, invertLogo]);
 
   const themeClasses = theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-white text-gray-900';
   const textAlignClass =
