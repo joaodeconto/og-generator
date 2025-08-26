@@ -21,6 +21,7 @@ pnpm dev
 - [ ] Upload de logo via drag-and-drop
 - [x] Exportação de PNG em múltiplos tamanhos
 - [ ] Presets automáticos de layout e cores
+- [x] Presets de dimensões do canvas
 
 ## How it works
 Projeto construído com **Next.js 15** (App Router) e **React 18**. Os estilos são gerenciados com **Tailwind CSS** e o estado global com **Zustand**.  
