@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useMemo } from 'react';
 import { ensureSameOriginImage } from 'lib/urls';
 import { useCanvasZoom } from 'lib/hooks/useCanvasZoom';
+import { useLogoKeyboardControls } from 'lib/hooks/useLogoKeyboardControls';
 import { useEffect, useRef, useState } from 'react';
 import { useEditorStore } from 'lib/editorStore';
 import { invertImageColors, blobToDataURL } from 'lib/images';
