@@ -2,6 +2,7 @@
 
 import { useEditorStore } from 'lib/editorStore';
 import { generateRandomPreset } from 'lib/randomStyle';
+import { Button } from '@/components/ui/button';
 
 /**
  * Panel that allows creating random style presets and applying them.
@@ -20,18 +21,16 @@ export default function PresetsPanel() {
   return (
     <div className="space-y-4">
       <h2 className="text-lg font-semibold">Presets</h2>
-      <button
-        onClick={handleGeneratePreset}
-        className="rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
-      >
+      <Button onClick={handleGeneratePreset}>
         Gerar Preset Aleatório
-      </button>
+      </Button>
       <ul className="space-y-2">
         {presets.map((preset, index) => (
           <li key={index}>
-            <button
+            <Button
               onClick={() => applyPreset(preset)}
-              className="flex w-full items-center justify-between rounded-md border px-2 py-1 text-left hover:bg-gray-50"
+              variant="secondary"
+              className="flex w-full items-center justify-between px-2 py-1 text-left"
             >
               <span className="text-sm">
                 {preset.theme} / {preset.layout}
@@ -40,7 +39,7 @@ export default function PresetsPanel() {
                 className="h-4 w-4 rounded"
                 style={{ backgroundColor: preset.accentColor }}
               />
-            </button>
+            </Button>
           </li>
         ))}
         {presets.length === 0 && (

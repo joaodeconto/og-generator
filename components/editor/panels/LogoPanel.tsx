@@ -2,6 +2,8 @@
 import { useEditorStore } from "lib/editorStore";
 import useProcessedLogo from "lib/hooks/useProcessedLogo";
 import type { ChangeEvent } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 export default function LogoPanel() {
   const {
@@ -81,15 +83,15 @@ export default function LogoPanel() {
           aria-label="Upload logo file"
           className="hidden"
         />
-        <label htmlFor="logo-upload" className="btn">
-          Choose File
-        </label>
-        <button className="btn" aria-label="Paste logo from clipboard" onClick={handlePaste}>
+        <Button asChild variant="secondary">
+          <label htmlFor="logo-upload">Choose File</label>
+        </Button>
+        <Button aria-label="Paste logo from clipboard" onClick={handlePaste}>
           Paste
-        </button>
-        <button className="btn" aria-label="Load logo from URL" onClick={handleUrl}>
+        </Button>
+        <Button aria-label="Load logo from URL" onClick={handleUrl}>
           From URL
-        </button>
+        </Button>
       </div>
       {loading && (
         <div
@@ -119,16 +121,15 @@ export default function LogoPanel() {
         </div>
       )}
       <div className="grid grid-cols-3 gap-2">
-        <button className="btn" aria-label="Remove background from logo" onClick={toggleRemoveLogoBg}>
+        <Button aria-label="Remove background from logo" onClick={toggleRemoveLogoBg}>
           Remove BG
-        </button>
-        <button className="btn" aria-label="Invert logo colors" onClick={toggleInvertLogo}>
+        </Button>
+        <Button aria-label="Invert logo colors" onClick={toggleInvertLogo}>
           Invert B/W
-        </button>
-        <button className="btn" aria-label="Mask logo as circle" onClick={toggleMaskLogo}>
-
+        </Button>
+        <Button aria-label="Mask logo as circle" onClick={toggleMaskLogo}>
           Mask: Circle
-        </button>
+        </Button>
       </div>
       <div>
         <label htmlFor="logo-scale" className="text-sm">
@@ -150,7 +151,7 @@ export default function LogoPanel() {
           <label htmlFor="logo-x" className="text-sm">
             X
           </label>
-          <input
+          <Input
             id="logo-x"
             type="number"
             min={0}
@@ -164,7 +165,7 @@ export default function LogoPanel() {
           <label htmlFor="logo-y" className="text-sm">
             Y
           </label>
-          <input
+          <Input
             id="logo-y"
             type="number"
             min={0}
@@ -210,9 +211,9 @@ export default function LogoPanel() {
         />
       </div>
       <div>
-        <button className="btn" aria-label="Reset logo adjustments" onClick={handleReset}>
+        <Button aria-label="Reset logo adjustments" onClick={handleReset}>
           Reset
-        </button>
+        </Button>
       </div>
     </section>
   );

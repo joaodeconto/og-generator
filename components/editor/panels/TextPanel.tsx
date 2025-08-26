@@ -1,5 +1,8 @@
 "use client";
 import { useEditorStore } from "lib/editorStore";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
 import type { ChangeEvent } from "react";
 import type { CSSProperties } from "react";
 
@@ -47,7 +50,6 @@ function TextField({
     </label>
   );
 }
-
 export default function TextPanel() {
   const {
     title,
@@ -72,6 +74,25 @@ export default function TextPanel() {
 
   return (
     <section className="space-y-3">
+      <label className="block">
+        <span className="text-sm">Title</span>
+        <Input
+          className="mt-1"
+          placeholder="Your awesome title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
+      </label>
+      <label className="block">
+        <span className="text-sm">Subtitle</span>
+        <Textarea
+          className="mt-1"
+          rows={3}
+          placeholder="Short description"
+          value={subtitle}
+          onChange={(e) => setSubtitle(e.target.value)}
+        />
+      </label>
       <TextField
         label="Title"
         placeholder="Your awesome title"
@@ -93,9 +114,15 @@ export default function TextPanel() {
         onChange={setSubtitle}
       />
       <div className="grid grid-cols-3 gap-2">
-        <button className="btn" aria-label="Extra small title size" onClick={() => applySize("xs")}>XS</button>
-        <button className="btn" aria-label="Medium title size" onClick={() => applySize("md")}>MD</button>
-        <button className="btn" aria-label="Extra large title size" onClick={() => applySize("xl")}>XL</button>
+        <Button aria-label="Extra small title size" onClick={() => applySize("xs")}>
+          XS
+        </Button>
+        <Button aria-label="Medium title size" onClick={() => applySize("md")}>
+          MD
+        </Button>
+        <Button aria-label="Extra large title size" onClick={() => applySize("xl")}>
+          XL
+        </Button>
       </div>
     </section>
   );

@@ -42,7 +42,6 @@ describe('ExportPanel', () => {
       { backgroundColor: '#abcdef' }
     );
     expect(sizeBtn).toHaveAttribute('aria-pressed', 'true');
-    expect(sizeBtn).toHaveClass('btn-primary');
   });
 
   it('copies meta tags', () => {

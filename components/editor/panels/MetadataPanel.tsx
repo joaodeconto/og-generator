@@ -4,6 +4,9 @@ import { useState } from 'react';
 import { useMetadataStore } from 'lib/metadataStore';
 import { useEditorStore } from 'lib/editorStore';
 import { toast } from 'components/ToastProvider';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Button } from '@/components/ui/button';
 
 /**
  * Panel for editing metadata related to the current Open Graph image. By
@@ -63,72 +66,67 @@ export default function MetadataPanel() {
           URL
         </label>
         <div className="mt-1 flex gap-2">
-          <input
+          <Input
             id="url"
             type="url"
             value={url}
             onChange={(e) => setUrl(e.target.value)}
-            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
             placeholder="https://exemplo.com"
           />
-          <button
-            type="button"
-            onClick={handleFetch}
-            className="rounded-md bg-blue-600 px-3 py-2 text-sm font-medium text-white hover:bg-blue-700"
-          >
+          <Button type="button" onClick={handleFetch}>
             Fetch metadata
-          </button>
+          </Button>
         </div>
       </div>
       <div>
         <label className="block text-sm font-medium text-gray-700" htmlFor="siteName">
           Nome do site
         </label>
-        <input
+        <Input
           id="siteName"
           type="text"
           value={siteName}
           onChange={(e) => setSiteName(e.target.value)}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
           placeholder="Nome do site"
+          className="mt-1"
         />
       </div>
       <div>
         <label className="block text-sm font-medium text-gray-700" htmlFor="description">
           Descrição
         </label>
-        <textarea
+        <Textarea
           id="description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
           placeholder="Descrição da página"
+          className="mt-1"
         />
       </div>
       <div>
         <label className="block text-sm font-medium text-gray-700" htmlFor="image">
           URL da imagem
         </label>
-        <input
+        <Input
           id="image"
           type="url"
           value={image}
           onChange={(e) => setImage(e.target.value)}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
           placeholder="https://exemplo.com/imagem.png"
+          className="mt-1"
         />
       </div>
       <div>
         <label className="block text-sm font-medium text-gray-700" htmlFor="favicon">
           URL do favicon
         </label>
-        <input
+        <Input
           id="favicon"
           type="url"
           value={favicon}
           onChange={(e) => setFavicon(e.target.value)}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
           placeholder="https://exemplo.com/favicon.ico"
+          className="mt-1"
         />
       </div>
       {warnings.length > 0 && (

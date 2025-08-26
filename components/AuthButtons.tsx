@@ -1,9 +1,9 @@
 "use client";
 
 import { signIn, signOut, useSession } from 'next-auth/react';
+import { Button } from '@/components/ui/button';
 import { useEffect, useRef, useState } from 'react';
 import { useSessionStore } from '../lib/sessionStore';
-
 /**
  * Renders sign in/out controls. When authenticated it shows the user's avatar
  * with a dropdown menu containing the sign-out action. The current session is
@@ -33,12 +33,7 @@ export default function AuthButtons() {
   if (status === 'loading') {
     return (
       <div className="space-x-3">
-        <button
-          type="button"
-          className="flex items-center justify-center rounded-md bg-gray-200 px-4 py-2 text-sm font-medium text-gray-700"
-          disabled
-          aria-busy="true"
-        >
+        <Button type="button" disabled aria-busy="true" variant="secondary" className="flex items-center justify-center px-4 py-2">
           <svg
             className="h-4 w-4 animate-spin"
             xmlns="http://www.w3.org/2000/svg"
@@ -61,7 +56,7 @@ export default function AuthButtons() {
             ></path>
           </svg>
           <span className="sr-only">Carregando</span>
-        </button>
+        </Button>
       </div>
     );
   }
@@ -70,6 +65,10 @@ export default function AuthButtons() {
     <div className="relative" ref={menuRef}>
       {session ? (
         <>
+          <span className="text-sm font-medium">Olá, {session.user?.name || 'usuário'}</span>
+          <Button onClick={() => signOut()} variant="secondary">
+            Sair
+          </Button>
           <button
             onClick={() => setOpen((o) => !o)}
             className="flex h-8 w-8 items-center justify-center rounded-full focus:outline-none"
@@ -102,12 +101,9 @@ export default function AuthButtons() {
           )}
         </>
       ) : (
-        <button
-          onClick={() => signIn()}
-          className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
-        >
+        <Button onClick={() => signIn()}>
           Entrar
-        </button>
+        </Button>
       )}
     </div>
   );

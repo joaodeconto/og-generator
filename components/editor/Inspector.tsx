@@ -6,6 +6,7 @@ import LogoPanel from "./panels/LogoPanel";
 import ExportPanel from "./panels/ExportPanel";
 import MetadataPanel from "./panels/MetadataPanel";
 import PresetsPanel from "./panels/PresetsPanel";
+import { Button } from "@/components/ui/button";
 
 const tabs = [
   { id: "canvas", label: "Canvas", component: CanvasPanel },
@@ -28,19 +29,18 @@ export default function Inspector() {
         aria-label="Editor panels"
       >
         {tabs.map(tab => (
-          <button
+          <Button
             key={tab.id}
             id={`tab-${tab.id}`}
             role="tab"
             aria-selected={active === tab.id}
             aria-controls={`panel-${tab.id}`}
-            className={`px-2 py-1 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ring rounded-md ${
-              active === tab.id ? "border-b-2" : ""
-            }`}
+            variant={active === tab.id ? "secondary" : "ghost"}
+            size="sm"
             onClick={() => setActive(tab.id)}
           >
             {tab.label}
-          </button>
+          </Button>
         ))}
       </div>
       <div
