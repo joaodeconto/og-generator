@@ -102,7 +102,13 @@ The editor's right-hand inspector groups controls into individual panels. Tabs a
 
 ### 4.1 Environment Variables
 
-Create `.env.local` with:
+Copie `.env.local.example` para `.env.local` e preencha os valores necessários. As variáveis são validadas em tempo de execução por `lib/env.ts` usando Zod; se `NEXTAUTH_SECRET` estiver ausente, um `dev-secret` inseguro é usado apenas para desenvolvimento.
+
+```
+cp .env.local.example .env.local
+```
+
+Depois, ajuste o arquivo `.env.local` conforme abaixo:
 
 ```
 NEXTAUTH_URL=https://your-vercel-domain.vercel.app
@@ -408,12 +414,14 @@ pnpm dev
 # Dev
 pnpm dev
 
-# Typecheck & Lint
-pnpm typecheck
+# Lint
 pnpm lint
 
-# Unit tests
+# Tests
 pnpm test
+
+# Docs sync
+pnpm docs:guard
 
 # Build (CI/Vercel)
 pnpm build

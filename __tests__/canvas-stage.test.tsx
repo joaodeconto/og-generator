@@ -47,7 +47,7 @@ describe('CanvasStage', () => {
     expect(subtitleWrapper).toHaveStyle({ top: '50%', left: '50%' });
   });
 
-  it('marks images as crossOrigin anonymous for export', () => {
+  it('renders images without crossOrigin attribute by default', () => {
     useEditorStore.setState({
       bannerUrl: 'https://example.com/banner.png',
       logoUrl: 'https://example.com/logo.png'
@@ -55,7 +55,7 @@ describe('CanvasStage', () => {
     render(<CanvasStage />);
     const banner = screen.getByAltText('Banner image') as HTMLImageElement;
     const logo = screen.getByAltText('Logo') as HTMLImageElement;
-    expect(banner.getAttribute('crossorigin')).toBe('anonymous');
-    expect(logo.getAttribute('crossorigin')).toBe('anonymous');
+    expect(banner.getAttribute('crossorigin')).toBeNull();
+    expect(logo.getAttribute('crossorigin')).toBeNull();
   });
 });
