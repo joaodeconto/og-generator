@@ -47,6 +47,15 @@ describe('LogoPanel', () => {
     expect(useEditorStore.getState().maskLogo).toBe(true);
   });
 
+  it('updates logo position via coordinate inputs', () => {
+    render(<LogoPanel />);
+    const xInput = screen.getByLabelText(/^x$/i);
+    const yInput = screen.getByLabelText(/^y$/i);
+    fireEvent.change(xInput, { target: { value: '30' } });
+    fireEvent.change(yInput, { target: { value: '40' } });
+    expect(useEditorStore.getState().logoPosition).toEqual({ x: 30, y: 40 });
+  });
+
   it('adjusts scale and position', async () => {
     render(<LogoPanel />);
     fireEvent.change(screen.getByLabelText(/scale/i), { target: { value: '2' } });
