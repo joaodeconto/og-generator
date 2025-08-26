@@ -60,14 +60,6 @@ export default function LogoPanel() {
     setLogoPosition(50, 50);
   };
 
-  const positions = [
-    { label: "Top Left", x: 10, y: 10 },
-    { label: "Top Right", x: 90, y: 10 },
-    { label: "Bottom Left", x: 10, y: 90 },
-    { label: "Bottom Right", x: 90, y: 90 },
-    { label: "Center", x: 50, y: 50 },
-  ];
-
   return (
     <section className="space-y-3">
       <div className="flex items-center gap-2">
@@ -158,15 +150,26 @@ export default function LogoPanel() {
           </button>
         ))}
       </div>
-      <div className="grid grid-cols-3 gap-2">
+      <div>
+        <label htmlFor="logo-y" className="text-sm">
+          Y Position
+        </label>
+        <input
+          id="logo-y"
+          type="range"
+          min={0}
+          max={100}
+          step={1}
+          className="w-full"
+          value={logoPosition.y}
+          onChange={(e) =>
+            setLogoPosition(logoPosition.x, parseFloat(e.target.value))
+          }
+        />
+      </div>
+      <div>
         <button className="btn" aria-label="Reset logo adjustments" onClick={handleReset}>
           Reset
-        </button>
-        <button className="btn" aria-label="Undo logo action" onClick={undo}>
-          Undo
-        </button>
-        <button className="btn" aria-label="Redo logo action" onClick={redo}>
-          Redo
         </button>
       </div>
     </section>
