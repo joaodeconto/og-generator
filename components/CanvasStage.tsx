@@ -47,9 +47,11 @@ function Draggable({
     if (!start) return;
     const dx = e.clientX - start.pointer.x;
     const dy = e.clientY - start.pointer.y;
-    const rect = e.currentTarget.getBoundingClientRect();
-    const halfWidthPct = (rect.width / (BASE_WIDTH * zoom)) * 50;
-    const halfHeightPct = (rect.height / (BASE_HEIGHT * zoom)) * 50;
+    const el = e.currentTarget as HTMLElement;
+    const width = el.offsetWidth * scale;
+    const height = el.offsetHeight * scale;
+    const halfWidthPct = (width / BASE_WIDTH) * 50;
+    const halfHeightPct = (height / BASE_HEIGHT) * 50;
     const nx = start.origin.x + (dx / (BASE_WIDTH * zoom)) * 100;
     const ny = start.origin.y + (dy / (BASE_HEIGHT * zoom)) * 100;
     const x = Math.min(100 - halfWidthPct, Math.max(halfWidthPct, nx));

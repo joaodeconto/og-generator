@@ -14,3 +14,4 @@ This document records major milestones in the project.
 - Fixed OAuth callback error handling for LinkedIn.
 - Added WebWorker for background removal with lazy WASM loading.
 - Added font loading guard and @2x export options with size presets; fixed CanvasStage store import.
+- Clamped draggable elements using offset dimensions to prevent edge clipping on all sides.

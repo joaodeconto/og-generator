@@ -38,17 +38,8 @@ describe('CanvasStage drag', () => {
     render(<CanvasStage />);
     const logo = screen.getByAltText('Logo');
     const wrapper = logo.parentElement as HTMLElement;
-    Object.defineProperty(wrapper, 'getBoundingClientRect', {
-      value: () => ({
-        width: 96,
-        height: 96,
-        top: 0,
-        left: 0,
-        bottom: 96,
-        right: 96,
-        toJSON: () => {},
-      }),
-    });
+    Object.defineProperty(wrapper, 'offsetWidth', { value: 96 });
+    Object.defineProperty(wrapper, 'offsetHeight', { value: 96 });
 
     fireEvent.pointerDown(wrapper, { clientX: 50, clientY: 50 });
     fireEvent.pointerMove(wrapper, { clientX: -1000, clientY: -1000 });

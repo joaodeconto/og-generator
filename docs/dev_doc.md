@@ -421,7 +421,9 @@ pnpm build
 * **OAuth callback error**: ensure provider console has the exact redirect URL.
 * **Fonts not applied in export**: the export utility awaits `document.fonts.ready`, but ensure custom fonts are loaded.
 * **Exported image cropped**: export uses `clientWidth`/`clientHeight` to ignore preview zoom. Verify these reflect the expected base size.
-* **Dragged element clipped**: drag limits now subtract half the element size to keep content fully visible.
+
+* **Dragged element clipped**: drag limits use the element's offset size to keep content fully visible on all edges.
+
 * **WASM background removal slow**: run in Worker and lazy‑load the model (\~5–15MB). Cache after first run.
 * **SVG injection risk**: sanitize or rasterize into canvas before any edit.
 
