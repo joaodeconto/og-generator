@@ -30,7 +30,8 @@ export default function CanvasStage() {
     setLogoScale,
     invertLogo,
     removeLogoBg,
-    maskLogo
+    maskLogo,
+    vertical
   } = useEditorStore();
   const [logoDataUrl, setLogoDataUrl] = useState<string | undefined>(undefined);
 
@@ -90,7 +91,18 @@ export default function CanvasStage() {
   }, [logoFile, logoUrl, removeLogoBg, invertLogo]);
 
   const themeClasses = theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-white text-gray-900';
-  const layoutClasses = layout === 'center' ? 'items-center text-center' : 'items-start text-left';
+  const layoutClasses =
+    layout === 'center'
+      ? 'items-center text-center'
+      : layout === 'right'
+        ? 'items-end text-right'
+        : 'items-start text-left';
+  const verticalClasses =
+    vertical === 'top'
+      ? 'justify-start'
+      : vertical === 'bottom'
+        ? 'justify-end'
+        : 'justify-center';
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (
@@ -143,7 +155,7 @@ export default function CanvasStage() {
         )}
         {bannerUrl && <div className={`absolute inset-0 ${theme === 'dark' ? 'bg-black/50' : 'bg-white/60'}`} />}
         <div
-          className={`absolute inset-0 flex flex-col justify-center px-12 py-8 space-y-4 ${layoutClasses}`}
+          className={`absolute inset-0 flex flex-col ${verticalClasses} px-12 py-8 space-y-4 ${layoutClasses}`}
         >
           <h1
             className="font-bold leading-tight break-words"

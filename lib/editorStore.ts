@@ -9,7 +9,8 @@ interface EditorData {
   titleFontSize: number;
   subtitleFontSize: number;
   theme: 'light' | 'dark';
-  layout: 'left' | 'center';
+  layout: 'left' | 'center' | 'right';
+  vertical: 'top' | 'center' | 'bottom';
   accentColor: string;
   bannerUrl?: string;
   logoFile?: File;
@@ -28,7 +29,8 @@ export interface EditorState extends EditorData {
   setTitleFontSize: (size: number) => void;
   setSubtitleFontSize: (size: number) => void;
   setTheme: (value: 'light' | 'dark') => void;
-  setLayout: (value: 'left' | 'center') => void;
+  setLayout: (value: 'left' | 'center' | 'right') => void;
+  setVertical: (value: 'top' | 'center' | 'bottom') => void;
   setAccentColor: (value: string) => void;
   setBannerUrl: (value: string | undefined) => void;
   setLogoFile: (file: File | undefined) => void;
@@ -52,6 +54,7 @@ const initialState: EditorData = {
   subtitleFontSize: 24,
   theme: 'light',
   layout: 'left',
+  vertical: 'center',
   accentColor: '#3b82f6',
   logoPosition: { x: 50, y: 50 },
   logoScale: 1,
@@ -74,6 +77,7 @@ export const useEditorStore = create<EditorState>()(
         subtitleFontSize,
         theme,
         layout,
+        vertical,
         accentColor,
         bannerUrl,
         logoFile,
@@ -91,6 +95,7 @@ export const useEditorStore = create<EditorState>()(
         subtitleFontSize,
         theme,
         layout,
+        vertical,
         accentColor,
         bannerUrl,
         logoFile,
@@ -118,6 +123,7 @@ export const useEditorStore = create<EditorState>()(
         setSubtitleFontSize: (size) => apply({ subtitleFontSize: size }),
         setTheme: (value) => apply({ theme: value }),
         setLayout: (value) => apply({ layout: value }),
+        setVertical: (value) => apply({ vertical: value }),
         setAccentColor: (value) => apply({ accentColor: value }),
         setBannerUrl: (value) => apply({ bannerUrl: value }),
         setLogoFile: (file) => apply({ logoFile: file, logoUrl: undefined }),
@@ -163,6 +169,7 @@ export const useEditorStore = create<EditorState>()(
         subtitle: state.subtitle,
         theme: state.theme,
         layout: state.layout,
+        vertical: state.vertical,
         accentColor: state.accentColor,
         bannerUrl: state.bannerUrl,
         logoUrl: state.logoUrl,

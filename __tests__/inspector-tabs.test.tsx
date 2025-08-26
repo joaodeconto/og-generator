@@ -27,6 +27,7 @@ describe('Inspector tabs', () => {
       subtitle: '',
       theme: 'light',
       layout: 'left',
+      vertical: 'center',
       accentColor: '#3b82f6',
       bannerUrl: undefined,
       logoFile: undefined,
