@@ -15,6 +15,15 @@ export function toast(opts: { message: string; variant?: "default" | "error" }) 
   }
 }
 
+export function useToast() {
+  return {
+    save: (message = "Saved") => toast({ message }),
+    exportImage: (message = "Exported") => toast({ message }),
+    error: (message = "Unexpected error") =>
+      toast({ message, variant: "error" }),
+  };
+}
+
 export default function ToastProvider({ children }: { children: ReactNode }) {
   const [toasts, setToasts] = useState<Toast[]>([]);
 

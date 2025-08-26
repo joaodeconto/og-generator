@@ -39,8 +39,8 @@ function TextField({
   return (
     <label className="block">
       <span className="text-sm">{label}</span>
-      <textarea
-        className="mt-1 w-full rounded-lg border bg-background px-3 py-2"
+      <Textarea
+        className="mt-1"
         rows={rows}
         placeholder={placeholder}
         value={value}

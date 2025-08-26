@@ -152,8 +152,6 @@ pnpm dev
 * [ ] **Invert B/W** improve.
 * [ ] Hi‑DPI export (2× then downscale) to PNG.
 * [x] **Size presets**: added dimension presets and updated Canvas
-* [x] Copy OG/Twitter meta block with toast feedback.
-* [ ] **Tooltips** and polished focus states; basic ARIA labels present.
 * [ ] **Toasts** for every user action.
 * [ ] Minimal **analytics** (Vercel Analytics).
 * [ ] Media import prototype.
@@ -167,7 +165,7 @@ pnpm dev
 ## 18) Error Handling
 
 * `ErrorBoundary` envolve o `EditorShell` exibindo um fallback amigável.
-* `ToastProvider` fornece notificações para falhas em remoção de fundo, exportação e busca de metadata.
+* `ToastProvider` expõe `useToast` com mensagens padrão de salvar, exportar e erros em remoção de fundo ou busca de metadata.
 
 ---
 
@@ -180,11 +178,16 @@ Decision: Introduced `lib/sessionStore` with Zustand `persist` and synced `AuthB
 Consequences: Session info lives in localStorage and is accessible app-wide; must clear store on sign-out.
 Links: PR TBD
 
-
 # Copy OG/Twitter meta block with toast
 Date: 2025-08-26
 Status: accepted
 Context: Users need a quick way to generate and copy SEO meta tags.
 Decision: Added `buildMetaTags` utility and Export panel button that copies tags to clipboard with toast feedback.
 Consequences: Streamlines publishing workflow; relies on Clipboard API availability.
+# Integrate shadcn tooltip component
+Date: 2025-08-26
+Status: accepted
+Context: Needed accessible tooltips and visible focus styles for editor controls.
+Decision: Added shadcn/ui Tooltip primitive and audited interactive elements with focus-visible ring styling.
+Consequences: Improved keyboard navigation and discoverability of actions; future components should reuse these patterns.
 Links: PR TBD

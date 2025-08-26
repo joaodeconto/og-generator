@@ -22,11 +22,13 @@ pnpm dev
 - [x] Remoção de fundo, inversão B/W e máscara circular do logo (com loading)
 - [ ] Upload de logo via drag-and-drop
 - [x] Exportação de PNG em múltiplos tamanhos
+- [x] Toasts para salvar, exportar e erros
 - [x] Cor de fundo personalizável
 - [x] Cópia de metatags OG/Twitter com feedback via toast
 - [ ] Presets automáticos de layout e cores
 - [x] API de persistência do editor (CRUD)
 - [x] Presets de dimensões do canvas
+- [x] Tooltips nos botões da barra de ferramentas
 
 ## How it works
 Projeto construído com **Next.js 15** (App Router) e **React 18**. Os estilos são gerenciados com **Tailwind CSS** e o estado global com **Zustand**.
