@@ -11,6 +11,7 @@ export default function LogoPanel() {
     toggleMaskLogo,
     logoScale,
     setLogoScale,
+    logoPosition,
     setLogoPosition,
     undo,
     redo,
@@ -114,6 +115,36 @@ export default function LogoPanel() {
           value={logoScale}
           onChange={(e) => setLogoScale(parseFloat(e.target.value))}
         />
+      </div>
+      <div className="grid grid-cols-2 gap-2">
+        <div>
+          <label htmlFor="logo-x" className="text-sm">
+            X
+          </label>
+          <input
+            id="logo-x"
+            type="number"
+            min={0}
+            max={100}
+            className="w-full"
+            value={logoPosition.x}
+            onChange={(e) => setLogoPosition(parseFloat(e.target.value), logoPosition.y)}
+          />
+        </div>
+        <div>
+          <label htmlFor="logo-y" className="text-sm">
+            Y
+          </label>
+          <input
+            id="logo-y"
+            type="number"
+            min={0}
+            max={100}
+            className="w-full"
+            value={logoPosition.y}
+            onChange={(e) => setLogoPosition(logoPosition.x, parseFloat(e.target.value))}
+          />
+        </div>
       </div>
       <div className="grid grid-cols-3 gap-2">
         {positions.map((p) => (
