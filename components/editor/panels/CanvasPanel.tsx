@@ -11,6 +11,8 @@ export default function CanvasPanel() {
     setVertical,
     accentColor,
     setAccentColor,
+    background,
+    setBackground,
   } = useEditorStore();
 
   return (
@@ -81,6 +83,17 @@ export default function CanvasPanel() {
           value={accentColor}
           onChange={(e) => setAccentColor(e.target.value)}
           aria-label="Accent Color"
+        />
+      </label>
+
+      <label className="block">
+        <span className="text-sm">Background</span>
+        <input
+          type="color"
+          className="mt-1 h-8 w-full rounded-lg border bg-background p-1"
+          value={background}
+          onChange={(e) => setBackground(e.target.value)}
+          aria-label="Background Color"
         />
       </label>
     </section>

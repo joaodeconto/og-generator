@@ -88,10 +88,11 @@ OGGenerator is a one‑page (expandable) app to **compose Open Graph images** wi
 **Canvas Stage**
 
 * Base size (1200×630). Zoom to fit viewport, render at 2× for crisp export.
-* 
+*
 * Text: Title + Subtitle with smart clamp, max width, balance (`text-wrap: balance`).
 * Layout Presets: horizontal left/center/right and vertical top/center/bottom alignment with 8px baseline.
 * Logo Layer: PNG/SVG upload (drag‑and‑drop + paste). Controls below.
+* Background: solid color selection with undo/redo support.
 
 **Logo Controls**
 
@@ -146,7 +147,7 @@ pnpm dev
 * [ ] Choose storage strategy (KV + Blob *or* Supabase) and implement abstraction.
 * [ ] Save/load **Design** documents per user.
 * [ ] **Text layers** (Title/Subtitle) with clamp + balance (basic inputs exist).
-* [ ] **Background**: solid/gradient/image (with object‑fit cover, position).
+* [x] **Background**: solid color; gradient/image pending.
 * [ ] **Layout presets**:  Add more, reset, auto-layout, auto fit
 * [ ] **Resize on boundries**: Improve featur, it flicks when dragging close to border
 * [ ] **Remove Backgroun** processo lento, Mostrar loading.

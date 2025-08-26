@@ -14,7 +14,7 @@ const SIZE_PRESETS: Record<string, ImageSize> = {
 
 export default function ExportPanel() {
   const [selected, setSelected] = useState<keyof typeof SIZE_PRESETS>("1200x630");
-  const { title, subtitle } = useEditorStore();
+  const { title, subtitle, background } = useEditorStore();
 
   const handleExport = async () => {
     const el = document.getElementById("og-canvas");
@@ -26,7 +26,8 @@ export default function ExportPanel() {
       await exportElementAsPng(
         el as HTMLElement,
         SIZE_PRESETS[selected],
-        `og-image-${selected}.png`
+        `og-image-${selected}.png`,
+        { backgroundColor: background }
       );
     } catch (err) {
       console.error(err);

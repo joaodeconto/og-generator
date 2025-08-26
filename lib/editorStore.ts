@@ -14,6 +14,7 @@ interface EditorData {
   layout: 'left' | 'center' | 'right';
   vertical: 'top' | 'center' | 'bottom';
   accentColor: string;
+  background: string;
   bannerUrl?: string;
   logoFile?: File;
   logoUrl?: string;
@@ -36,6 +37,7 @@ export interface EditorState extends EditorData {
   setLayout: (value: 'left' | 'center' | 'right') => void;
   setVertical: (value: 'top' | 'center' | 'bottom') => void;
   setAccentColor: (value: string) => void;
+  setBackground: (value: string) => void;
   setBannerUrl: (value: string | undefined) => void;
   setLogoFile: (file: File | undefined) => void;
   setLogoUrl: (url: string | undefined) => void;
@@ -62,6 +64,7 @@ const initialState: EditorData = {
   layout: 'left',
   vertical: 'center',
   accentColor: '#3b82f6',
+  background: '#ffffff',
   logoPosition: { x: 50, y: 50 },
   logoScale: 1,
   invertLogo: false,
@@ -87,6 +90,7 @@ export const useEditorStore = create<EditorState>()(
         layout,
         vertical,
         accentColor,
+        background,
         bannerUrl,
         logoFile,
         logoUrl,
@@ -107,6 +111,7 @@ export const useEditorStore = create<EditorState>()(
         layout,
         vertical,
         accentColor,
+        background,
         bannerUrl,
         logoFile,
         logoUrl,
@@ -137,6 +142,7 @@ export const useEditorStore = create<EditorState>()(
         setLayout: (value) => apply({ layout: value }),
         setVertical: (value) => apply({ vertical: value }),
         setAccentColor: (value) => apply({ accentColor: value }),
+        setBackground: (value) => apply({ background: value }),
         setBannerUrl: (value) => apply({ bannerUrl: value }),
         setLogoFile: (file) => apply({ logoFile: file, logoUrl: undefined }),
         setLogoUrl: (url) => apply({ logoUrl: url, logoFile: undefined }),
@@ -185,6 +191,7 @@ export const useEditorStore = create<EditorState>()(
         layout: state.layout,
         vertical: state.vertical,
         accentColor: state.accentColor,
+        background: state.background,
         bannerUrl: state.bannerUrl,
         logoUrl: state.logoUrl,
         logoPosition: state.logoPosition,

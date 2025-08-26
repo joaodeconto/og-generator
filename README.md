@@ -20,6 +20,7 @@ pnpm dev
 - [x] Remoção de fundo, inversão B/W e máscara circular do logo
 - [ ] Upload de logo via drag-and-drop
 - [x] Exportação de PNG em múltiplos tamanhos
+- [x] Cor de fundo personalizável
 - [ ] Presets automáticos de layout e cores
 
 ## How it works

@@ -14,13 +14,14 @@ export interface ImageSize {
  */
 export interface ExportOptions {
   pixelRatio?: number;
+  backgroundColor?: string;
 }
 
 export async function exportElementAsPng(
   element: HTMLElement,
   size: ImageSize,
   filename = 'og-image.png',
-  { pixelRatio = 1 }: ExportOptions = {}
+  { pixelRatio = 1, backgroundColor }: ExportOptions = {}
 ): Promise<void> {
   await document.fonts.ready;
 
@@ -40,7 +41,8 @@ export async function exportElementAsPng(
       width: `${originalWidth}px`,
       height: `${originalHeight}px`
     },
-    pixelRatio
+    pixelRatio,
+    backgroundColor
   });
 
   const link = document.createElement('a');

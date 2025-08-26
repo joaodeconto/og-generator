@@ -14,4 +14,9 @@ describe('editorStore position setters', () => {
     useEditorStore.getState().setSubtitlePosition(30, 40);
     expect(useEditorStore.getState().subtitlePosition).toEqual({ x: 30, y: 40 });
   });
+
+  it('updates background color', () => {
+    useEditorStore.getState().setBackground('#112233');
+    expect(useEditorStore.getState().background).toBe('#112233');
+  });
 });
