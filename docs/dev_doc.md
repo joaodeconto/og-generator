@@ -11,7 +11,7 @@ OGGenerator is a one‑page (expandable) app to **compose Open Graph images** wi
 **MVP Goals**
 
 * Authenticated session via Google and GitHub. Twitter/X and Facebook are optional.
-* Editor with: title, subtitle, theme (light/dark), layout (left/center), background (color/gradient/image), size presets, and **logo editing** (upload via file/paste/URL, translate, scale, remove BG, invert B/W, mask).
+* Editor with: title, subtitle, theme (light/dark), layout (left/center/right, vertical top/center/bottom), background (color/gradient/image), size presets, and **logo editing** (upload via file/paste/URL, translate, scale, remove BG, invert B/W, mask).
 * Export PNG (1200×630 default; extras 1600×900, 1920×1005) and copy meta tags.
 * Basic persistence (local + per‑user cloud).
 
@@ -192,7 +192,7 @@ http://localhost:3000/api/auth/callback/<provider>
 * Base size (1200×630). Zoom to fit viewport, render at 2× for crisp export.
 * Background: solid/gradient/image (with object‑fit cover, position).
 * Text: Title + Subtitle with smart clamp, max width, balance (`text-wrap: balance`).
-* Layout Presets: left/center grid alignment with 8px baseline.
+* Layout Presets: horizontal left/center/right and vertical top/center/bottom alignment with 8px baseline.
 * Logo Layer: PNG/SVG upload (drag‑and‑drop + paste). Controls below.
 
 **Logo Controls**
@@ -202,6 +202,7 @@ http://localhost:3000/api/auth/callback/<provider>
 * **Remove Background**: client‑side WASM U^2‑Net; fallback API route.
 * **Invert B/W**: canvas filter (luminance threshold + invert) — preview toggle.
 * **Mask (Circle)**: optional clipPath for avatars.
+* **Position Presets & Undo/Redo**: quick corner/center placement plus history controls.
 * **Reset**: revert layer transforms.
 
 **Export**
@@ -232,7 +233,8 @@ export type Design = {
   title: string;
   subtitle: string;
   theme: "light" | "dark";
-  layout: "left" | "center";
+  layout: "left" | "center" | "right";
+  vertical: "top" | "center" | "bottom";
   bg: { kind: "solid"|"gradient"|"image"; value: any };
   size: { w: number; h: number };
   logo?: {
@@ -377,7 +379,7 @@ pnpm dev
 ## 14) Definition of Done (MVP)
 
 * User can sign in with at least **2 providers** (Google + GitHub).
-* Editor supports title, subtitle, background, layout, logo translate/scale, remove BG, invert B/W.
+* Editor supports title, subtitle, background, layout & vertical alignment, logo translate/scale, remove BG, invert B/W.
 * PNG export works for 1200×630; other sizes optional.
 * Meta block copies to clipboard.
 * State persists locally and user can save/load at least one **Design** in cloud.
