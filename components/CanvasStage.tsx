@@ -9,6 +9,7 @@ import { useEditorStore } from 'lib/editorStore';
 import { invertImageColors, blobToDataURL } from 'lib/images';
 import { removeImageBackground } from 'lib/removeBg';
 import { toast } from './ToastProvider';
+import { useLogoKeyboardControls } from 'lib/hooks/useLogoKeyboardControls';
 
 const BASE_WIDTH = 1200;
 const BASE_HEIGHT = 630;
@@ -187,25 +188,12 @@ export default function CanvasStage() {
         ? 'text-right'
         : 'text-left';
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    if (
-      e.key === 'ArrowUp' ||
-      e.key === 'ArrowDown' ||
-      e.key === 'ArrowLeft' ||
-      e.key === 'ArrowRight'
-    ) {
-      e.preventDefault();
-      if (e.shiftKey && (e.key === 'ArrowUp' || e.key === 'ArrowDown')) {
-        const delta = e.key === 'ArrowUp' ? 0.05 : -0.05;
-        const next = Math.min(3, Math.max(0.2, logoScale + delta));
-        setLogoScale(next);
-      } else {
-        const dx = e.key === 'ArrowLeft' ? -1 : e.key === 'ArrowRight' ? 1 : 0;
-        const dy = e.key === 'ArrowUp' ? -1 : e.key === 'ArrowDown' ? 1 : 0;
-        setLogoPosition(logoPosition.x + dx, logoPosition.y + dy);
-      }
-    }
-  };
+  const { onKeyDown } = useLogoKeyboardControls({
+    logoScale,
+    logoPosition,
+    setLogoScale,
+    setLogoPosition,
+  });
 
 
   const bannerSrc = useMemo(() => ensureSameOriginImage(bannerUrl), [bannerUrl]);
@@ -217,7 +205,7 @@ export default function CanvasStage() {
       tabIndex={0}
       role="img"
       aria-label="OG image preview"
-      onKeyDown={handleKeyDown}
+      onKeyDown={onKeyDown}
     >
       <div
         id="og-canvas"

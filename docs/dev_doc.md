@@ -353,6 +353,7 @@ pnpm dev
 
 * [ ] Upload: file input, paste and URL handled; drag‑and‑drop pending.
 * [x] Translate + scale + mask (circle) — drag to translate logo and arrow keys for fine-tuning (hoisted draggable wrapper keeps drag state stable).
+* [x] Arrow-key logo controls extracted into `useLogoKeyboardControls` hook.
 * [x] **Remove Background** via WASM in WebWorker (toggle integrated with helper).
 * [x] **Invert B/W** filter + toggle.
 
