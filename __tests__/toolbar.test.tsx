@@ -17,8 +17,8 @@ jest.mock('../components/ToastProvider', () => {
 const mockAddPreset = jest.fn();
 
 jest.mock('../lib/editorStore', () => ({
-  useEditorStore: jest.fn((selector) =>
-    selector({
+  useEditorStore: jest.fn((selector?: any) => {
+    const state = {
       undo: jest.fn(),
       redo: jest.fn(),
       addPreset: mockAddPreset,
@@ -27,8 +27,9 @@ jest.mock('../lib/editorStore', () => ({
       accentColor: '#000',
       title: 't',
       subtitle: 's',
-    })
-  ),
+    };
+    return selector ? selector(state) : state;
+  }),
 }));
 
 jest.mock('../lib/images', () => ({

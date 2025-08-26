@@ -99,7 +99,7 @@ OGGenerator is a one‑page (expandable) app to **compose Open Graph images** wi
 
 **Logo Controls**
 
-* **Translate**: click‑drag in canvas with positions clamped to bounds; fine‑tune with arrow keys (Shift = 10×).
+* **Translate**: click‑drag in canvas with positions clamped to bounds; fine‑tune with arrow keys (Shift = 10×). Element scale remains constant near edges.
 * **Scale**: pinch/scroll over logo; numeric slider with min/max.
 * **Manual Position**: X/Y number inputs in Logo panel update with drag.
 * **Remove Background**: client‑side WASM U^2‑Net; fallback API route.
@@ -147,7 +147,7 @@ pnpm dev
 * [ ] Choose storage strategy (KV + Blob *or* Supabase) and implement abstraction.
 * [ ] Save/load **Design** documents per user.
 * [ ] **Layout presets**:  Add more, reset, auto-layout, auto fit
-* [ ] **Resize on boundries**: Improve featur, it flicks when dragging close to border
+* [ ] **Edge feedback**: add visual indicator when dragging near boundaries (deformation removed)
 * [x] **Remove Backgroun** processo lento, Mostrar loading.
 * [ ] **Invert B/W** improve.
 * [ ] Hi‑DPI export (2× then downscale) to PNG.
@@ -206,4 +206,12 @@ Status: accepted
 Context: Next.js warned when the logo `<Image>` rendered with an empty `src`.
 Decision: Destructure `useProcessedLogo` and render the logo only when a data URL exists.
 Consequences: Eliminates spurious image requests and console errors.
+Links: PR TBD
+
+# Drop edge deformation in Draggable
+Date: 2025-08-26
+Status: accepted
+Context: Scaling the logo near canvas edges caused visual distortion and conflicted with position clamping.
+Decision: Remove deformation logic; keep position clamping so the logo stays fully visible.
+Consequences: Simplifies drag behavior; consider adding a different edge indicator later.
 Links: PR TBD
