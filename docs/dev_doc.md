@@ -167,7 +167,7 @@ pnpm dev
 ## 18) Error Handling
 
 * `ErrorBoundary` envolve o `EditorShell` exibindo um fallback amigável.
-* `ToastProvider` fornece notificações para falhas em remoção de fundo, exportação e busca de metadata.
+* `ToastProvider` expõe `useToast` com mensagens padrão de salvar, exportar e erros em remoção de fundo ou busca de metadata.
 
 ---
 
