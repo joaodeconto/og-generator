@@ -19,6 +19,7 @@ OGGenerator is a one‑page (expandable) app to **compose Open Graph images** wi
 * **Auth:** NextAuth.js (Auth.js) with OAuth providers (see configuration below).
 * **Storage:**
   * Local state: Zustand with undo/redo history and localStorage persistence.
+  * API routes persist serialized editor state (`/api/design`).
   * Object storage for uploads (logo): Vercel Blob **or** Supabase Storage/S3‑compatible bucket.
 * **Image Processing:** HTMLCanvas + OffscreenCanvas + WebWorker. For **background removal**, a dedicated worker lazy-loads `@imgly/background-removal` and caches the WASM model.
 * **Validation/Config:** Zod + TypeScript.
@@ -35,7 +36,8 @@ OGGenerator is a one‑page (expandable) app to **compose Open Graph images** wi
 │  ├─ api/
 │  │  ├─ auth/[...nextauth]/route.ts          # NextAuth handlers
 │  │  ├─ upload/route.ts                      # signed upload / server utilities
-│  │  └─ remove-bg/route.ts                   # optional server-side removal (alt to WASM)
+│  │  ├─ remove-bg/route.ts                   # optional server-side removal (alt to WASM)
+│  │  └─ design/route.ts                      # CRUD for editor persistence
 │  ├─ (editor)/page.tsx                       # main editor page
 │  ├─ layout.tsx
 │  └─ globals.css
@@ -145,7 +147,7 @@ pnpm dev
 * [ ] Add shadcn/ui primitives (Button, Slider, Dialog, Toast, Tooltip).
 * [x] **Session header**: AuthButtons shows avatar with dropdown and persists session.
 * [ ] Choose storage strategy (KV + Blob *or* Supabase) and implement abstraction.
-* [ ] Save/load **Design** documents per user.
+* [ ] Save/load **Design** documents per user (basic CRUD API present).
 * [ ] **Text layers** (Title/Subtitle) with clamp + balance (basic inputs exist).
 * [ ] **Background**: solid/gradient/image (with object‑fit cover, position).
 * [ ] **Layout presets**:  Add more, reset, auto-layout, auto fit
