@@ -43,6 +43,11 @@ jest.mock('../lib/meta', () => ({
 describe('Toolbar toasts', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    jest.spyOn(console, 'error').mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    (console.error as jest.Mock).mockRestore();
   });
 
   it('shows toast on save', () => {

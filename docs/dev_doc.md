@@ -9,7 +9,11 @@ A concise, implementation‑ready base for the **OG Image Studio** project using
 OGGenerator is a one‑page (expandable) app to **compose Open Graph images** with live preview and export presets. Users authenticate via mainstream providers and can **upload a logo** and **edit it** (translate, scale, remove background, invert B/W). The result is exportable as PNG and the app can copy a ready‑to‑paste meta‑tag block.
 
 **MVP Goals**
-
+* Autenticação com Google e GitHub via NextAuth.
+* Editor de canvas com logo arrastável, undo/redo e presets de dimensão.
+* Upload e processamento do logo (remoção de fundo, inversão B/W, máscara).
+* Exportação de PNG com tamanhos predefinidos.
+* Persistência de designs via API e armazenamento.
 ---
 
 ## 2) Tech Stack
@@ -80,7 +84,7 @@ OGGenerator is a one‑page (expandable) app to **compose Open Graph images** wi
 │  └─ index.d.ts
 ├─ public/
 │  └─ fonts/*
-├─ .env.local.example
+├─ .env.example
 ├─ tailwind.config.ts
 ├─ postcss.config.js
 ├─ next.config.js
@@ -116,6 +120,7 @@ OGGenerator is a one‑page (expandable) app to **compose Open Graph images** wi
 
 ```
 pnpm i
+cp .env.example .env.local
 pnpm dev
 ```
 
@@ -145,11 +150,11 @@ pnpm dev
 
 ## 13) TODO
 * [ ] Choose storage strategy (KV + Blob *or* Supabase) and implement abstraction.
+* [ ] Font size input for Title and Subtitle.
 * [ ] Save/load **Design** documents per user.
 * [ ] **Layout presets**:  Add more, reset, auto-layout, auto fit
-* [ ] **Edge feedback**: add visual indicator when dragging near boundaries (deformation removed)
-* [x] **Remove Backgroun** processo lento, Mostrar loading.
-* [ ] **Invert B/W** improve.
+* [x] **Remove Background** processo lento, Mostrar loading.
+* [ ] **Invert B/W** improve, the result image is of lower quality than the reference.
 * [ ] Hi‑DPI export (2× then downscale) to PNG.
 * [x] **Size presets**: added dimension presets and updated Canvas
 * [ ] **Toasts** for every user action.
@@ -164,7 +169,6 @@ pnpm dev
 
 ## 18) Error Handling
 
-* `ErrorBoundary` envolve o `EditorShell` exibindo um fallback amigável.
 * `ToastProvider` expõe `useToast` com mensagens padrão de salvar, exportar e erros em remoção de fundo ou busca de metadata.
 
 ---
@@ -232,10 +236,27 @@ Decision: Compute explicit min/max percentages for both axes and clamp against a
 Consequences: Dragging stops uniformly at each boundary without visual scaling.
 Links: PR TBD
 
+
 # Center-stable scaling in Draggable
 Date: 2025-09-01
 Status: accepted
 Context: CSS transform order caused translation to be scaled, making elements appear to shrink near canvas edges.
 Decision: Apply `scale()` before `translate()` so elements scale around their center without drifting.
 Consequences: Dragging a scaled element no longer distorts its apparent size when clamped to an edge.
+
+# Strip boolean props in next/image mock
+Date: 2025-09-10
+Status: accepted
+Context: Jest tests mocked `next/image` with a plain `<img>` element, causing React to warn about `fill` and `unoptimized` boolean attributes.
+Decision: Filter Next.js-specific boolean props from the mock before rendering the `<img>`.
+Consequences: Test runs no longer emit React attribute warnings, keeping logs clean.
+Links: PR TBD
+
+# Wrap Zustand mutations in tests with act
+Date: 2025-09-10
+Status: accepted
+Context: Direct calls to `useEditorStore` setters during tests triggered React warnings about updates outside `act`.
+Decision: Wrap store mutations in `act()` within affected tests.
+Consequences: Ensures state changes are flushed before assertions and eliminates noisy warnings.
+
 Links: PR TBD
