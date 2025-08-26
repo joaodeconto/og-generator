@@ -57,8 +57,15 @@ export default function Draggable({
     const ny = start.origin.y + (dy / (baseHeight * zoom)) * 100;
     const clamp = (v: number, min: number, max: number) =>
       Math.min(Math.max(v, min), max);
-    const x = clamp(nx, Math.min(halfWidthPct, 100 - halfWidthPct), Math.max(halfWidthPct, 100 - halfWidthPct));
-    const y = clamp(ny, Math.min(halfHeightPct, 100 - halfHeightPct), Math.max(halfHeightPct, 100 - halfHeightPct));
+
+    // Clamp independently against each canvas edge
+    const minX = Math.min(halfWidthPct, 100 - halfWidthPct);
+    const maxX = Math.max(halfWidthPct, 100 - halfWidthPct);
+    const minY = Math.min(halfHeightPct, 100 - halfHeightPct);
+    const maxY = Math.max(halfHeightPct, 100 - halfHeightPct);
+
+    const x = clamp(nx, minX, maxX);
+    const y = clamp(ny, minY, maxY);
 
     last.current = { x, y };
     onChange(x, y, false);
