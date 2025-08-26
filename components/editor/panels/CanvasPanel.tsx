@@ -1,5 +1,6 @@
 "use client";
 import { useEditorStore } from "lib/editorStore";
+import { Button } from "@/components/ui/button";
 
 const SIZE_PRESETS = {
   "1200x630": { width: 1200, height: 630 },
@@ -42,7 +43,7 @@ export default function CanvasPanel() {
               value="light"
               checked={theme === "light"}
               onChange={() => setTheme("light")}
-              className="h-4 w-4"
+              className="h-4 w-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
             />
             Light
           </label>
@@ -53,7 +54,7 @@ export default function CanvasPanel() {
               value="dark"
               checked={theme === "dark"}
               onChange={() => setTheme("dark")}
-              className="h-4 w-4"
+              className="h-4 w-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
             />
             Dark
           </label>
@@ -63,7 +64,7 @@ export default function CanvasPanel() {
       <label className="block">
         <span className="text-sm">Horizontal</span>
         <select
-          className="mt-1 w-full rounded-lg border bg-background px-3 py-2"
+          className="mt-1 w-full rounded-lg border bg-background px-3 py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           value={layout}
           onChange={(e) => setLayout(e.target.value as "left" | "center" | "right")}
           aria-label="Horizontal Alignment"
@@ -77,7 +78,7 @@ export default function CanvasPanel() {
       <label className="block">
         <span className="text-sm">Vertical</span>
         <select
-          className="mt-1 w-full rounded-lg border bg-background px-3 py-2"
+          className="mt-1 w-full rounded-lg border bg-background px-3 py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           value={vertical}
           onChange={(e) => setVertical(e.target.value as "top" | "center" | "bottom")}
           aria-label="Vertical Alignment"
@@ -92,7 +93,7 @@ export default function CanvasPanel() {
         <span className="text-sm">Accent Color</span>
         <input
           type="color"
-          className="mt-1 h-8 w-full rounded-lg border bg-background p-1"
+          className="mt-1 h-8 w-full rounded-lg border bg-background p-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           value={accentColor}
           onChange={(e) => setAccentColor(e.target.value)}
           aria-label="Accent Color"
@@ -102,7 +103,7 @@ export default function CanvasPanel() {
         <span className="text-sm">Background</span>
         <input
           type="color"
-          className="mt-1 h-8 w-full rounded-lg border bg-background p-1"
+          className="mt-1 h-8 w-full rounded-lg border bg-background p-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           value={background}
           onChange={(e) => setBackground(e.target.value)}
           aria-label="Background Color"
@@ -118,15 +119,15 @@ export default function CanvasPanel() {
           aria-labelledby="size-label"
         >
           {Object.entries(SIZE_PRESETS).map(([key, value]) => (
-            <button
+            <Button
               key={key}
-              className={`btn ${current === key ? "btn-primary" : ""}`}
+              variant={current === key ? "default" : "secondary"}
               aria-label={`Canvas size ${key.replace("x", " by ")}`}
               aria-pressed={current === key}
               onClick={() => setSize(value.width, value.height)}
             >
               {key.replace("x", "×")}
-            </button>
+            </Button>
           ))}
         </div>
       </div>
