@@ -8,9 +8,7 @@ import { useCanvasZoom } from 'lib/hooks/useCanvasZoom';
 import { useLogoKeyboardControls } from 'lib/hooks/useLogoKeyboardControls';
 import { useEffect, useRef, useState } from 'react';
 import { useEditorStore } from 'lib/editorStore';
-import { invertImageColors, blobToDataURL } from 'lib/images';
-import { removeImageBackground } from 'lib/removeBg';
-import { toast } from './ToastProvider';
+import useProcessedLogo from 'lib/hooks/useProcessedLogo';
 
 import Draggable, { BASE_WIDTH, BASE_HEIGHT } from './Draggable';
 
@@ -38,52 +36,12 @@ export default function CanvasStage() {
     removeLogoBg,
     maskLogo
   } = useEditorStore();
-  const [logoDataUrl, setLogoDataUrl] = useState<string | undefined>(undefined);
-
-
-  // Prepare logo image applying optional background removal and inversion
-  useEffect(() => {
-    let cancelled = false;
-
-    const process = async () => {
-      let source: string | Blob | undefined = logoFile ?? logoUrl;
-      if (!source) {
-        setLogoDataUrl(undefined);
-        return;
-      }
-
-      try {    
-
-        //Normalize to a same-origin string (data: or /api/img?url=...)
-        let normalized: string;
-        if (source instanceof Blob) {
-          normalized = await blobToDataURL(source); // becomes data:
-        } else {
-          normalized = ensureSameOriginImage(source)!; // http(s) → /api/img?... ; data:/relative kept
-        }
-        
-        //Optional background removal (accepts Blob or string)
-        if (removeLogoBg) {
-          source = await removeImageBackground(source);
-        }
-
-        // 3) Optional inversion (safe now because it's same-origin)
-        if (invertLogo) {
-          normalized = await invertImageColors(normalized);
-        }
-
-        if (!cancelled) setLogoDataUrl(normalized);
-
-      } catch (e) {
-        const message = e instanceof Error ? e.message : 'Erro ao processar o logo.';
-        toast({ message, variant: 'error' });
-        if (!cancelled) setLogoDataUrl(undefined);
-      }
-    };
-
-    process();
-    return () => { cancelled = true; };
-  }, [logoFile, logoUrl, removeLogoBg, invertLogo]);
+  const logoDataUrl = useProcessedLogo({
+    logoFile,
+    logoUrl,
+    removeLogoBg,
+    invertLogo,
+  });
 
   const themeClasses = theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-white text-gray-900';
   const textAlignClass =
