@@ -350,7 +350,7 @@ pnpm dev
 ### Sprint 3 — Logo Tools (2–3 days)
 
 * [ ] Upload: file input, paste and URL handled; drag‑and‑drop pending.
-* [ ] Translate + scale + mask (circle) — scale slider and mask toggle done; drag translate pending.
+* [x] Translate + scale + mask (circle) — drag to translate logo and arrow keys for fine-tuning.
 * [x] **Remove Background** via WASM in WebWorker (toggle integrated with helper).
 * [x] **Invert B/W** filter + toggle.
 
