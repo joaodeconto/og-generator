@@ -199,3 +199,11 @@ Context: `document.fonts` may be undefined in some environments, causing export 
 Decision: Check for the Fonts API before awaiting `document.fonts.ready` when exporting images.
 Consequences: Ensures PNG export works in browsers lacking `document.fonts` support.
 Links: PR TBD
+
+# Avoid empty logo src in CanvasStage
+Date: 2025-08-26
+Status: accepted
+Context: Next.js warned when the logo `<Image>` rendered with an empty `src`.
+Decision: Destructure `useProcessedLogo` and render the logo only when a data URL exists.
+Consequences: Eliminates spurious image requests and console errors.
+Links: PR TBD

@@ -38,7 +38,7 @@ export default function CanvasStage() {
     height,
   } = useEditorStore();
   const { containerRef, zoom } = useCanvasZoom(width, height);
-  const logoDataUrl = useProcessedLogo({
+  const { logoDataUrl } = useProcessedLogo({
     logoFile,
     logoUrl,
     removeLogoBg,
@@ -131,7 +131,7 @@ export default function CanvasStage() {
             baseHeight={height}
           >
             <Image
-              src={logoDataUrl.logoDataUrl}
+              src={logoDataUrl}
               alt="Logo"
               width={96}
               height={96}

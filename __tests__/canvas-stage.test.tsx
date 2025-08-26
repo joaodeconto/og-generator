@@ -22,6 +22,11 @@ describe('CanvasStage', () => {
     expect(banners[0].getAttribute('src')).toContain('banner.png');
   });
 
+  it('does not render a logo when none is provided', () => {
+    render(<CanvasStage />);
+    expect(screen.queryByAltText('Logo')).toBeNull();
+  });
+
   it('uses dimensions from store', () => {
     useEditorStore.setState({ width: 1600, height: 900 });
     render(<CanvasStage />);
