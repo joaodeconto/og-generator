@@ -61,11 +61,14 @@ describe('LogoPanel', () => {
     fireEvent.change(screen.getByLabelText(/scale/i), { target: { value: '2' } });
     expect(useEditorStore.getState().logoScale).toBeCloseTo(2);
 
-    await act(async () => {
-      useEditorStore.setState({ logoPosition: { x: 30, y: 40 } });
+    fireEvent.change(screen.getByLabelText(/x position/i), {
+      target: { value: '30' },
     });
-    fireEvent.click(screen.getByText(/center/i));
-    expect(useEditorStore.getState().logoPosition).toEqual({ x: 50, y: 50 });
+    expect(useEditorStore.getState().logoPosition.x).toBe(30);
+    fireEvent.change(screen.getByLabelText(/y position/i), {
+      target: { value: '40' },
+    });
+    expect(useEditorStore.getState().logoPosition.y).toBe(40);
 
     await act(async () => {
       useEditorStore.setState({ logoScale: 2, logoPosition: { x: 60, y: 70 } });

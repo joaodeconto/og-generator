@@ -191,6 +191,71 @@ export default function CanvasStage() {
     }
   };
 
+  function Draggable({
+    position,
+    onChange,
+    scale = 1,
+    children,
+  }: {
+    position: { x: number; y: number };
+    onChange: (x: number, y: number) => void;
+    scale?: number;
+    children: ReactNode;
+  }) {
+    const [start, setStart] = useState<
+      | {
+          pointer: { x: number; y: number };
+          origin: { x: number; y: number };
+        }
+      | null
+    >(null);
+
+    const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+      e.preventDefault();
+      setStart({
+        pointer: { x: e.clientX, y: e.clientY },
+        origin: { x: position.x, y: position.y },
+      });
+      (e.currentTarget as HTMLElement).setPointerCapture?.(e.pointerId);
+    };
+
+    const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+      if (!start) return;
+      const dx = e.clientX - start.pointer.x;
+      const dy = e.clientY - start.pointer.y;
+      const x = Math.min(
+        100,
+        Math.max(0, start.origin.x + (dx / (BASE_WIDTH * zoom)) * 100),
+      );
+      const y = Math.min(
+        100,
+        Math.max(0, start.origin.y + (dy / (BASE_HEIGHT * zoom)) * 100),
+      );
+      onChange(x, y);
+    };
+
+    const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
+      setStart(null);
+      (e.currentTarget as HTMLElement).releasePointerCapture?.(e.pointerId);
+    };
+
+    return (
+      <div
+        className={`absolute ${start ? 'outline outline-2 outline-blue-500' : ''}`}
+        style={{
+          top: `${position.y}%`,
+          left: `${position.x}%`,
+          transform: `translate(-50%, -50%) scale(${scale})`,
+        }}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+      >
+        {children}
+      </div>
+    );
+  }
+
   return (
     <div
       ref={containerRef}
