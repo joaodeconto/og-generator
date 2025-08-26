@@ -208,6 +208,7 @@ http://localhost:3000/api/auth/callback/<provider>
 
 * PNG @ 2× downscaled; presets 1200×630 (default), 1600×900, 1920×1005.
 * Copy “OG + Twitter meta” block.
+* Canvas images flagged with `crossOrigin="anonymous"`; remote hosts must permit CORS for export.
 
 **Persistence**
 
@@ -416,6 +417,7 @@ pnpm build
 
 * **OAuth callback error**: ensure provider console has the exact redirect URL.
 * **Fonts not applied in export**: the export utility awaits `document.fonts.ready`, but ensure custom fonts are loaded.
+* **Exported image cropped**: export uses `clientWidth`/`clientHeight` to ignore preview zoom. Verify these reflect the expected base size.
 * **WASM background removal slow**: run in Worker and lazy‑load the model (\~5–15MB). Cache after first run.
 * **SVG injection risk**: sanitize or rasterize into canvas before any edit.
 

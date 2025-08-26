@@ -19,6 +19,7 @@ Aplicação Next.js para criar imagens Open Graph personalizadas. Utiliza React,
 - Remoção de fundo, inversão B/W e máscara circular do logo
 - Controles de escala e centralização do logo
 - Sanitização de campos de metadados
+- Exportação de PNG em múltiplos tamanhos sem cortes, inclusive com imagens remotas
 
 ## Instalação e Uso
 
@@ -117,6 +118,7 @@ pnpm docs:guard   # garante que docs/log, dev_doc ou README foram atualizados
 ## Problemas Conhecidos
 
 - Alguns sites bloqueiam a coleta de metadados; quando isso ocorre o painel de Metadata exibe um toast de erro.
+- Exportação falhará se o servidor de origem da imagem não permitir CORS, ainda que os elementos usem `crossOrigin="anonymous"`.
 
 ## Licença
 

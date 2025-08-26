@@ -34,4 +34,16 @@ describe('CanvasStage', () => {
     const container = logo.parentElement as HTMLElement;
     expect(container).toHaveStyle({ top: '50%', left: '50%' });
   });
+
+  it('marks images as crossOrigin anonymous for export', () => {
+    useEditorStore.setState({
+      bannerUrl: 'https://example.com/banner.png',
+      logoUrl: 'https://example.com/logo.png'
+    });
+    render(<CanvasStage />);
+    const banner = screen.getByAltText('Banner image') as HTMLImageElement;
+    const logo = screen.getByAltText('Logo') as HTMLImageElement;
+    expect(banner.getAttribute('crossorigin')).toBe('anonymous');
+    expect(logo.getAttribute('crossorigin')).toBe('anonymous');
+  });
 });
