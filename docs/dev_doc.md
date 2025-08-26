@@ -142,7 +142,7 @@ pnpm dev
 ## 13) TODO
 
 * [ ] Add shadcn/ui primitives (Button, Slider, Dialog, Toast, Tooltip).
-* [ ] **Session header**: AuthButtons handles sign-in/out; avatar + menu pending.
+* [x] **Session header**: AuthButtons shows avatar with dropdown and persists session.
 * [ ] Choose storage strategy (KV + Blob *or* Supabase) and implement abstraction.
 * [ ] Save/load **Design** documents per user.
 * [ ] **Text layers** (Title/Subtitle) with clamp + balance (basic inputs exist).
@@ -172,3 +172,11 @@ pnpm dev
 
 ---
 
+
+# Persist session in Zustand
+Date: 2025-08-26
+Status: accepted
+Context: Header needed persisted auth state to show avatar dropdown across routes.
+Decision: Introduced `lib/sessionStore` with Zustand `persist` and synced `AuthButtons` via `useSession`.
+Consequences: Session info lives in localStorage and is accessible app-wide; must clear store on sign-out.
+Links: PR TBD
