@@ -13,8 +13,6 @@ export default function LogoPanel() {
     setLogoScale,
     logoPosition,
     setLogoPosition,
-    undo,
-    redo,
   } = useEditorStore();
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -138,18 +136,6 @@ export default function LogoPanel() {
           />
         </div>
       </div>
-      <div className="grid grid-cols-3 gap-2">
-        {positions.map((p) => (
-          <button
-            key={p.label}
-            className="btn"
-            aria-label={`Move logo to ${p.label}`}
-            onClick={() => setLogoPosition(p.x, p.y)}
-          >
-            {p.label}
-          </button>
-        ))}
-      </div>
       <div>
         <label htmlFor="logo-y" className="text-sm">
           Y Position
@@ -164,6 +150,23 @@ export default function LogoPanel() {
           value={logoPosition.y}
           onChange={(e) =>
             setLogoPosition(logoPosition.x, parseFloat(e.target.value))
+          }
+        />
+      </div>
+      <div>
+        <label htmlFor="logo-x" className="text-sm">
+          X Position
+        </label>
+        <input
+          id="logo-x"
+          type="range"
+          min={0}
+          max={100}
+          step={1}
+          className="w-full"
+          value={logoPosition.x}
+          onChange={(e) =>
+            setLogoPosition(parseFloat(e.target.value), logoPosition.y)
           }
         />
       </div>

@@ -2,8 +2,8 @@
 "use client";
 
 import Image from 'next/image';
-//import { useMemo } from 'react';
-//import { ensureSameOriginImage } from 'lib/urls';
+import { useMemo } from 'react';
+import { ensureSameOriginImage } from 'lib/urls';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { useEditorStore } from 'lib/editorStore';
 import { invertImageColors, blobToDataURL } from 'lib/images';
@@ -28,9 +28,9 @@ function Draggable({
 }) {
   const [start, setStart] = useState<
     | {
-        pointer: { x: number; y: number };
-        origin: { x: number; y: number };
-      }
+      pointer: { x: number; y: number };
+      origin: { x: number; y: number };
+    }
     | null
   >(null);
 
@@ -120,43 +120,43 @@ export default function CanvasStage() {
   // Prepare logo image applying optional background removal and inversion
   useEffect(() => {
     let cancelled = false;
+
     const process = async () => {
-      let source: string | Blob | undefined;
-      if (logoFile) {
-        source = logoFile;
-      } else if (logoUrl) {
-        source = logoUrl;
-      } else {
+      let source: string | Blob | undefined = logoFile ?? logoUrl;
+      if (!source) {
         setLogoDataUrl(undefined);
         return;
       }
 
       try {
+        // 1) Optional background removal (accepts Blob or string)
         if (removeLogoBg) {
           source = await removeImageBackground(source);
-        } else if (source instanceof Blob) {
-          source = await blobToDataURL(source);
         }
 
-        if (invertLogo && typeof source === 'string') {
-          source = await invertImageColors(source);
+        // 2) Normalize to a same-origin string (data: or /api/img?url=...)
+        let normalized: string;
+        if (source instanceof Blob) {
+          normalized = await blobToDataURL(source); // becomes data:
+        } else {
+          normalized = ensureSameOriginImage(source)!; // http(s) → /api/img?... ; data:/relative kept
         }
 
-        if (!cancelled) {
-          setLogoDataUrl(source as string);
+        // 3) Optional inversion (safe now because it's same-origin)
+        if (invertLogo) {
+          normalized = await invertImageColors(normalized);
         }
+
+        if (!cancelled) setLogoDataUrl(normalized);
       } catch (e) {
         const message = e instanceof Error ? e.message : 'Erro ao processar a imagem.';
         toast({ message, variant: 'error' });
-        if (!cancelled) {
-          setLogoDataUrl(undefined);
-        }
+        if (!cancelled) setLogoDataUrl(undefined);
       }
     };
+
     process();
-    return () => {
-      cancelled = true;
-    };
+    return () => { cancelled = true; };
   }, [logoFile, logoUrl, removeLogoBg, invertLogo]);
 
   const themeClasses = theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-white text-gray-900';
@@ -193,76 +193,8 @@ export default function CanvasStage() {
     }
   };
 
-  function Draggable({
-    position,
-    onChange,
-    scale = 1,
-    children,
-  }: {
-    position: { x: number; y: number };
-    onChange: (x: number, y: number) => void;
-    scale?: number;
-    children: ReactNode;
-  }) {
-    const [start, setStart] = useState<
-      | {
-        pointer: { x: number; y: number };
-        origin: { x: number; y: number };
-      }
-      | null
-    >(null);
 
-    const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
-      e.preventDefault();
-      setStart({
-        pointer: { x: e.clientX, y: e.clientY },
-        origin: { x: position.x, y: position.y },
-      });
-      (e.currentTarget as HTMLElement).setPointerCapture?.(e.pointerId);
-    };
-
-    const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
-      if (!start) return;
-      const dx = e.clientX - start.pointer.x;
-      const dy = e.clientY - start.pointer.y;
-      const x = Math.min(
-        100,
-        Math.max(0, start.origin.x + (dx / (BASE_WIDTH * zoom)) * 100),
-      );
-      const y = Math.min(
-        100,
-        Math.max(0, start.origin.y + (dy / (BASE_HEIGHT * zoom)) * 100),
-      );
-      onChange(x, y);
-    };
-
-    const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
-      setStart(null);
-      (e.currentTarget as HTMLElement).releasePointerCapture?.(e.pointerId);
-    };
-
-    return (
-      <div
-        className={`absolute ${start ? 'outline outline-2 outline-blue-500' : ''}`}
-        style={{
-          top: `${position.y}%`,
-          left: `${position.x}%`,
-          transform: `translate(-50%, -50%) scale(${scale})`,
-        }}
-        onPointerDown={handlePointerDown}
-        onPointerMove={handlePointerMove}
-        onPointerUp={handlePointerUp}
-      >
-        {children}
-      </div>
-    );
-  }
-
-  const [resolvedBannerSrc, setResolvedBannerSrc] = useState<string | undefined>(undefined);
-
-  useEffect(() => {
-    setResolvedBannerSrc(bannerUrl ? `/api/img?url=${encodeURIComponent(bannerUrl)}` : undefined);
-  }, [bannerUrl]);
+  const bannerSrc = useMemo(() => ensureSameOriginImage(bannerUrl), [bannerUrl]);
 
   return (
     <div
@@ -284,16 +216,16 @@ export default function CanvasStage() {
           borderColor: accentColor
         }}
       >
-        {resolvedBannerSrc && (
+        {bannerSrc && (
           <Image
-            src={resolvedBannerSrc}
+            src={bannerSrc}
             alt="Banner image"
             fill
             className="absolute inset-0 w-full h-full object-cover"
-            unoptimized // avoid double-optimization since we already proxy
+            //unoptimized // avoid double-optimization since we already proxy
           />
         )}
-        {resolvedBannerSrc && <div className={`absolute inset-0 ${theme === 'dark' ? 'bg-black/50' : 'bg-white/60'}`} />}
+        {bannerSrc && <div className={`absolute inset-0 ${theme === 'dark' ? 'bg-black/50' : 'bg-white/60'}`} />}
         <div
           className={`absolute inset-0 flex flex-col ${verticalClasses} px-12 py-8 space-y-4 ${layoutClasses}`}
         >
