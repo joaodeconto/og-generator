@@ -65,5 +65,15 @@ describe('LogoPanel', () => {
     expect(useEditorStore.getState().logoScale).toBe(1);
     expect(useEditorStore.getState().logoPosition).toEqual({ x: 50, y: 50 });
   });
+
+  it('sets logo position presets and supports undo/redo', () => {
+    render(<LogoPanel />);
+    fireEvent.click(screen.getByText(/top left/i));
+    expect(useEditorStore.getState().logoPosition).toEqual({ x: 10, y: 10 });
+    fireEvent.click(screen.getByText(/undo/i));
+    expect(useEditorStore.getState().logoPosition).toEqual({ x: 10, y: 20 });
+    fireEvent.click(screen.getByText(/redo/i));
+    expect(useEditorStore.getState().logoPosition).toEqual({ x: 10, y: 10 });
+  });
 });
 

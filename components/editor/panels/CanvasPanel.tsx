@@ -7,6 +7,8 @@ export default function CanvasPanel() {
     setTheme,
     layout,
     setLayout,
+    vertical,
+    setVertical,
     accentColor,
     setAccentColor,
   } = useEditorStore();
@@ -44,15 +46,30 @@ export default function CanvasPanel() {
       </div>
 
       <label className="block">
-        <span className="text-sm">Layout</span>
+        <span className="text-sm">Horizontal</span>
         <select
           className="mt-1 w-full rounded-lg border bg-background px-3 py-2"
           value={layout}
-          onChange={(e) => setLayout(e.target.value as "left" | "center")}
-          aria-label="Layout"
+          onChange={(e) => setLayout(e.target.value as "left" | "center" | "right")}
+          aria-label="Horizontal Alignment"
         >
           <option value="left">Left</option>
           <option value="center">Center</option>
+          <option value="right">Right</option>
+        </select>
+      </label>
+
+      <label className="block">
+        <span className="text-sm">Vertical</span>
+        <select
+          className="mt-1 w-full rounded-lg border bg-background px-3 py-2"
+          value={vertical}
+          onChange={(e) => setVertical(e.target.value as "top" | "center" | "bottom")}
+          aria-label="Vertical Alignment"
+        >
+          <option value="top">Top</option>
+          <option value="center">Center</option>
+          <option value="bottom">Bottom</option>
         </select>
       </label>
 

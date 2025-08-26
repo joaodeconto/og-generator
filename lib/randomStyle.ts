@@ -1,6 +1,6 @@
 export interface RandomStyle {
   theme: 'light' | 'dark';
-  layout: 'left' | 'center';
+  layout: 'left' | 'center' | 'right';
   accentColor: string;
 }
 
@@ -9,7 +9,7 @@ export interface RandomStyle {
 export type Preset = RandomStyle;
 
 const themes: RandomStyle['theme'][] = ['light', 'dark'];
-const layouts: RandomStyle['layout'][] = ['left', 'center'];
+const layouts: RandomStyle['layout'][] = ['left', 'center', 'right'];
 // A handful of pleasant accent colors
 const colors: string[] = [
   '#3b82f6', // blue

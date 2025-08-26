@@ -69,6 +69,8 @@ describe('image utilities', () => {
 
     const inverted = await invertImageColors(redPixel);
     expect(inverted.startsWith('data:image/png;base64,')).toBe(true);
+    const putData = (mockCtx.putImageData as jest.Mock).mock.calls[0][0].data as Uint8ClampedArray;
+    expect(Array.from(putData)).toEqual([255, 255, 255, 255]);
   });
 
   it('rejects when canvas context is missing', async () => {
