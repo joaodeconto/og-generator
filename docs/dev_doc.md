@@ -99,7 +99,7 @@ OGGenerator is a one‑page (expandable) app to **compose Open Graph images** wi
 
 **Logo Controls**
 
-* **Translate**: click‑drag in canvas with positions clamped to bounds; fine‑tune with arrow keys (Shift = 10×). Element scale remains constant near edges.
+* **Translate**: click‑drag in canvas with positions clamped to bounds; fine‑tune with arrow keys (Shift = 10×). Element scale remains constant near edges. Undo history commits once on release.
 * **Scale**: pinch/scroll over logo; numeric slider with min/max.
 * **Manual Position**: X/Y number inputs in Logo panel update with drag.
 * **Remove Background**: client‑side WASM U^2‑Net; fallback API route.
