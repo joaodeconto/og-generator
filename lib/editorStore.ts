@@ -3,7 +3,7 @@ import { persist } from 'zustand/middleware';
 import type { Preset } from './randomStyle';
 
 // State without actions for history snapshots
-interface EditorData {
+export interface EditorData {
   title: string;
   subtitle: string;
   titleFontSize: number;
@@ -68,6 +68,17 @@ const initialState: EditorData = {
   removeLogoBg: false,
   maskLogo: false,
   presets: [],
+};
+
+export const serializeEditorState = (state: EditorState | EditorData): string => {
+  const { logoFile, ...data } = state;
+  void logoFile;
+  return JSON.stringify(data);
+};
+
+export const deserializeEditorState = (json: string): EditorData => {
+  const data = JSON.parse(json) as Partial<EditorData>;
+  return { ...initialState, ...data };
 };
 
 export const useEditorStore = create<EditorState>()(

@@ -1,4 +1,8 @@
-import { useEditorStore } from '../lib/editorStore';
+import {
+  useEditorStore,
+  serializeEditorState,
+  deserializeEditorState,
+} from '../lib/editorStore';
 
 describe('editorStore position setters', () => {
   beforeEach(() => {
@@ -13,5 +17,19 @@ describe('editorStore position setters', () => {
   it('updates subtitle position', () => {
     useEditorStore.getState().setSubtitlePosition(30, 40);
     expect(useEditorStore.getState().subtitlePosition).toEqual({ x: 30, y: 40 });
+  });
+});
+
+describe('editorStore serialization', () => {
+  beforeEach(() => {
+    useEditorStore.getState().reset();
+  });
+
+  it('round-trips state without File objects', () => {
+    useEditorStore.getState().setTitle('Hello');
+    const json = serializeEditorState(useEditorStore.getState());
+    const restored = deserializeEditorState(json);
+    expect(restored.title).toBe('Hello');
+    expect(restored.logoFile).toBeUndefined();
   });
 });
