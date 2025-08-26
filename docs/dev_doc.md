@@ -49,6 +49,7 @@ OGGenerator is a one‑page (expandable) app to **compose Open Graph images** wi
 ├─ components/
 │  ├─ AuthButtons.tsx
 │  ├─ CanvasStage.tsx
+│  ├─ Draggable.tsx
 │  ├─ ErrorBoundary.tsx
 │  ├─ Providers.tsx
 │  ├─ ToastProvider.tsx
