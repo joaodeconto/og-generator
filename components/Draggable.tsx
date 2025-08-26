@@ -53,8 +53,11 @@ export default function Draggable({
     const halfHeightPct = (height / baseHeight) * 50;
     const nx = start.origin.x + (dx / (baseWidth * zoom)) * 100;
     const ny = start.origin.y + (dy / (baseHeight * zoom)) * 100;
-    const x = Math.min(100 - halfWidthPct, Math.max(halfWidthPct, nx));
-    const y = Math.min(100 - halfHeightPct, Math.max(halfHeightPct, ny));
+    const clamp = (v: number, min: number, max: number) =>
+      Math.min(Math.max(v, min), max);
+    const x = clamp(nx, Math.min(halfWidthPct, 100 - halfWidthPct), Math.max(halfWidthPct, 100 - halfWidthPct));
+    const y = clamp(ny, Math.min(halfHeightPct, 100 - halfHeightPct), Math.max(halfHeightPct, 100 - halfHeightPct));
+
 
     const distLeft = x - halfWidthPct;
     const distRight = 100 - (x + halfWidthPct);
