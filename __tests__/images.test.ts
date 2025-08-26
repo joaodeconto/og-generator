@@ -154,31 +154,57 @@ describe('image utilities', () => {
     expect(blob.type).toBe('image/png');
   });
 
-  it('waits for fonts and respects pixelRatio when exporting', async () => {
-    const element = document.createElement('div');
-    element.getBoundingClientRect = () => ({ width: 100, height: 50 } as any);
+    it('waits for fonts and respects pixelRatio when exporting', async () => {
+      const element = document.createElement('div');
+      Object.defineProperty(element, 'clientWidth', { value: 100 });
+      Object.defineProperty(element, 'clientHeight', { value: 50 });
 
-    let resolveFonts: () => void;
-    // @ts-ignore
-    document.fonts = { ready: new Promise<void>((r) => (resolveFonts = r)) };
+      let resolveFonts: () => void;
+      // @ts-ignore
+      document.fonts = { ready: new Promise<void>((r) => (resolveFonts = r)) };
 
-    const exportPromise = exportElementAsPng(
-      element,
-      { width: 200, height: 100 },
-      'test.png',
-      { pixelRatio: 2 }
-    );
+      const exportPromise = exportElementAsPng(
+        element,
+        { width: 200, height: 100 },
+        'test.png',
+        { pixelRatio: 2 }
+      );
 
-    const toPngMock = htmlToImage.toPng as jest.Mock;
-    expect(toPngMock).not.toHaveBeenCalled();
+      const toPngMock = htmlToImage.toPng as jest.Mock;
+      expect(toPngMock).not.toHaveBeenCalled();
 
-    resolveFonts();
-    await exportPromise;
+      resolveFonts();
+      await exportPromise;
 
-    expect(toPngMock).toHaveBeenCalledWith(
-      element,
-      expect.objectContaining({ pixelRatio: 2 })
-    );
-  });
+      expect(toPngMock).toHaveBeenCalledWith(
+        element,
+        expect.objectContaining({ pixelRatio: 2 })
+      );
+    });
+
+    it('ignores bounding box transforms when scaling for export', async () => {
+      const element = document.createElement('div');
+      Object.defineProperty(element, 'clientWidth', { value: 100 });
+      Object.defineProperty(element, 'clientHeight', { value: 50 });
+      element.getBoundingClientRect = () => ({ width: 50, height: 25 } as any);
+      // @ts-ignore
+      document.fonts = { ready: Promise.resolve() };
+
+      await exportElementAsPng(element, { width: 200, height: 100 }, 'test.png');
+
+      const toPngMock = htmlToImage.toPng as jest.Mock;
+      expect(toPngMock).toHaveBeenCalledWith(
+        element,
+        expect.objectContaining({
+          width: 200,
+          height: 100,
+          style: expect.objectContaining({
+            transform: 'scale(2, 2)',
+            width: '100px',
+            height: '50px',
+          }),
+        })
+      );
+    });
 });
 

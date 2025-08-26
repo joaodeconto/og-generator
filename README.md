@@ -20,6 +20,7 @@ Aplicação Next.js para criar imagens Open Graph personalizadas. Utiliza React,
 - Controles de escala, posicionamento e centralização do logo com Undo/Redo
 - Alinhamento de texto horizontal e vertical (esquerda/centro/direita, topo/centro/baixo)
 - Sanitização de campos de metadados
+- Exportação de PNG em múltiplos tamanhos sem cortes, inclusive com imagens remotas
 
 ## Instalação e Uso
 
