@@ -2,6 +2,8 @@
 "use client";
 
 import Image from 'next/image';
+//import { useMemo } from 'react';
+//import { ensureSameOriginImage } from 'lib/urls';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { useEditorStore } from 'lib/editorStore';
 import { invertImageColors, blobToDataURL } from 'lib/images';
@@ -137,9 +139,9 @@ export default function CanvasStage() {
   }) {
     const [start, setStart] = useState<
       | {
-          pointer: { x: number; y: number };
-          origin: { x: number; y: number };
-        }
+        pointer: { x: number; y: number };
+        origin: { x: number; y: number };
+      }
       | null
     >(null);
 
@@ -189,6 +191,12 @@ export default function CanvasStage() {
     );
   }
 
+  const [resolvedBannerSrc, setResolvedBannerSrc] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    setResolvedBannerSrc(bannerUrl ? `/api/img?url=${encodeURIComponent(bannerUrl)}` : undefined);
+  }, [bannerUrl]);
+
   return (
     <div
       ref={containerRef}
@@ -209,16 +217,16 @@ export default function CanvasStage() {
           borderColor: accentColor
         }}
       >
-        {bannerUrl && (
+        {resolvedBannerSrc && (
           <Image
-            src={bannerUrl}
+            src={resolvedBannerSrc}
             alt="Banner image"
             fill
-            crossOrigin="anonymous"
             className="absolute inset-0 w-full h-full object-cover"
+            unoptimized // avoid double-optimization since we already proxy
           />
         )}
-        {bannerUrl && <div className={`absolute inset-0 ${theme === 'dark' ? 'bg-black/50' : 'bg-white/60'}`} />}
+        {resolvedBannerSrc && <div className={`absolute inset-0 ${theme === 'dark' ? 'bg-black/50' : 'bg-white/60'}`} />}
         <div
           className={`absolute inset-0 flex flex-col ${verticalClasses} px-12 py-8 space-y-4 ${layoutClasses}`}
         >
