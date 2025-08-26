@@ -36,7 +36,9 @@ describe('useProcessedLogo', () => {
         invertLogo: false,
       })
     );
-    await waitFor(() => expect(result.current).toBe('removed-url'));
+    await waitFor(() => expect(result.current.loading).toBe(true));
+    await waitFor(() => expect(result.current.logoDataUrl).toBe('removed-url'));
+    expect(result.current.loading).toBe(false);
     expect(removeImageBackground).toHaveBeenCalledWith('logo.png');
   });
 
@@ -51,7 +53,9 @@ describe('useProcessedLogo', () => {
         invertLogo: true,
       })
     );
-    await waitFor(() => expect(result.current).toBe('inverted-url'));
+    await waitFor(() => expect(result.current.loading).toBe(true));
+    await waitFor(() => expect(result.current.logoDataUrl).toBe('inverted-url'));
+    expect(result.current.loading).toBe(false);
     expect(removeImageBackground).not.toHaveBeenCalled();
     expect(invertImageColors).toHaveBeenCalledWith('normalized-url');
   });
