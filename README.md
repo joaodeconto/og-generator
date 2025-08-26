@@ -15,6 +15,7 @@ pnpm dev
 
 ## Features
 - [x] Autenticação com Google e GitHub (NextAuth)
+- [x] Avatar e menu de sessão persistente
 - [ ] Provedores adicionais (Twitter, Facebook, Instagram)
 - [x] Editor com título, subtítulo e logo arrastável
 - [x] Remoção de fundo, inversão B/W e máscara circular do logo (com loading)
@@ -72,6 +73,7 @@ Os testes residem em `__tests__/` e cobrem utilitários e fluxos principais.
 ## Roadmap & Status
 - [x] Bootstrap Next.js + Tailwind + Zustand
 - [x] Autenticação Google e GitHub
+- [x] Avatar e menu de sessão persistente
 - [ ] Provedores Twitter e Facebook
 - [x] Canvas com título, subtítulo e logo arrastável
 - [ ] Upload de logo via drag-and-drop
