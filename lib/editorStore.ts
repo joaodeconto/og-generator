@@ -8,6 +8,8 @@ interface EditorData {
   subtitle: string;
   titleFontSize: number;
   subtitleFontSize: number;
+  titlePosition: { x: number; y: number };
+  subtitlePosition: { x: number; y: number };
   theme: 'light' | 'dark';
   layout: 'left' | 'center' | 'right';
   vertical: 'top' | 'center' | 'bottom';
@@ -28,6 +30,8 @@ export interface EditorState extends EditorData {
   setSubtitle: (value: string) => void;
   setTitleFontSize: (size: number) => void;
   setSubtitleFontSize: (size: number) => void;
+  setTitlePosition: (x: number, y: number) => void;
+  setSubtitlePosition: (x: number, y: number) => void;
   setTheme: (value: 'light' | 'dark') => void;
   setLayout: (value: 'left' | 'center' | 'right') => void;
   setVertical: (value: 'top' | 'center' | 'bottom') => void;
@@ -52,6 +56,8 @@ const initialState: EditorData = {
   subtitle: '',
   titleFontSize: 48,
   subtitleFontSize: 24,
+  titlePosition: { x: 50, y: 50 },
+  subtitlePosition: { x: 50, y: 50 },
   theme: 'light',
   layout: 'left',
   vertical: 'center',
@@ -75,6 +81,8 @@ export const useEditorStore = create<EditorState>()(
         subtitle,
         titleFontSize,
         subtitleFontSize,
+        titlePosition,
+        subtitlePosition,
         theme,
         layout,
         vertical,
@@ -93,6 +101,8 @@ export const useEditorStore = create<EditorState>()(
         subtitle,
         titleFontSize,
         subtitleFontSize,
+        titlePosition,
+        subtitlePosition,
         theme,
         layout,
         vertical,
@@ -121,6 +131,8 @@ export const useEditorStore = create<EditorState>()(
         setSubtitle: (value) => apply({ subtitle: value }),
         setTitleFontSize: (size) => apply({ titleFontSize: size }),
         setSubtitleFontSize: (size) => apply({ subtitleFontSize: size }),
+        setTitlePosition: (x, y) => apply({ titlePosition: { x, y } }),
+        setSubtitlePosition: (x, y) => apply({ subtitlePosition: { x, y } }),
         setTheme: (value) => apply({ theme: value }),
         setLayout: (value) => apply({ layout: value }),
         setVertical: (value) => apply({ vertical: value }),
@@ -167,6 +179,8 @@ export const useEditorStore = create<EditorState>()(
       partialize: (state) => ({
         title: state.title,
         subtitle: state.subtitle,
+        titlePosition: state.titlePosition,
+        subtitlePosition: state.subtitlePosition,
         theme: state.theme,
         layout: state.layout,
         vertical: state.vertical,

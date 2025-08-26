@@ -4,6 +4,7 @@ import { useEditorStore } from '../lib/editorStore';
 
 describe('CanvasStage keyboard controls', () => {
   beforeEach(() => {
+    useEditorStore.getState().reset();
     useEditorStore.setState({ logoPosition: { x: 50, y: 50 }, logoScale: 1 });
   });
 

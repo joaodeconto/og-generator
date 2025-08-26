@@ -22,6 +22,7 @@ describe('Inspector tabs', () => {
       sourceMap: {},
       warnings: []
     });
+    useEditorStore.getState().reset();
     useEditorStore.setState({
       title: '',
       subtitle: '',
@@ -37,7 +38,9 @@ describe('Inspector tabs', () => {
       invertLogo: false,
       removeLogoBg: false,
       maskLogo: false,
-      presets: []
+      presets: [],
+      titlePosition: { x: 50, y: 50 },
+      subtitlePosition: { x: 50, y: 50 }
     });
   });
 

@@ -4,6 +4,7 @@ import { useEditorStore } from '../lib/editorStore';
 
 describe('CanvasStage', () => {
   beforeEach(() => {
+    useEditorStore.getState().reset();
     useEditorStore.setState({
       title: '',
       subtitle: '',
@@ -35,11 +36,15 @@ describe('CanvasStage', () => {
     expect(container).toHaveStyle({ top: '50%', left: '50%' });
   });
 
-  it('applies vertical alignment classes', () => {
-    useEditorStore.setState({ vertical: 'bottom' });
+  it('positions title and subtitle at the center by default', () => {
+    useEditorStore.setState({ title: 'Hello', subtitle: 'World' });
     render(<CanvasStage />);
-    const textContainer = document.querySelector('#og-canvas > div.flex') as HTMLElement;
-    expect(textContainer.className).toMatch(/justify-end/);
+    const titleEl = screen.getByText('Hello');
+    const titleWrapper = titleEl.parentElement as HTMLElement;
+    expect(titleWrapper).toHaveStyle({ top: '50%', left: '50%' });
+    const subtitleEl = screen.getByText('World');
+    const subtitleWrapper = subtitleEl.parentElement as HTMLElement;
+    expect(subtitleWrapper).toHaveStyle({ top: '50%', left: '50%' });
   });
 
   it('marks images as crossOrigin anonymous for export', () => {

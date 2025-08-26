@@ -17,6 +17,7 @@ describe('Toolbar shortcuts', () => {
     logSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
     writeText = jest.fn().mockResolvedValue(undefined);
     Object.assign(navigator, { clipboard: { writeText } });
+    useEditorStore.getState().reset();
   });
 
   afterEach(() => {

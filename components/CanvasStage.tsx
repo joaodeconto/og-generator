@@ -87,6 +87,8 @@ export default function CanvasStage() {
     title,
     subtitle,
     titleFontSize,
+    titlePosition,
+    subtitlePosition,
     theme,
     layout,
     accentColor,
@@ -97,10 +99,11 @@ export default function CanvasStage() {
     logoScale,
     setLogoPosition,
     setLogoScale,
+    setTitlePosition,
+    setSubtitlePosition,
     invertLogo,
     removeLogoBg,
-    maskLogo,
-    vertical
+    maskLogo
   } = useEditorStore();
   const [logoDataUrl, setLogoDataUrl] = useState<string | undefined>(undefined);
 
@@ -160,18 +163,12 @@ export default function CanvasStage() {
   }, [logoFile, logoUrl, removeLogoBg, invertLogo]);
 
   const themeClasses = theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-white text-gray-900';
-  const layoutClasses =
+  const textAlignClass =
     layout === 'center'
-      ? 'items-center text-center'
+      ? 'text-center'
       : layout === 'right'
-        ? 'items-end text-right'
-        : 'items-start text-left';
-  const verticalClasses =
-    vertical === 'top'
-      ? 'justify-start'
-      : vertical === 'bottom'
-        ? 'justify-end'
-        : 'justify-center';
+        ? 'text-right'
+        : 'text-left';
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (
@@ -230,15 +227,24 @@ export default function CanvasStage() {
           className={`absolute inset-0 flex flex-col ${verticalClasses} px-12 py-8 space-y-4 ${layoutClasses}`}
         >
           <h1
-            className="font-bold leading-tight break-words"
+            className={`font-bold leading-tight break-words ${textAlignClass}`}
             style={{ color: accentColor, fontSize: `${titleFontSize}px` }}
           >
             {title}
           </h1>
-          <p className="text-lg md:text-2xl max-w-prose">
+        </Draggable>
+        <Draggable
+          position={titlePosition}
+          onChange={setTitlePosition}
+        >
+          <p className={`text-lg md:text-2xl max-w-prose ${textAlignClass}`}>
             {subtitle}
           </p>
-        </div>
+        </Draggable>
+          <Draggable
+          position={subtitlePosition}
+          onChange={setSubtitlePosition}
+        >
         {logoDataUrl && (
           <Draggable
             position={logoPosition}

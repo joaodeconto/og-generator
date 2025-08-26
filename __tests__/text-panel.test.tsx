@@ -4,6 +4,7 @@ import { useEditorStore } from '../lib/editorStore';
 
 describe('TextPanel', () => {
   beforeEach(() => {
+    useEditorStore.getState().reset();
     useEditorStore.setState({
       title: '',
       subtitle: '',
