@@ -8,6 +8,9 @@ jest.mock('html-to-image', () => ({
 
 afterEach(() => {
   jest.restoreAllMocks();
+  // ensure document.fonts doesn't leak across tests
+  // @ts-ignore
+  delete document.fonts;
 });
 
 describe('image utilities', () => {
@@ -180,6 +183,17 @@ describe('image utilities', () => {
         element,
         expect.objectContaining({ pixelRatio: 2 })
       );
+    });
+
+    it('exports even if document.fonts is missing', async () => {
+      const element = document.createElement('div');
+      Object.defineProperty(element, 'clientWidth', { value: 100 });
+      Object.defineProperty(element, 'clientHeight', { value: 50 });
+
+      await exportElementAsPng(element, { width: 200, height: 100 }, 'test.png');
+
+      const toPngMock = htmlToImage.toPng as jest.Mock;
+      expect(toPngMock).toHaveBeenCalled();
     });
 
     it('ignores bounding box transforms when scaling for export', async () => {
