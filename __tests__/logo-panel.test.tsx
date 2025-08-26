@@ -1,9 +1,20 @@
 import { render, screen, fireEvent, act } from '@testing-library/react';
 import LogoPanel from '../components/editor/panels/LogoPanel';
 import { useEditorStore } from '../lib/editorStore';
+import useProcessedLogo from '../lib/hooks/useProcessedLogo';
+
+jest.mock('../lib/hooks/useProcessedLogo', () => ({
+  __esModule: true,
+  default: jest.fn(() => ({ logoDataUrl: undefined, loading: false })),
+}));
 
 describe('LogoPanel', () => {
   beforeEach(() => {
+    jest.clearAllMocks();
+    (useProcessedLogo as jest.Mock).mockReturnValue({
+      logoDataUrl: undefined,
+      loading: false,
+    });
     useEditorStore.getState().reset();
     useEditorStore.setState({
       logoFile: undefined,
@@ -77,6 +88,15 @@ describe('LogoPanel', () => {
     fireEvent.click(screen.getByText(/reset/i));
     expect(useEditorStore.getState().logoScale).toBe(1);
     expect(useEditorStore.getState().logoPosition).toEqual({ x: 50, y: 50 });
+  });
+
+  it('shows spinner while processing', () => {
+    (useProcessedLogo as jest.Mock).mockReturnValue({
+      logoDataUrl: undefined,
+      loading: true,
+    });
+    render(<LogoPanel />);
+    expect(screen.getByLabelText(/processing logo/i)).toBeInTheDocument();
   });
 });
 

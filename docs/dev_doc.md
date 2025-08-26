@@ -63,7 +63,7 @@ OGGenerator is a one‑page (expandable) app to **compose Open Graph images** wi
 │  ├─ randomStyle.ts
 │  ├─ removeBg.ts                              # WASM loader + pipeline
 │  └─ hooks/
-│     └─ useProcessedLogo.ts                   # prepares logo image (BG removal + inversion)
+│     └─ useProcessedLogo.ts                   # prepares logo image (BG removal + inversion) and exposes loading state
 ├─ state/
 │  └─ editorStore.ts                           # re-export for convenience
 ├─ workers/
@@ -101,6 +101,7 @@ OGGenerator is a one‑page (expandable) app to **compose Open Graph images** wi
 * **Remove Background**: client‑side WASM U^2‑Net; fallback API route.
 * **Invert B/W**: canvas filter (luminance threshold + invert) — preview toggle.
 * **Mask (Circle)**: optional clipPath for avatars.
+* **Loading indicator**: spinner while logo processing is running.
 * **Position**: X/Y sliders for precise placement; Undo/Redo available via global toolbar.
 
 ---
@@ -149,7 +150,7 @@ pnpm dev
 * [ ] **Background**: solid/gradient/image (with object‑fit cover, position).
 * [ ] **Layout presets**:  Add more, reset, auto-layout, auto fit
 * [ ] **Resize on boundries**: Improve featur, it flicks when dragging close to border
-* [ ] **Remove Backgroun** processo lento, Mostrar loading.
+* [x] **Remove Backgroun** processo lento, Mostrar loading.
 * [ ] **Invert B/W** improve.
 * [ ] Hi‑DPI export (2× then downscale) to PNG.
 * [x] **Size presets**: added dimension presets and updated Canvas

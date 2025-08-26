@@ -17,7 +17,7 @@ pnpm dev
 - [x] Autenticação com Google e GitHub (NextAuth)
 - [ ] Provedores adicionais (Twitter, Facebook, Instagram)
 - [x] Editor com título, subtítulo e logo arrastável
-- [x] Remoção de fundo, inversão B/W e máscara circular do logo
+- [x] Remoção de fundo, inversão B/W e máscara circular do logo (com loading)
 - [ ] Upload de logo via drag-and-drop
 - [x] Exportação de PNG em múltiplos tamanhos
 - [ ] Presets automáticos de layout e cores
@@ -75,7 +75,7 @@ Os testes residem em `__tests__/` e cobrem utilitários e fluxos principais.
 - [ ] Provedores Twitter e Facebook
 - [x] Canvas com título, subtítulo e logo arrastável
 - [ ] Upload de logo via drag-and-drop
-- [x] Remoção de fundo e inversão B/W
+- [x] Remoção de fundo, inversão B/W e loading do logo
 - [ ] Hi‑DPI export (2×)
 - [ ] Templates de layout e cores
 
