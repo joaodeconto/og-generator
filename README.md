@@ -8,7 +8,7 @@ Requisitos: Node.js 18+ e pnpm.
 
 ```bash
 pnpm install
-cp .env.local.example .env.local  # preencha com suas credenciais
+cp .env.example .env.local  # preencha com suas credenciais
 pnpm dev
 # acesse http://localhost:3000
 ```
@@ -17,7 +17,6 @@ pnpm dev
 - [x] Autenticação com Google e GitHub (NextAuth)
 - [x] Avatar e menu de sessão persistente
 - [ ] Provedores adicionais (Twitter, Facebook, Instagram)
-- [x] Remoção de fundo, inversão B/W e máscara circular do logo
 - [x] Editor com título, subtítulo e logo arrastável (posicionamento limitado aos quatro lados, sem deformar)
 - [x] Remoção de fundo, inversão B/W e máscara circular do logo (com loading)
 - [x] Histórico de undo/redo para edições
@@ -53,10 +52,10 @@ Estrutura principal:
 - **Shift+Setas para cima/baixo**: redimensionar o logo
 
 ## Env Vars
-Copie o arquivo `.env.local.example` para `.env.local` e preencha as chaves:
+Copie o arquivo `.env.example` para `.env.local` e preencha as chaves:
 
 ```bash
-cp .env.local.example .env.local
+cp .env.example .env.local
 ```
 
 Defina um `NEXTAUTH_SECRET` forte e configure credenciais dos provedores OAuth desejados. Variáveis opcionais (Twitter, Facebook, Instagram) omitem os botões de login se ausentes.  
@@ -69,6 +68,9 @@ NEXTAUTH_SECRET=seu-segredo
 GOOGLE_CLIENT_ID=...
 GOOGLE_CLIENT_SECRET=...
 ```
+
+## Documentation
+Consulte [docs/dev_doc.md](docs/dev_doc.md) para detalhes de arquitetura e [docs/log](docs/log) para o histórico de decisões.
 
 ## Testing
 Execute os testes unitários e verifique se a documentação está sincronizada:
