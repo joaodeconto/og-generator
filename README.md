@@ -18,6 +18,7 @@ Aplicação Next.js para criar imagens Open Graph personalizadas. Utiliza React,
 - Editor de logo com upload por arquivo, colagem ou URL
 - Remoção de fundo, inversão B/W aprimorada e máscara circular do logo
 - Controles de escala, posicionamento e centralização do logo com Undo/Redo
+- Arraste o logo diretamente no canvas
 - Alinhamento de texto horizontal e vertical (esquerda/centro/direita, topo/centro/baixo)
 - Sanitização de campos de metadados
 - Exportação de PNG em múltiplos tamanhos sem cortes, inclusive com imagens remotas
@@ -110,7 +111,6 @@ pnpm docs:guard   # garante que docs/log, dev_doc ou README foram atualizados
 - Presets automáticos de layout e cores ("Surpreenda‑me")
 - Página de login personalizada
 - Efeitos adicionais no editor de logo
-- Arrastar e soltar de logo e outras melhorias
 
 - **Desfazer:** Ctrl/Cmd + Z
 - **Refazer:** Ctrl/Cmd + Shift + Z
