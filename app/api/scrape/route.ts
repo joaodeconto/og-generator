@@ -1,4 +1,4 @@
-import { scrape, pickBestImage } from '@odeconto/scraper';
+import { scrape, pickBestImage, iconPicker  } from '@odeconto/scraper';
 import { NextResponse } from 'next/server';
 
 export async function GET(req: Request) {
@@ -37,6 +37,7 @@ export async function GET(req: Request) {
       }
     };
     const image = resolve(pickBestImage(result.meta));
+    const icon = resolve(iconpick);
     const favicon = resolve(result.meta.basic.favicon);
     const warnings = result.diagnostics.warnings ?? [];
     return NextResponse.json({ title, description, image, favicon, warnings });
