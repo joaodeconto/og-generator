@@ -236,6 +236,14 @@ Decision: Compute explicit min/max percentages for both axes and clamp against a
 Consequences: Dragging stops uniformly at each boundary without visual scaling.
 Links: PR TBD
 
+
+# Center-stable scaling in Draggable
+Date: 2025-09-01
+Status: accepted
+Context: CSS transform order caused translation to be scaled, making elements appear to shrink near canvas edges.
+Decision: Apply `scale()` before `translate()` so elements scale around their center without drifting.
+Consequences: Dragging a scaled element no longer distorts its apparent size when clamped to an edge.
+
 # Strip boolean props in next/image mock
 Date: 2025-09-10
 Status: accepted
@@ -250,4 +258,5 @@ Status: accepted
 Context: Direct calls to `useEditorStore` setters during tests triggered React warnings about updates outside `act`.
 Decision: Wrap store mutations in `act()` within affected tests.
 Consequences: Ensures state changes are flushed before assertions and eliminates noisy warnings.
+
 Links: PR TBD

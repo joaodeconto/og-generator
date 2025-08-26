@@ -31,6 +31,16 @@ describe('Draggable', () => {
     expect(second[1]).not.toBe(50);
   });
 
+  it('applies scale before translation', () => {
+    render(
+      <Draggable position={{ x: 50, y: 50 }} onChange={() => {}} zoom={1} scale={2}>
+        <div data-testid="content" />
+      </Draggable>
+    );
+    const wrapper = screen.getByTestId('content').parentElement as HTMLElement;
+    expect(wrapper).toHaveStyle('transform: scale(2) translate(-50%, -50%)');
+  });
+
 
   it('clamps position within canvas bounds', () => {
     const onChange = jest.fn();
