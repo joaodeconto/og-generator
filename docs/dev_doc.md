@@ -145,11 +145,11 @@ pnpm dev
 
 ## 13) TODO
 * [ ] Choose storage strategy (KV + Blob *or* Supabase) and implement abstraction.
+* [ ] Font size input for Title and Subtitle.
 * [ ] Save/load **Design** documents per user.
 * [ ] **Layout presets**:  Add more, reset, auto-layout, auto fit
-* [ ] **Edge feedback**: add visual indicator when dragging near boundaries (deformation removed)
-* [x] **Remove Backgroun** processo lento, Mostrar loading.
-* [ ] **Invert B/W** improve.
+* [x] **Remove Background** processo lento, Mostrar loading.
+* [ ] **Invert B/W** improve, the result image is of lower quality than the reference.
 * [ ] Hi‑DPI export (2× then downscale) to PNG.
 * [x] **Size presets**: added dimension presets and updated Canvas
 * [ ] **Toasts** for every user action.
@@ -164,7 +164,6 @@ pnpm dev
 
 ## 18) Error Handling
 
-* `ErrorBoundary` envolve o `EditorShell` exibindo um fallback amigável.
 * `ToastProvider` expõe `useToast` com mensagens padrão de salvar, exportar e erros em remoção de fundo ou busca de metadata.
 
 ---
