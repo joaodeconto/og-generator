@@ -47,6 +47,7 @@ export function buildMetaTags({
   if (safeDescription) {
     tags.push(`<meta property="og:description" content="${safeDescription}" />`);
     tags.push(`<meta name="twitter:description" content="${safeDescription}" />`);
+    tags.push(`<meta name="description" content="${safeDescription}" />`);
   }
   tags.push(`<meta property="og:type" content="website" />`);
   if (safeUrl) {

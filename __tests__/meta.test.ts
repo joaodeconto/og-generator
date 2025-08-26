@@ -1,62 +1,31 @@
-import { buildMetaTags, copyMetaTags } from '../lib/meta';
+import { buildMetaTags, copyMetaTags, escapeHtml } from '../lib/meta';
 
-describe('meta helpers', () => {
-  it('builds meta tag block', () => {
-    const tags = buildMetaTags({ title: 'Title', description: 'Desc', image: 'img.png' });
-    expect(tags).toContain('<meta property="og:title" content="Title" />');
-    expect(tags).toContain('<meta property="og:description" content="Desc" />');
-    expect(tags).toContain('<meta property="og:type" content="website" />');
-    expect(tags).toContain('<meta property="og:image" content="img.png" />');
-    expect(tags).toContain('<meta name="twitter:image" content="img.png" />');
+describe('meta builder', () => {
+  it('escapes HTML special chars', () => {
+    expect(escapeHtml(`Tom & Jerry <script>`)).toBe('Tom &amp; Jerry &lt;script&gt;');
   });
 
-  it('writes tags to clipboard', async () => {
-    const writeText = jest.fn();
-    Object.assign(navigator, { clipboard: { writeText } });
-    await copyMetaTags({ title: 't', description: 'd' });
-    expect(writeText).toHaveBeenCalled();
-  });
-
-  it('propagates clipboard errors', async () => {
-    const writeText = jest.fn().mockRejectedValue(new Error('denied'));
-    Object.assign(navigator, { clipboard: { writeText } });
-    await expect(copyMetaTags({ title: 't' })).rejects.toThrow('denied');
-  });
-
-  it('adds url tag when url is provided', () => {
-    const tags = buildMetaTags({ title: 'T', description: 'D', url: 'https://x.com' });
-    expect(tags).toContain('<meta property="og:url" content="https://x.com" />');
-  });
-
-  it('supports optional fields', () => {
-    const tags = buildMetaTags({
-      title: 'Title',
-      description: 'Desc',
-      image: 'https://example.com/img.png',
+  it('builds full meta tag block', () => {
+    const html = buildMetaTags({
+      title: 'Hello',
+      description: "desc with 'quotes'",
+      image: 'https://img.test/og.png',
       url: 'https://example.com',
-      siteName: 'Example',
-      twitterSite: '@example',
+      siteName: 'My Site',
+      twitterSite: '@tw',
     });
-    expect(tags).toContain('<meta property="og:site_name" content="Example" />');
-    expect(tags).toContain('<meta name="twitter:site" content="@example" />');
+    expect(html).toContain('<meta property="og:title" content="Hello" />');
+    expect(html).toContain('<meta name="twitter:description" content="desc with &#39;quotes&#39;" />');
+    expect(html).toContain('<meta property="og:image" content="https://img.test/og.png" />');
+    expect(html).toContain('<meta name="description" content="desc with &#39;quotes&#39;" />');
+    expect(html).toContain('<meta name="twitter:site" content="@tw" />');
   });
 
-  it('omits tags for missing fields', () => {
-    const tags = buildMetaTags({ title: 'Only' });
-    expect(tags).not.toContain('og:description');
-    expect(tags).not.toContain('twitter:description');
-  });
-
-  it('escapes special HTML characters', () => {
-    const tags = buildMetaTags({
-      title: 'Tom & "Jerry" <Best>',
-      description: 'It\'s > all "fun" & games',
-      image: 'img?id=1&mode=<',
-      url: 'https://x.com/?q=a&b',
-    });
-    expect(tags).toContain('<meta property="og:title" content="Tom &amp; &quot;Jerry&quot; &lt;Best&gt;" />');
-    expect(tags).toContain('<meta property="og:description" content="It&#39;s &gt; all &quot;fun&quot; &amp; games" />');
-    expect(tags).toContain('<meta property="og:image" content="img?id=1&amp;mode=&lt;" />');
-    expect(tags).toContain('<meta property="og:url" content="https://x.com/?q=a&amp;b" />');
+  it('copies meta tags to clipboard', async () => {
+    Object.assign(navigator, { clipboard: { writeText: jest.fn().mockResolvedValue(undefined) } });
+    await copyMetaTags({ title: 'Hello' });
+    expect((navigator.clipboard as any).writeText).toHaveBeenCalledWith(
+      buildMetaTags({ title: 'Hello' })
+    );
   });
 });

@@ -76,8 +76,13 @@ export default function ExportPanel() {
       <Button className="w-full" aria-label="Export image as PNG" onClick={handleExport}>
         Export PNG
       </Button>
-      <Button className="w-full" variant="secondary" aria-label="Copy meta tags" onClick={handleCopyMeta}>
-        Copy Meta
+      <Button
+        className="w-full"
+        variant="secondary"
+        aria-label="Copy meta tags"
+        onClick={handleCopyMeta}
+      >
+        Copy Meta Tags
       </Button>
     </section>
   );
