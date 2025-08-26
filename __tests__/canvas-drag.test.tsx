@@ -1,6 +1,7 @@
 import { render, fireEvent, screen } from '@testing-library/react';
 import CanvasStage from '../components/CanvasStage';
 import { useEditorStore } from '../lib/editorStore';
+import { waitFor } from '@testing-library/react';
 
 describe('CanvasStage drag', () => {
   beforeAll(() => {
@@ -48,8 +49,34 @@ describe('CanvasStage drag', () => {
     expect(pos.y).toBeCloseTo(7.6, 1);
     fireEvent.pointerMove(wrapper, { clientX: 2000, clientY: 2000 });
     pos = useEditorStore.getState().logoPosition;
-    expect(pos.x).toBeCloseTo(96, 1);
-    expect(pos.y).toBeCloseTo(92.4, 1);
+    expect(pos.x).toBeCloseTo(99.2, 1);
+    expect(pos.y).toBeCloseTo(98.48, 1);
     fireEvent.pointerUp(wrapper, { clientX: 2000, clientY: 2000 });
+  });
+
+  const getScale = (el: HTMLElement) => {
+    const match = el.style.transform.match(/scale\(([^)]+)\)/);
+    return match ? parseFloat(match[1]) : 1;
+  };
+
+  it('deforms near edges and restores after release', async () => {
+    render(<CanvasStage />);
+    const logo = screen.getByAltText('Logo');
+    const wrapper = logo.parentElement as HTMLElement;
+    Object.defineProperty(wrapper, 'offsetWidth', { value: 96 });
+    Object.defineProperty(wrapper, 'offsetHeight', { value: 96 });
+
+    fireEvent.pointerDown(wrapper, { clientX: 50, clientY: 50 });
+    fireEvent.pointerMove(wrapper, { clientX: -1000, clientY: 50 });
+
+    await waitFor(() => {
+      expect(getScale(wrapper)).toBeLessThan(1);
+    });
+
+    fireEvent.pointerUp(wrapper, { clientX: -1000, clientY: 50 });
+
+    await waitFor(() => {
+      expect(getScale(wrapper)).toBeCloseTo(1);
+    });
   });
 });
