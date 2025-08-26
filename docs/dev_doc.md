@@ -9,7 +9,11 @@ A concise, implementation‑ready base for the **OG Image Studio** project using
 OGGenerator is a one‑page (expandable) app to **compose Open Graph images** with live preview and export presets. Users authenticate via mainstream providers and can **upload a logo** and **edit it** (translate, scale, remove background, invert B/W). The result is exportable as PNG and the app can copy a ready‑to‑paste meta‑tag block.
 
 **MVP Goals**
-
+* Autenticação com Google e GitHub via NextAuth.
+* Editor de canvas com logo arrastável, undo/redo e presets de dimensão.
+* Upload e processamento do logo (remoção de fundo, inversão B/W, máscara).
+* Exportação de PNG com tamanhos predefinidos.
+* Persistência de designs via API e armazenamento.
 ---
 
 ## 2) Tech Stack
@@ -80,7 +84,7 @@ OGGenerator is a one‑page (expandable) app to **compose Open Graph images** wi
 │  └─ index.d.ts
 ├─ public/
 │  └─ fonts/*
-├─ .env.local.example
+├─ .env.example
 ├─ tailwind.config.ts
 ├─ postcss.config.js
 ├─ next.config.js
@@ -116,6 +120,7 @@ OGGenerator is a one‑page (expandable) app to **compose Open Graph images** wi
 
 ```
 pnpm i
+cp .env.example .env.local
 pnpm dev
 ```
 
