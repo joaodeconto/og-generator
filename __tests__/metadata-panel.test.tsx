@@ -1,5 +1,5 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import MetadataPanel from '../components/MetadataPanel';
+import MetadataPanel from '../components/editor/panels/MetadataPanel';
 import { useMetadataStore } from '../lib/metadataStore';
 import { toast } from '../components/ToastProvider';
 

@@ -137,6 +137,7 @@ export default function CanvasStage() {
             src={bannerUrl}
             alt="Banner image"
             fill
+            crossOrigin="anonymous"
             className="absolute inset-0 w-full h-full object-cover"
           />
         )}
@@ -168,6 +169,7 @@ export default function CanvasStage() {
               alt="Logo"
               width={96}
               height={96}
+              crossOrigin="anonymous"
               className={`object-contain w-24 h-24 ${maskLogo ? 'rounded-full' : ''} shadow`}
             />
           </div>

@@ -208,6 +208,7 @@ http://localhost:3000/api/auth/callback/<provider>
 
 * PNG @ 2× downscaled; presets 1200×630 (default), 1600×900, 1920×1005.
 * Copy “OG + Twitter meta” block.
+* Canvas images flagged with `crossOrigin="anonymous"`; remote hosts must permit CORS for export.
 
 **Persistence**
 
