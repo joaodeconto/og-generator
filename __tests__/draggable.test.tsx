@@ -1,4 +1,4 @@
-import { render, fireEvent, screen, waitFor } from '@testing-library/react';
+import { render, fireEvent, screen } from '@testing-library/react';
 import Draggable, { BASE_WIDTH, BASE_HEIGHT } from '../components/Draggable';
 
 describe('Draggable', () => {
@@ -28,35 +28,6 @@ describe('Draggable', () => {
     expect(y).not.toBe(50);
   });
 
-  const getScale = (el: HTMLElement) => {
-    const match = el.style.transform.match(/scale\(([^)]+)\)/);
-    return match ? parseFloat(match[1]) : 1;
-  };
-
-  it('deforms near edges and restores after release', async () => {
-    const onChange = jest.fn();
-    render(
-      <Draggable position={{ x: 50, y: 50 }} onChange={onChange} zoom={1}>
-        <div data-testid="content" />
-      </Draggable>
-    );
-    const wrapper = screen.getByTestId('content').parentElement as HTMLElement;
-    Object.defineProperty(wrapper, 'offsetWidth', { value: 96 });
-    Object.defineProperty(wrapper, 'offsetHeight', { value: 96 });
-
-    fireEvent.pointerDown(wrapper, { clientX: 50, clientY: 50 });
-    fireEvent.pointerMove(wrapper, { clientX: -1000, clientY: 50 });
-
-    await waitFor(() => {
-      expect(getScale(wrapper)).toBeLessThan(1);
-    });
-
-    fireEvent.pointerUp(wrapper, { clientX: -1000, clientY: 50 });
-
-    await waitFor(() => {
-      expect(getScale(wrapper)).toBeCloseTo(1);
-    });
-  });
 
   it('clamps position within canvas bounds', () => {
     const onChange = jest.fn();

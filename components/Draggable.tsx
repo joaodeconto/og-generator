@@ -29,8 +29,7 @@ export default function Draggable({
       }
     | null
   >(null);
-  const [deform, setDeform] = useState(1);
-  const DEFORM_THRESHOLD = 5;
+  // Element scale remains constant; previous edge-deformation logic removed
 
   const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -46,9 +45,8 @@ export default function Draggable({
     const dx = e.clientX - start.pointer.x;
     const dy = e.clientY - start.pointer.y;
     const el = e.currentTarget as HTMLElement;
-    const currentScale = scale * deform;
-    const width = el.offsetWidth * currentScale;
-    const height = el.offsetHeight * currentScale;
+    const width = el.offsetWidth * scale;
+    const height = el.offsetHeight * scale;
     const halfWidthPct = (width / baseWidth) * 50;
     const halfHeightPct = (height / baseHeight) * 50;
     const nx = start.origin.x + (dx / (baseWidth * zoom)) * 100;
@@ -58,22 +56,11 @@ export default function Draggable({
     const x = clamp(nx, Math.min(halfWidthPct, 100 - halfWidthPct), Math.max(halfWidthPct, 100 - halfWidthPct));
     const y = clamp(ny, Math.min(halfHeightPct, 100 - halfHeightPct), Math.max(halfHeightPct, 100 - halfHeightPct));
 
-
-    const distLeft = x - halfWidthPct;
-    const distRight = 100 - (x + halfWidthPct);
-    const distTop = y - halfHeightPct;
-    const distBottom = 100 - (y + halfHeightPct);
-    const minDist = Math.min(distLeft, distRight, distTop, distBottom);
-    const nextDeform =
-      minDist < DEFORM_THRESHOLD ? Math.max(minDist / DEFORM_THRESHOLD, 0.2) : 1;
-
-    setDeform(nextDeform);
     onChange(x, y);
   };
 
   const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
     setStart(null);
-    setDeform(1);
     (e.currentTarget as HTMLElement).releasePointerCapture?.(e.pointerId);
   };
 
@@ -83,7 +70,7 @@ export default function Draggable({
       style={{
         top: `${position.y}%`,
         left: `${position.x}%`,
-        transform: `translate(-50%, -50%) scale(${scale * deform})`,
+        transform: `translate(-50%, -50%) scale(${scale})`,
       }}
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}

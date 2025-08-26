@@ -24,7 +24,7 @@ export async function exportElementAsPng(
   { pixelRatio = 1, backgroundColor }: ExportOptions = {}
 ): Promise<void> {
   if ('fonts' in document) {
-    await (document as any).fonts.ready;
+    await (document.fonts as FontFaceSet).ready;
   }
 
   // Use client dimensions so preview zoom transforms do not affect export.

@@ -18,7 +18,7 @@ pnpm dev
 - [x] Avatar e menu de sessão persistente
 - [ ] Provedores adicionais (Twitter, Facebook, Instagram)
 - [x] Remoção de fundo, inversão B/W e máscara circular do logo
-- [x] Editor com título, subtítulo e logo arrastável
+- [x] Editor com título, subtítulo e logo arrastável (posicionamento limitado sem deformar)
 - [x] Remoção de fundo, inversão B/W e máscara circular do logo (com loading)
 - [ ] Upload de logo via drag-and-drop
 - [x] Exportação de PNG em múltiplos tamanhos
