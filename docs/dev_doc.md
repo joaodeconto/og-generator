@@ -191,3 +191,11 @@ Context: Needed accessible tooltips and visible focus styles for editor controls
 Decision: Added shadcn/ui Tooltip primitive and audited interactive elements with focus-visible ring styling.
 Consequences: Improved keyboard navigation and discoverability of actions; future components should reuse these patterns.
 Links: PR TBD
+
+# Guard font readiness in exportElementAsPng
+Date: 2025-08-26
+Status: accepted
+Context: `document.fonts` may be undefined in some environments, causing export to fail.
+Decision: Check for the Fonts API before awaiting `document.fonts.ready` when exporting images.
+Consequences: Ensures PNG export works in browsers lacking `document.fonts` support.
+Links: PR TBD

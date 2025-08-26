@@ -23,7 +23,9 @@ export async function exportElementAsPng(
   filename = 'og-image.png',
   { pixelRatio = 1, backgroundColor }: ExportOptions = {}
 ): Promise<void> {
-  await document.fonts.ready;
+  if ('fonts' in document) {
+    await (document as any).fonts.ready;
+  }
 
   // Use client dimensions so preview zoom transforms do not affect export.
   const originalWidth = element.clientWidth;
