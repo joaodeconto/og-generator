@@ -223,3 +223,19 @@ Context: `removeBackground` failed on third-party logos due to CORS restrictions
 Decision: Normalize URLs via `ensureSameOriginImage` before invoking `removeImageBackground`.
 Consequences: Background removal works for external logos through the `/api/image` proxy with minimal overhead.
 Links: PR TBD
+
+# Symmetric canvas edge clamping in Draggable
+Date: 2025-09-01
+Status: accepted
+Context: Right-edge clamping was explicit but other sides relied on implicit behavior, confusing users.
+Decision: Compute explicit min/max percentages for both axes and clamp against all four canvas edges.
+Consequences: Dragging stops uniformly at each boundary without visual scaling.
+Links: PR TBD
+
+# Center-stable scaling in Draggable
+Date: 2025-09-01
+Status: accepted
+Context: CSS transform order caused translation to be scaled, making elements appear to shrink near canvas edges.
+Decision: Apply `scale()` before `translate()` so elements scale around their center without drifting.
+Consequences: Dragging a scaled element no longer distorts its apparent size when clamped to an edge.
+Links: PR TBD
