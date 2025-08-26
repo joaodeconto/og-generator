@@ -6,7 +6,6 @@ import { useMemo } from 'react';
 import { ensureSameOriginImage } from 'lib/urls';
 import { useCanvasZoom } from 'lib/hooks/useCanvasZoom';
 import { useLogoKeyboardControls } from 'lib/hooks/useLogoKeyboardControls';
-import { useEffect, useRef, useState } from 'react';
 import { useEditorStore } from 'lib/editorStore';
 import useProcessedLogo from 'lib/hooks/useProcessedLogo';
 
@@ -42,7 +41,6 @@ export default function CanvasStage() {
     removeLogoBg,
     invertLogo,
   });
-
   const themeClasses = theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-white text-gray-900';
   const textAlignClass =
     layout === 'center'
