@@ -11,12 +11,16 @@ export default function Draggable({
   scale = 1,
   zoom,
   children,
+  baseWidth = BASE_WIDTH,
+  baseHeight = BASE_HEIGHT,
 }: {
   position: { x: number; y: number };
   onChange: (x: number, y: number) => void;
   scale?: number;
   zoom: number;
   children: ReactNode;
+  baseWidth?: number;
+  baseHeight?: number;
 }) {
   const [start, setStart] = useState<
     | {
@@ -45,12 +49,15 @@ export default function Draggable({
     const currentScale = scale * deform;
     const width = el.offsetWidth * currentScale;
     const height = el.offsetHeight * currentScale;
-    const halfWidthPct = (width / BASE_WIDTH) * 50;
-    const halfHeightPct = (height / BASE_HEIGHT) * 50;
-    const nx = start.origin.x + (dx / (BASE_WIDTH * zoom)) * 100;
-    const ny = start.origin.y + (dy / (BASE_HEIGHT * zoom)) * 100;
-    const x = Math.min(100 - halfWidthPct, Math.max(halfWidthPct, nx));
-    const y = Math.min(100 - halfHeightPct, Math.max(halfHeightPct, ny));
+    const halfWidthPct = (width / baseWidth) * 50;
+    const halfHeightPct = (height / baseHeight) * 50;
+    const nx = start.origin.x + (dx / (baseWidth * zoom)) * 100;
+    const ny = start.origin.y + (dy / (baseHeight * zoom)) * 100;
+    const clamp = (v: number, min: number, max: number) =>
+      Math.min(Math.max(v, min), max);
+    const x = clamp(nx, Math.min(halfWidthPct, 100 - halfWidthPct), Math.max(halfWidthPct, 100 - halfWidthPct));
+    const y = clamp(ny, Math.min(halfHeightPct, 100 - halfHeightPct), Math.max(halfHeightPct, 100 - halfHeightPct));
+
 
     const distLeft = x - halfWidthPct;
     const distRight = 100 - (x + halfWidthPct);

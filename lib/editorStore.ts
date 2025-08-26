@@ -14,6 +14,8 @@ export interface EditorData {
   layout: 'left' | 'center' | 'right';
   vertical: 'top' | 'center' | 'bottom';
   accentColor: string;
+  width: number;
+  height: number;
   bannerUrl?: string;
   logoFile?: File;
   logoUrl?: string;
@@ -44,6 +46,7 @@ export interface EditorState extends EditorData {
   toggleInvertLogo: () => void;
   toggleRemoveLogoBg: () => void;
   toggleMaskLogo: () => void;
+  setSize: (width: number, height: number) => void;
   addPreset: (preset: Preset) => void;
   applyPreset: (preset: Preset) => void;
   undo: () => void;
@@ -62,6 +65,8 @@ const initialState: EditorData = {
   layout: 'left',
   vertical: 'center',
   accentColor: '#3b82f6',
+  width: 1200,
+  height: 630,
   logoPosition: { x: 50, y: 50 },
   logoScale: 1,
   invertLogo: false,
@@ -98,6 +103,8 @@ export const useEditorStore = create<EditorState>()(
         layout,
         vertical,
         accentColor,
+        width,
+        height,
         bannerUrl,
         logoFile,
         logoUrl,
@@ -118,6 +125,8 @@ export const useEditorStore = create<EditorState>()(
         layout,
         vertical,
         accentColor,
+        width,
+        height,
         bannerUrl,
         logoFile,
         logoUrl,
@@ -148,6 +157,7 @@ export const useEditorStore = create<EditorState>()(
         setLayout: (value) => apply({ layout: value }),
         setVertical: (value) => apply({ vertical: value }),
         setAccentColor: (value) => apply({ accentColor: value }),
+        setSize: (width, height) => apply({ width, height }),
         setBannerUrl: (value) => apply({ bannerUrl: value }),
         setLogoFile: (file) => apply({ logoFile: file, logoUrl: undefined }),
         setLogoUrl: (url) => apply({ logoUrl: url, logoFile: undefined }),
@@ -196,6 +206,8 @@ export const useEditorStore = create<EditorState>()(
         layout: state.layout,
         vertical: state.vertical,
         accentColor: state.accentColor,
+        width: state.width,
+        height: state.height,
         bannerUrl: state.bannerUrl,
         logoUrl: state.logoUrl,
         logoPosition: state.logoPosition,
