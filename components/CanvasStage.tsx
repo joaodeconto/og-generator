@@ -47,14 +47,13 @@ function Draggable({
     if (!start) return;
     const dx = e.clientX - start.pointer.x;
     const dy = e.clientY - start.pointer.y;
-    const x = Math.min(
-      100,
-      Math.max(0, start.origin.x + (dx / (BASE_WIDTH * zoom)) * 100),
-    );
-    const y = Math.min(
-      100,
-      Math.max(0, start.origin.y + (dy / (BASE_HEIGHT * zoom)) * 100),
-    );
+    const rect = e.currentTarget.getBoundingClientRect();
+    const halfWidthPct = (rect.width / (BASE_WIDTH * zoom)) * 50;
+    const halfHeightPct = (rect.height / (BASE_HEIGHT * zoom)) * 50;
+    const nx = start.origin.x + (dx / (BASE_WIDTH * zoom)) * 100;
+    const ny = start.origin.y + (dy / (BASE_HEIGHT * zoom)) * 100;
+    const x = Math.min(100 - halfWidthPct, Math.max(halfWidthPct, nx));
+    const y = Math.min(100 - halfHeightPct, Math.max(halfHeightPct, ny));
     onChange(x, y);
   };
 
@@ -218,6 +217,7 @@ export default function CanvasStage() {
             src={bannerSrc}
             alt="Banner image"
             fill
+            crossOrigin="anonymous"
             className="absolute inset-0 w-full h-full object-cover"
             //unoptimized // avoid double-optimization since we already proxy
           />
