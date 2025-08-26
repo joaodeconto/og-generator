@@ -344,6 +344,7 @@ pnpm dev
 
 * [x] CanvasStage wired to editor store with banner, title/subtitle and logo processing.
 * [ ] Text layers (Title/Subtitle) with clamp + balance (basic inputs exist).
+* [x] Title and subtitle positions stored with `{x,y}` coordinates and draggable on canvas.
 * [x] Layout presets (left/center); 8px baseline grid pending.
 * [x] Local autosave (Zustand persist) and basic keyboard shortcuts for logo.
 

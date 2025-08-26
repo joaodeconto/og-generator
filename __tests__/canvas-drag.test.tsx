@@ -8,6 +8,7 @@ describe('CanvasStage drag', () => {
     (window as any).PointerEvent = MouseEvent;
   });
   beforeEach(() => {
+    useEditorStore.getState().reset();
     useEditorStore.setState({
       logoUrl: 'https://example.com/logo.png',
       logoPosition: { x: 50, y: 50 },
