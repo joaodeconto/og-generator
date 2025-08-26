@@ -152,8 +152,6 @@ pnpm dev
 * [ ] **Invert B/W** improve.
 * [ ] Hi‑DPI export (2× then downscale) to PNG.
 * [x] **Size presets**: added dimension presets and updated Canvas
-* [ ] Copy OG/Twitter meta block with toast feedback.
-* [x] **Tooltips** integrated and focus states polished; basic ARIA labels present.
 * [ ] **Toasts** for every user action.
 * [ ] Minimal **analytics** (Vercel Analytics).
 * [ ] Media import prototype.
@@ -180,6 +178,12 @@ Decision: Introduced `lib/sessionStore` with Zustand `persist` and synced `AuthB
 Consequences: Session info lives in localStorage and is accessible app-wide; must clear store on sign-out.
 Links: PR TBD
 
+# Copy OG/Twitter meta block with toast
+Date: 2025-08-26
+Status: accepted
+Context: Users need a quick way to generate and copy SEO meta tags.
+Decision: Added `buildMetaTags` utility and Export panel button that copies tags to clipboard with toast feedback.
+Consequences: Streamlines publishing workflow; relies on Clipboard API availability.
 # Integrate shadcn tooltip component
 Date: 2025-08-26
 Status: accepted

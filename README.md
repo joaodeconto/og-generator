@@ -24,6 +24,7 @@ pnpm dev
 - [x] Exportação de PNG em múltiplos tamanhos
 - [x] Toasts para salvar, exportar e erros
 - [x] Cor de fundo personalizável
+- [x] Cópia de metatags OG/Twitter com feedback via toast
 - [ ] Presets automáticos de layout e cores
 - [x] API de persistência do editor (CRUD)
 - [x] Presets de dimensões do canvas
