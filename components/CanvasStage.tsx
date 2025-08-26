@@ -9,10 +9,9 @@ import { useLogoKeyboardControls } from 'lib/hooks/useLogoKeyboardControls';
 import { useEditorStore } from 'lib/editorStore';
 import useProcessedLogo from 'lib/hooks/useProcessedLogo';
 
-import Draggable, { BASE_WIDTH, BASE_HEIGHT } from './Draggable';
+import Draggable from './Draggable';
 
 export default function CanvasStage() {
-  const { containerRef, zoom } = useCanvasZoom(BASE_WIDTH, BASE_HEIGHT);
   const {
     title,
     subtitle,
@@ -22,6 +21,7 @@ export default function CanvasStage() {
     theme,
     layout,
     accentColor,
+    background,
     bannerUrl,
     logoFile,
     logoUrl,
@@ -33,15 +33,18 @@ export default function CanvasStage() {
     setSubtitlePosition,
     invertLogo,
     removeLogoBg,
-    maskLogo
+    maskLogo,
+    width,
+    height,
   } = useEditorStore();
+  const { containerRef, zoom } = useCanvasZoom(width, height);
   const logoDataUrl = useProcessedLogo({
     logoFile,
     logoUrl,
     removeLogoBg,
     invertLogo,
   });
-  const themeClasses = theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-white text-gray-900';
+  const themeClasses = theme === 'dark' ? 'text-white' : 'text-gray-900';
   const textAlignClass =
     layout === 'center'
       ? 'text-center'
@@ -59,10 +62,13 @@ export default function CanvasStage() {
 
   const bannerSrc = useMemo(() => ensureSameOriginImage(bannerUrl), [bannerUrl]);
 
+  const paddingTop = `${(height / width) * 100}%`;
+
   return (
     <div
       ref={containerRef}
-      className="relative w-full h-0 pt-[52.5%] overflow-hidden rounded-lg focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ring"
+      className="relative w-full h-0 overflow-hidden rounded-lg focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ring"
+      style={{ paddingTop }}
       tabIndex={0}
       role="img"
       aria-label="OG image preview"
@@ -72,11 +78,12 @@ export default function CanvasStage() {
         id="og-canvas"
         className={`absolute top-0 left-0 rounded-lg shadow-md border ${themeClasses}`}
         style={{
-          width: BASE_WIDTH,
-          height: BASE_HEIGHT,
+          width,
+          height,
           transform: `scale(${zoom})`,
           transformOrigin: 'top left',
-          borderColor: accentColor
+          borderColor: accentColor,
+          backgroundColor: background
         }}
       >
         {bannerSrc && (
@@ -93,6 +100,8 @@ export default function CanvasStage() {
           position={titlePosition}
           onChange={setTitlePosition}
           zoom={zoom}
+          baseWidth={width}
+          baseHeight={height}
         >
           <h1
             className={`font-bold leading-tight break-words ${textAlignClass}`}
@@ -105,6 +114,8 @@ export default function CanvasStage() {
           position={subtitlePosition}
           onChange={setSubtitlePosition}
           zoom={zoom}
+          baseWidth={width}
+          baseHeight={height}
         >
           <p className={`text-lg md:text-2xl max-w-prose ${textAlignClass}`}>
             {subtitle}
@@ -116,6 +127,8 @@ export default function CanvasStage() {
             onChange={setLogoPosition}
             scale={logoScale}
             zoom={zoom}
+            baseWidth={width}
+            baseHeight={height}
           >
             <Image
               src={logoDataUrl}

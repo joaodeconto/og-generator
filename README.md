@@ -15,16 +15,24 @@ pnpm dev
 
 ## Features
 - [x] Autenticação com Google e GitHub (NextAuth)
+- [x] Avatar e menu de sessão persistente
 - [ ] Provedores adicionais (Twitter, Facebook, Instagram)
-- [x] Editor com título, subtítulo e logo arrastável
 - [x] Remoção de fundo, inversão B/W e máscara circular do logo
+- [x] Editor com título, subtítulo e logo arrastável
+- [x] Remoção de fundo, inversão B/W e máscara circular do logo (com loading)
 - [ ] Upload de logo via drag-and-drop
 - [x] Exportação de PNG em múltiplos tamanhos
+- [x] Cor de fundo personalizável
 - [ ] Presets automáticos de layout e cores
+- [x] API de persistência do editor (CRUD)
+- [x] Presets de dimensões do canvas
 
 ## How it works
-Projeto construído com **Next.js 15** (App Router) e **React 18**. Os estilos são gerenciados com **Tailwind CSS** e os componentes básicos usam **shadcn/ui**; o estado global com **Zustand**.
-A autenticacão é feita via **NextAuth** e a remoção de fundo usa um **WebWorker** com modelo WASM.
+Projeto construído com **Next.js 15** (App Router) e **React 18**. Os estilos são gerenciados com **Tailwind CSS** e o estado global com **Zustand**.
+A autenticacão é feita via **NextAuth**, a remoção de fundo usa um **WebWorker** com modelo WASM e o estado do editor pode ser serializado e salvo em `/api/design`.
+
+
+Os textos de título e subtítulo utilizam CSS `clamp()` e `text-wrap: balance`, mantendo legibilidade em diferentes tamanhos.
 
 Estrutura principal:
 - `app/` – rotas e páginas (editor em `app/(editor)/page.tsx`)
@@ -71,10 +79,11 @@ Os testes residem em `__tests__/` e cobrem utilitários e fluxos principais.
 ## Roadmap & Status
 - [x] Bootstrap Next.js + Tailwind + Zustand
 - [x] Autenticação Google e GitHub
+- [x] Avatar e menu de sessão persistente
 - [ ] Provedores Twitter e Facebook
 - [x] Canvas com título, subtítulo e logo arrastável
 - [ ] Upload de logo via drag-and-drop
-- [x] Remoção de fundo e inversão B/W
+- [x] Remoção de fundo, inversão B/W e loading do logo
 - [ ] Hi‑DPI export (2×)
 - [ ] Templates de layout e cores
 

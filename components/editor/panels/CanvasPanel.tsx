@@ -1,6 +1,12 @@
 "use client";
 import { useEditorStore } from "lib/editorStore";
 
+const SIZE_PRESETS = {
+  "1200x630": { width: 1200, height: 630 },
+  "1600x900": { width: 1600, height: 900 },
+  "1920x1005": { width: 1920, height: 1005 },
+};
+
 export default function CanvasPanel() {
   const {
     theme,
@@ -11,7 +17,16 @@ export default function CanvasPanel() {
     setVertical,
     accentColor,
     setAccentColor,
+    background,
+    setBackground,
+    width,
+    height,
+    setSize,
   } = useEditorStore();
+
+  const current = (Object.entries(SIZE_PRESETS).find(
+    ([, v]) => v.width === width && v.height === height
+  ) || ["", { width: 0, height: 0 }])[0];
 
   return (
     <section className="space-y-3">
@@ -83,6 +98,38 @@ export default function CanvasPanel() {
           aria-label="Accent Color"
         />
       </label>
+      <label className="block">
+        <span className="text-sm">Background</span>
+        <input
+          type="color"
+          className="mt-1 h-8 w-full rounded-lg border bg-background p-1"
+          value={background}
+          onChange={(e) => setBackground(e.target.value)}
+          aria-label="Background Color"
+        />
+      </label>
+      <div>
+        <span className="text-sm" id="size-label">
+          Size
+        </span>
+        <div
+          className="mt-1 grid grid-cols-3 gap-2"
+          role="group"
+          aria-labelledby="size-label"
+        >
+          {Object.entries(SIZE_PRESETS).map(([key, value]) => (
+            <button
+              key={key}
+              className={`btn ${current === key ? "btn-primary" : ""}`}
+              aria-label={`Canvas size ${key.replace("x", " by ")}`}
+              aria-pressed={current === key}
+              onClick={() => setSize(value.width, value.height)}
+            >
+              {key.replace("x", "×")}
+            </button>
+          ))}
+        </div>
+      </div>
     </section>
   );
 }

@@ -19,6 +19,7 @@ OGGenerator is a one‑page (expandable) app to **compose Open Graph images** wi
 * **Auth:** NextAuth.js (Auth.js) with OAuth providers (see configuration below).
 * **Storage:**
   * Local state: Zustand with undo/redo history and localStorage persistence.
+  * API routes persist serialized editor state (`/api/design`).
   * Object storage for uploads (logo): Vercel Blob **or** Supabase Storage/S3‑compatible bucket.
 * **Image Processing:** HTMLCanvas + OffscreenCanvas + WebWorker. For **background removal**, a dedicated worker lazy-loads `@imgly/background-removal` and caches the WASM model.
 * **Validation/Config:** Zod + TypeScript.
@@ -35,7 +36,8 @@ OGGenerator is a one‑page (expandable) app to **compose Open Graph images** wi
 │  ├─ api/
 │  │  ├─ auth/[...nextauth]/route.ts          # NextAuth handlers
 │  │  ├─ upload/route.ts                      # signed upload / server utilities
-│  │  └─ remove-bg/route.ts                   # optional server-side removal (alt to WASM)
+│  │  ├─ remove-bg/route.ts                   # optional server-side removal (alt to WASM)
+│  │  └─ design/route.ts                      # CRUD for editor persistence
 │  ├─ (editor)/page.tsx                       # main editor page
 │  ├─ layout.tsx
 │  └─ globals.css
@@ -68,7 +70,7 @@ OGGenerator is a one‑page (expandable) app to **compose Open Graph images** wi
 │  ├─ removeBg.ts                              # WASM loader + pipeline
 │  ├─ utils.ts                                 # className helper
 │  └─ hooks/
-│     └─ useProcessedLogo.ts                   # prepares logo image (BG removal + inversion)
+│     └─ useProcessedLogo.ts                   # prepares logo image (BG removal + inversion) and exposes loading state
 ├─ state/
 │  └─ editorStore.ts                           # re-export for convenience
 ├─ workers/
@@ -91,21 +93,19 @@ OGGenerator is a one‑page (expandable) app to **compose Open Graph images** wi
 ## 5) Editor — Functional Spec
 
 **Canvas Stage**
-
-* Base size (1200×630). Zoom to fit viewport, render at 2× for crisp export.
-* 
-* Text: Title + Subtitle with smart clamp, max width, balance (`text-wrap: balance`).
 * Layout Presets: horizontal left/center/right and vertical top/center/bottom alignment with 8px baseline.
 * Logo Layer: PNG/SVG upload (drag‑and‑drop + paste). Controls below.
+* Background: solid color selection with undo/redo support.
 
 **Logo Controls**
 
-* **Translate**: click‑drag in canvas; fine‑tune with arrow keys (Shift = 10×).
+* **Translate**: click‑drag in canvas with positions clamped to bounds; fine‑tune with arrow keys (Shift = 10×).
 * **Scale**: pinch/scroll over logo; numeric slider with min/max.
 * **Manual Position**: X/Y number inputs in Logo panel update with drag.
 * **Remove Background**: client‑side WASM U^2‑Net; fallback API route.
 * **Invert B/W**: canvas filter (luminance threshold + invert) — preview toggle.
 * **Mask (Circle)**: optional clipPath for avatars.
+* **Loading indicator**: spinner while logo processing is running.
 * **Position**: X/Y sliders for precise placement; Undo/Redo available via global toolbar.
 
 ---
@@ -144,19 +144,14 @@ pnpm dev
 ---
 
 ## 13) TODO
-
-* [ ] Add remaining shadcn/ui primitives (Slider, Dialog, Toast, Tooltip). Button/Input/Textarea integrated.
-* [ ] **Session header**: AuthButtons handles sign-in/out; avatar + menu pending.
 * [ ] Choose storage strategy (KV + Blob *or* Supabase) and implement abstraction.
 * [ ] Save/load **Design** documents per user.
-* [ ] **Text layers** (Title/Subtitle) with clamp + balance (basic inputs exist).
-* [ ] **Background**: solid/gradient/image (with object‑fit cover, position).
 * [ ] **Layout presets**:  Add more, reset, auto-layout, auto fit
 * [ ] **Resize on boundries**: Improve featur, it flicks when dragging close to border
-* [ ] **Remove Backgroun** processo lento, Mostrar loading.
+* [x] **Remove Backgroun** processo lento, Mostrar loading.
 * [ ] **Invert B/W** improve.
 * [ ] Hi‑DPI export (2× then downscale) to PNG.
-* [ ] **Size presets**, add diferent proportions and update Canvas (portrait, landscape, box)
+* [x] **Size presets**: added dimension presets and updated Canvas
 * [ ] Copy OG/Twitter meta block with toast feedback.
 * [ ] **Tooltips** and polished focus states; basic ARIA labels present.
 * [ ] **Toasts** for every user action.
@@ -176,3 +171,11 @@ pnpm dev
 
 ---
 
+
+# Persist session in Zustand
+Date: 2025-08-26
+Status: accepted
+Context: Header needed persisted auth state to show avatar dropdown across routes.
+Decision: Introduced `lib/sessionStore` with Zustand `persist` and synced `AuthButtons` via `useSession`.
+Consequences: Session info lives in localStorage and is accessible app-wide; must clear store on sign-out.
+Links: PR TBD

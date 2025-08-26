@@ -2,14 +2,33 @@
 
 import { signIn, signOut, useSession } from 'next-auth/react';
 import { Button } from '@/components/ui/button';
-
+import { useEffect, useRef, useState } from 'react';
+import { useSessionStore } from '../lib/sessionStore';
 /**
- * Renders sign in/out buttons based on the user's session state. When not
- * authenticated the user can choose one of the available providers on the
- * default NextAuth sign in page.
+ * Renders sign in/out controls. When authenticated it shows the user's avatar
+ * with a dropdown menu containing the sign-out action. The current session is
+ * persisted to a Zustand store so other components can access it without the
+ * NextAuth context.
  */
 export default function AuthButtons() {
   const { data: session, status } = useSession();
+  const setSession = useSessionStore((s) => s.setSession);
+  const [open, setOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setSession(session);
+  }, [session, setSession]);
+
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    }
+    if (open) document.addEventListener('click', handleClick);
+    return () => document.removeEventListener('click', handleClick);
+  }, [open]);
 
   if (status === 'loading') {
     return (
@@ -43,13 +62,43 @@ export default function AuthButtons() {
   }
 
   return (
-    <div className="space-x-3">
+    <div className="relative" ref={menuRef}>
       {session ? (
         <>
           <span className="text-sm font-medium">Olá, {session.user?.name || 'usuário'}</span>
           <Button onClick={() => signOut()} variant="secondary">
             Sair
           </Button>
+          <button
+            onClick={() => setOpen((o) => !o)}
+            className="flex h-8 w-8 items-center justify-center rounded-full focus:outline-none"
+          >
+            {session.user?.image ? (
+              <img
+                src={session.user.image}
+                alt={session.user?.name ?? 'avatar'}
+                className="h-8 w-8 rounded-full"
+              />
+            ) : (
+              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-300 text-sm font-medium text-gray-700">
+                {(session.user?.name ?? 'U').charAt(0).toUpperCase()}
+              </span>
+            )}
+          </button>
+          {open && (
+            <div
+              role="menu"
+              className="absolute right-0 mt-2 w-32 rounded-md border bg-white shadow-lg"
+            >
+              <button
+                role="menuitem"
+                onClick={() => signOut()}
+                className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
+              >
+                Sair
+              </button>
+            </div>
+          )}
         </>
       ) : (
         <Button onClick={() => signIn()}>

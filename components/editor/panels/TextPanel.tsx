@@ -3,11 +3,59 @@ import { useEditorStore } from "lib/editorStore";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import type { ChangeEvent } from "react";
+import type { CSSProperties } from "react";
 
+type TextFieldProps = {
+  label: string;
+  placeholder: string;
+  value: string;
+  rows: number;
+  fontSize: number;
+  min: number;
+  max: number;
+  onChange: (value: string) => void;
+};
+
+function TextField({
+  label,
+  placeholder,
+  value,
+  rows,
+  fontSize,
+  min,
+  max,
+  onChange,
+}: TextFieldProps) {
+  const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    onChange(e.target.value);
+  };
+
+  const style: CSSProperties & { textWrap?: string } = {
+    fontSize: `clamp(${min}px, ${fontSize}px, ${max}px)`,
+    textWrap: "balance",
+  };
+
+  return (
+    <label className="block">
+      <span className="text-sm">{label}</span>
+      <textarea
+        className="mt-1 w-full rounded-lg border bg-background px-3 py-2"
+        rows={rows}
+        placeholder={placeholder}
+        value={value}
+        onChange={handleChange}
+        style={style}
+      />
+    </label>
+  );
+}
 export default function TextPanel() {
   const {
     title,
     subtitle,
+    titleFontSize,
+    subtitleFontSize,
     setTitle,
     setSubtitle,
     setTitleFontSize,
@@ -45,6 +93,26 @@ export default function TextPanel() {
           onChange={(e) => setSubtitle(e.target.value)}
         />
       </label>
+      <TextField
+        label="Title"
+        placeholder="Your awesome title"
+        value={title}
+        rows={2}
+        fontSize={titleFontSize}
+        min={32}
+        max={96}
+        onChange={setTitle}
+      />
+      <TextField
+        label="Subtitle"
+        placeholder="Short description"
+        value={subtitle}
+        rows={3}
+        fontSize={subtitleFontSize}
+        min={16}
+        max={48}
+        onChange={setSubtitle}
+      />
       <div className="grid grid-cols-3 gap-2">
         <Button aria-label="Extra small title size" onClick={() => applySize("xs")}>
           XS
