@@ -27,7 +27,10 @@ describe('useProcessedLogo', () => {
   });
 
   it('removes background when enabled', async () => {
-    (removeImageBackground as jest.Mock).mockResolvedValue('removed-url');
+    (removeImageBackground as jest.Mock).mockResolvedValue('data-removed-url');
+    (ensureSameOriginImage as jest.Mock).mockImplementation((url: string) =>
+      url === 'logo.png' ? 'proxied-logo.png' : url,
+    );
     const { result } = renderHook(() =>
       useProcessedLogo({
         logoUrl: 'logo.png',
@@ -37,9 +40,11 @@ describe('useProcessedLogo', () => {
       })
     );
     await waitFor(() => expect(result.current.loading).toBe(true));
-    await waitFor(() => expect(result.current.logoDataUrl).toBe('removed-url'));
+    await waitFor(() => expect(result.current.logoDataUrl).toBe('data-removed-url'));
     expect(result.current.loading).toBe(false);
-    expect(removeImageBackground).toHaveBeenCalledWith('logo.png');
+    expect(removeImageBackground).toHaveBeenCalledWith('proxied-logo.png');
+    expect(ensureSameOriginImage).toHaveBeenNthCalledWith(1, 'logo.png');
+    expect(ensureSameOriginImage).toHaveBeenNthCalledWith(2, 'data-removed-url');
   });
 
   it('inverts colors when enabled', async () => {

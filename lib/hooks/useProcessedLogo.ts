@@ -35,7 +35,9 @@ export default function useProcessedLogo({
 
       try {
         if (removeLogoBg) {
-          source = await removeImageBackground(source);
+          const prepared =
+            source instanceof Blob ? source : ensureSameOriginImage(source)!;
+          source = await removeImageBackground(prepared);
         }
 
         let normalized: string;

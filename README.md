@@ -33,6 +33,7 @@ pnpm dev
 ## How it works
 Projeto construído com **Next.js 15** (App Router) e **React 18**. Os estilos são gerenciados com **Tailwind CSS** e o estado global com **Zustand**.
 A autenticacão é feita via **NextAuth**, a remoção de fundo usa um **WebWorker** com modelo WASM e o estado do editor pode ser serializado e salvo em `/api/design`.
+Imagens externas são carregadas via `/api/image` para contornar restrições de CORS antes de qualquer processamento.
 
 
 Os textos de título e subtítulo utilizam CSS `clamp()` e `text-wrap: balance`, mantendo legibilidade em diferentes tamanhos.
@@ -92,7 +93,7 @@ Os testes residem em `__tests__/` e cobrem utilitários e fluxos principais.
 
 ## Known Issues
 - Alguns sites bloqueiam a coleta de metadados; nesse caso o painel de Metadata exibe um toast de erro.
-- A exportação falha se a origem da imagem não permitir CORS, mesmo com `crossOrigin="anonymous"`.
+- Alguns hosts podem bloquear requisições feitas pelo proxy `/api/image`, resultando em falha na remoção de fundo.
 
 ## Licença
 Projeto licenciado sob MIT. Consulte [LICENSE](LICENSE) para mais detalhes.

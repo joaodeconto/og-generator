@@ -215,3 +215,11 @@ Context: Scaling the logo near canvas edges caused visual distortion and conflic
 Decision: Remove deformation logic; keep position clamping so the logo stays fully visible.
 Consequences: Simplifies drag behavior; consider adding a different edge indicator later.
 Links: PR TBD
+
+# Proxy remote images for background removal
+Date: 2025-08-27
+Status: accepted
+Context: `removeBackground` failed on third-party logos due to CORS restrictions.
+Decision: Normalize URLs via `ensureSameOriginImage` before invoking `removeImageBackground`.
+Consequences: Background removal works for external logos through the `/api/image` proxy with minimal overhead.
+Links: PR TBD
