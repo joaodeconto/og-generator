@@ -82,7 +82,7 @@ export default function Draggable({
       style={{
         top: `${position.y}%`,
         left: `${position.x}%`,
-        transform: `scale(${scale}) translate(-50%, -50%)`,
+        transform: `translate(-50%, -50%) scale(${scale})`,
       }}
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}

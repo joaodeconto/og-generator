@@ -51,7 +51,6 @@ export default function CanvasStage() {
       : layout === 'right'
         ? 'text-right'
         : 'text-left';
-
   const { onKeyDown } = useLogoKeyboardControls({
     logoScale,
     logoPosition,
