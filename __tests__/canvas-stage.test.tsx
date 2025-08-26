@@ -22,10 +22,11 @@ describe('CanvasStage', () => {
     expect(banners[0].getAttribute('src')).toContain('banner.png');
   });
 
-  it('exports element has fixed base dimensions', () => {
+  it('uses dimensions from store', () => {
+    useEditorStore.setState({ width: 1600, height: 900 });
     render(<CanvasStage />);
     const canvas = document.getElementById('og-canvas') as HTMLElement;
-    expect(canvas).toHaveStyle({ width: '1200px', height: '630px' });
+    expect(canvas).toHaveStyle({ width: '1600px', height: '900px' });
   });
 
   it('positions the logo at the center by default', () => {

@@ -29,4 +29,14 @@ describe('TextPanel', () => {
     expect(state.titleFontSize).toBe(64);
     expect(state.subtitleFontSize).toBe(32);
   });
+
+  it('applies balanced wrapping and clamped font sizes', () => {
+    render(<TextPanel />);
+    const titleInput = screen.getByPlaceholderText('Your awesome title');
+    const subtitleInput = screen.getByPlaceholderText('Short description');
+    expect(titleInput).toHaveStyle('text-wrap: balance');
+    expect(titleInput).toHaveStyle('font-size: clamp(32px, 48px, 96px)');
+    expect(subtitleInput).toHaveStyle('text-wrap: balance');
+    expect(subtitleInput).toHaveStyle('font-size: clamp(16px, 24px, 48px)');
+  });
 });

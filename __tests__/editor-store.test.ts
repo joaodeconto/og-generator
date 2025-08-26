@@ -1,4 +1,8 @@
-import { useEditorStore } from '../lib/editorStore';
+import {
+  useEditorStore,
+  serializeEditorState,
+  deserializeEditorState,
+} from '../lib/editorStore';
 
 describe('editorStore position setters', () => {
   beforeEach(() => {
@@ -18,5 +22,23 @@ describe('editorStore position setters', () => {
   it('updates background color', () => {
     useEditorStore.getState().setBackground('#112233');
     expect(useEditorStore.getState().background).toBe('#112233');
+  it('updates canvas size', () => {
+    useEditorStore.getState().setSize(1600, 900);
+    expect(useEditorStore.getState().width).toBe(1600);
+    expect(useEditorStore.getState().height).toBe(900);
+  });
+});
+
+describe('editorStore serialization', () => {
+  beforeEach(() => {
+    useEditorStore.getState().reset();
+  });
+
+  it('round-trips state without File objects', () => {
+    useEditorStore.getState().setTitle('Hello');
+    const json = serializeEditorState(useEditorStore.getState());
+    const restored = deserializeEditorState(json);
+    expect(restored.title).toBe('Hello');
+    expect(restored.logoFile).toBeUndefined();
   });
 });

@@ -3,7 +3,7 @@ import { persist } from 'zustand/middleware';
 import type { Preset } from './randomStyle';
 
 // State without actions for history snapshots
-interface EditorData {
+export interface EditorData {
   title: string;
   subtitle: string;
   titleFontSize: number;
@@ -15,6 +15,8 @@ interface EditorData {
   vertical: 'top' | 'center' | 'bottom';
   accentColor: string;
   background: string;
+  width: number;
+  height: number;
   bannerUrl?: string;
   logoFile?: File;
   logoUrl?: string;
@@ -46,6 +48,7 @@ export interface EditorState extends EditorData {
   toggleInvertLogo: () => void;
   toggleRemoveLogoBg: () => void;
   toggleMaskLogo: () => void;
+  setSize: (width: number, height: number) => void;
   addPreset: (preset: Preset) => void;
   applyPreset: (preset: Preset) => void;
   undo: () => void;
@@ -65,12 +68,25 @@ const initialState: EditorData = {
   vertical: 'center',
   accentColor: '#3b82f6',
   background: '#ffffff',
+  width: 1200,
+  height: 630,
   logoPosition: { x: 50, y: 50 },
   logoScale: 1,
   invertLogo: false,
   removeLogoBg: false,
   maskLogo: false,
   presets: [],
+};
+
+export const serializeEditorState = (state: EditorState | EditorData): string => {
+  const { logoFile, ...data } = state;
+  void logoFile;
+  return JSON.stringify(data);
+};
+
+export const deserializeEditorState = (json: string): EditorData => {
+  const data = JSON.parse(json) as Partial<EditorData>;
+  return { ...initialState, ...data };
 };
 
 export const useEditorStore = create<EditorState>()(
@@ -91,6 +107,8 @@ export const useEditorStore = create<EditorState>()(
         vertical,
         accentColor,
         background,
+        width,
+        height,
         bannerUrl,
         logoFile,
         logoUrl,
@@ -112,6 +130,8 @@ export const useEditorStore = create<EditorState>()(
         vertical,
         accentColor,
         background,
+        width,
+        height,
         bannerUrl,
         logoFile,
         logoUrl,
@@ -143,6 +163,7 @@ export const useEditorStore = create<EditorState>()(
         setVertical: (value) => apply({ vertical: value }),
         setAccentColor: (value) => apply({ accentColor: value }),
         setBackground: (value) => apply({ background: value }),
+        setSize: (width, height) => apply({ width, height }),
         setBannerUrl: (value) => apply({ bannerUrl: value }),
         setLogoFile: (file) => apply({ logoFile: file, logoUrl: undefined }),
         setLogoUrl: (url) => apply({ logoUrl: url, logoFile: undefined }),
@@ -192,6 +213,8 @@ export const useEditorStore = create<EditorState>()(
         vertical: state.vertical,
         accentColor: state.accentColor,
         background: state.background,
+        width: state.width,
+        height: state.height,
         bannerUrl: state.bannerUrl,
         logoUrl: state.logoUrl,
         logoPosition: state.logoPosition,
