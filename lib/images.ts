@@ -83,9 +83,12 @@ export async function invertImageColors(dataUrl: string): Promise<string> {
       const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
       const data = imageData.data;
       for (let i = 0; i < data.length; i += 4) {
-        data[i] = 255 - data[i];
-        data[i + 1] = 255 - data[i + 1];
-        data[i + 2] = 255 - data[i + 2];
+        const r = data[i];
+        const g = data[i + 1];
+        const b = data[i + 2];
+        const luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+        const value = luminance > 128 ? 0 : 255;
+        data[i] = data[i + 1] = data[i + 2] = value;
       }
       ctx.putImageData(imageData, 0, 0);
       resolve(canvas.toDataURL());

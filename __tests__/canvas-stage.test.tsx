@@ -35,6 +35,13 @@ describe('CanvasStage', () => {
     expect(container).toHaveStyle({ top: '50%', left: '50%' });
   });
 
+  it('applies vertical alignment classes', () => {
+    useEditorStore.setState({ vertical: 'bottom' });
+    render(<CanvasStage />);
+    const textContainer = document.querySelector('#og-canvas > div.flex') as HTMLElement;
+    expect(textContainer.className).toMatch(/justify-end/);
+  });
+
   it('marks images as crossOrigin anonymous for export', () => {
     useEditorStore.setState({
       bannerUrl: 'https://example.com/banner.png',

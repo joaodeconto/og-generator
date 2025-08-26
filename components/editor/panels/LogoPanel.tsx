@@ -11,6 +11,7 @@ export default function LogoPanel() {
     toggleMaskLogo,
     logoScale,
     setLogoScale,
+    logoPosition,
     setLogoPosition,
   } = useEditorStore();
 
@@ -57,23 +58,20 @@ export default function LogoPanel() {
     setLogoPosition(50, 50);
   };
 
-  const handleCenter = () => {
-    setLogoPosition(50, 50);
-  };
-
   return (
     <section className="space-y-3">
       <div className="flex items-center gap-2">
-        <label htmlFor="logo-upload" className="sr-only">
-          Upload logo
-        </label>
         <input
           id="logo-upload"
           type="file"
           accept="image/png,image/svg+xml"
           onChange={handleFileChange}
           aria-label="Upload logo file"
+          className="hidden"
         />
+        <label htmlFor="logo-upload" className="btn">
+          Choose File
+        </label>
         <button className="btn" aria-label="Paste logo from clipboard" onClick={handlePaste}>
           Paste
         </button>
@@ -108,14 +106,43 @@ export default function LogoPanel() {
           onChange={(e) => setLogoScale(parseFloat(e.target.value))}
         />
       </div>
-      <div className="grid grid-cols-2 gap-2">
+      <div>
+        <label htmlFor="logo-x" className="text-sm">
+          X Position
+        </label>
+        <input
+          id="logo-x"
+          type="range"
+          min={0}
+          max={100}
+          step={1}
+          className="w-full"
+          value={logoPosition.x}
+          onChange={(e) =>
+            setLogoPosition(parseFloat(e.target.value), logoPosition.y)
+          }
+        />
+      </div>
+      <div>
+        <label htmlFor="logo-y" className="text-sm">
+          Y Position
+        </label>
+        <input
+          id="logo-y"
+          type="range"
+          min={0}
+          max={100}
+          step={1}
+          className="w-full"
+          value={logoPosition.y}
+          onChange={(e) =>
+            setLogoPosition(logoPosition.x, parseFloat(e.target.value))
+          }
+        />
+      </div>
+      <div>
         <button className="btn" aria-label="Reset logo adjustments" onClick={handleReset}>
           Reset
-        </button>
-      </div>
-      <div className="grid grid-cols-2 gap-2">        
-        <button className="btn" onClick={handleCenter} aria-label="Center logo on canvas">
-          Center
         </button>
       </div>
     </section>
