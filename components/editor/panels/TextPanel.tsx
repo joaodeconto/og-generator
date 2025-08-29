@@ -56,10 +56,16 @@ export default function TextPanel() {
     subtitle,
     titleFontSize,
     subtitleFontSize,
+    titleBoxWidthPct,
+    subtitleBoxWidthPct,
     setTitle,
     setSubtitle,
     setTitleFontSize,
     setSubtitleFontSize,
+    setTitleBoxWidthPct,
+    setSubtitleBoxWidthPct,
+    setResizingTitleBox,
+    setResizingSubtitleBox,
   } = useEditorStore();
 
   const applySize = (size: "xs" | "md" | "xl") => {
@@ -103,6 +109,30 @@ export default function TextPanel() {
         max={96}
         onChange={setTitle}
       />
+      <label className="block">
+        <span className="text-sm">Title size (px)</span>
+        <Input
+          className="mt-1"
+          type="number"
+          min={16}
+          max={200}
+          value={titleFontSize}
+          onChange={(e) => setTitleFontSize(parseInt(e.target.value || '0', 10))}
+        />
+      </label>
+      <label className="block">
+        <span className="text-sm">Title box width (%)</span>
+        <Input
+          className="mt-1"
+          type="number"
+          min={10}
+          max={100}
+          value={titleBoxWidthPct ?? 60}
+          onChange={(e) => setTitleBoxWidthPct(parseInt(e.target.value || '0', 10))}
+          onFocus={() => setResizingTitleBox(true)}
+          onBlur={() => setResizingTitleBox(false)}
+        />
+      </label>
       <TextField
         label="Subtitle"
         placeholder="Short description"
@@ -113,6 +143,30 @@ export default function TextPanel() {
         max={48}
         onChange={setSubtitle}
       />
+      <label className="block">
+        <span className="text-sm">Subtitle size (px)</span>
+        <Input
+          className="mt-1"
+          type="number"
+          min={8}
+          max={160}
+          value={subtitleFontSize}
+          onChange={(e) => setSubtitleFontSize(parseInt(e.target.value || '0', 10))}
+        />
+      </label>
+      <label className="block">
+        <span className="text-sm">Subtitle box width (%)</span>
+        <Input
+          className="mt-1"
+          type="number"
+          min={10}
+          max={100}
+          value={subtitleBoxWidthPct ?? 70}
+          onChange={(e) => setSubtitleBoxWidthPct(parseInt(e.target.value || '0', 10))}
+          onFocus={() => setResizingSubtitleBox(true)}
+          onBlur={() => setResizingSubtitleBox(false)}
+        />
+      </label>
       <div className="grid grid-cols-3 gap-2">
         <Button aria-label="Extra small title size" onClick={() => applySize("xs")}>
           XS

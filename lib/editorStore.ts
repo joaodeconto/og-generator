@@ -8,6 +8,28 @@ export interface EditorData {
   subtitle: string;
   titleFontSize: number;
   subtitleFontSize: number;
+  // Text container widths (percentage of canvas width)
+  titleBoxWidthPct?: number;
+  subtitleBoxWidthPct?: number;
+  // Text styling
+  titleFontFamily?: string;
+  subtitleFontFamily?: string;
+  titleFontWeight?: number;
+  subtitleFontWeight?: number;
+  titleColor?: string;
+  subtitleColor?: string;
+  titleLineHeight?: number;
+  subtitleLineHeight?: number;
+  titleLetterSpacing?: number;
+  subtitleLetterSpacing?: number;
+  titleAlign?: 'left' | 'center' | 'right';
+  subtitleAlign?: 'left' | 'center' | 'right';
+  // Rotation for objects
+  titleRotation?: number; // degrees
+  subtitleRotation?: number;
+  logoRotation?: number;
+  logoFlipX?: boolean;
+  logoFlipY?: boolean;
   titlePosition: { x: number; y: number };
   subtitlePosition: { x: number; y: number };
   theme: 'light' | 'dark';
@@ -26,6 +48,14 @@ export interface EditorData {
   removeLogoBg: boolean;
   maskLogo: boolean;
   presets: Preset[];
+  // layout helpers / flags
+  autoLayout?: boolean;
+  freezeSizeOnDrag?: boolean;
+  snapToGuides?: boolean;
+  selected?: 'title' | 'subtitle' | 'logo';
+  // UI transient flags
+  resizingTitleBox?: boolean;
+  resizingSubtitleBox?: boolean;
 }
 
 export interface EditorState extends EditorData {
@@ -33,6 +63,25 @@ export interface EditorState extends EditorData {
   setSubtitle: (value: string) => void;
   setTitleFontSize: (size: number) => void;
   setSubtitleFontSize: (size: number) => void;
+  setTitleBoxWidthPct: (pct: number) => void;
+  setSubtitleBoxWidthPct: (pct: number) => void;
+  setTitleFontFamily: (family: string) => void;
+  setSubtitleFontFamily: (family: string) => void;
+  setTitleFontWeight: (weight: number) => void;
+  setSubtitleFontWeight: (weight: number) => void;
+  setTitleColor: (color: string) => void;
+  setSubtitleColor: (color: string) => void;
+  setTitleLineHeight: (lh: number) => void;
+  setSubtitleLineHeight: (lh: number) => void;
+  setTitleLetterSpacing: (ls: number) => void;
+  setSubtitleLetterSpacing: (ls: number) => void;
+  setTitleAlign: (align: 'left' | 'center' | 'right') => void;
+  setSubtitleAlign: (align: 'left' | 'center' | 'right') => void;
+  setTitleRotation: (deg: number) => void;
+  setSubtitleRotation: (deg: number) => void;
+  setLogoRotation: (deg: number) => void;
+  toggleLogoFlipX: () => void;
+  toggleLogoFlipY: () => void;
   setTitlePosition: (x: number, y: number, commit?: boolean) => void;
   setSubtitlePosition: (x: number, y: number, commit?: boolean) => void;
   setTheme: (value: 'light' | 'dark') => void;
@@ -54,13 +103,40 @@ export interface EditorState extends EditorData {
   undo: () => void;
   redo: () => void;
   reset: () => void;
+  // load a full snapshot (e.g., from API)
+  loadDesign: (data: EditorData) => void;
+  setAutoLayout: (enabled: boolean) => void;
+  toggleFreezeSizeOnDrag: () => void;
+  setSnapToGuides: (enabled: boolean) => void;
+  setSelected: (sel: 'title' | 'subtitle' | 'logo') => void;
+  setResizingTitleBox: (resizing: boolean) => void;
+  setResizingSubtitleBox: (resizing: boolean) => void;
 }
 
 const initialState: EditorData = {
   title: '',
   subtitle: '',
-  titleFontSize: 48,
-  subtitleFontSize: 24,
+  titleFontSize: 72,
+  subtitleFontSize: 36,
+  titleBoxWidthPct: 60,
+  subtitleBoxWidthPct: 70,
+  titleFontFamily: 'Inter, ui-sans-serif, system-ui',
+  subtitleFontFamily: 'Inter, ui-sans-serif, system-ui',
+  titleFontWeight: 700,
+  subtitleFontWeight: 400,
+  titleColor: undefined,
+  subtitleColor: undefined,
+  titleLineHeight: 1.1,
+  subtitleLineHeight: 1.3,
+  titleLetterSpacing: 0,
+  subtitleLetterSpacing: 0,
+  titleAlign: undefined,
+  subtitleAlign: undefined,
+  titleRotation: 0,
+  subtitleRotation: 0,
+  logoRotation: 0,
+  logoFlipX: false,
+  logoFlipY: false,
   titlePosition: { x: 50, y: 50 },
   subtitlePosition: { x: 50, y: 50 },
   theme: 'light',
@@ -76,6 +152,12 @@ const initialState: EditorData = {
   removeLogoBg: false,
   maskLogo: false,
   presets: [],
+  autoLayout: false,
+  freezeSizeOnDrag: true,
+  snapToGuides: true,
+  selected: 'title',
+  resizingTitleBox: false,
+  resizingSubtitleBox: false,
 };
 
 export const serializeEditorState = (state: EditorState | EditorData): string => {
@@ -100,6 +182,23 @@ export const useEditorStore = create<EditorState>()(
         subtitle,
         titleFontSize,
         subtitleFontSize,
+        titleFontFamily,
+        subtitleFontFamily,
+        titleFontWeight,
+        subtitleFontWeight,
+        titleColor,
+        subtitleColor,
+        titleLineHeight,
+        subtitleLineHeight,
+        titleLetterSpacing,
+        subtitleLetterSpacing,
+        titleAlign,
+        subtitleAlign,
+        titleRotation,
+        subtitleRotation,
+        logoRotation,
+        logoFlipX,
+        logoFlipY,
         titlePosition,
         subtitlePosition,
         theme,
@@ -118,11 +217,34 @@ export const useEditorStore = create<EditorState>()(
         removeLogoBg,
         maskLogo,
         presets,
+        autoLayout,
+        freezeSizeOnDrag,
+        snapToGuides,
+        selected,
+        resizingTitleBox,
+        resizingSubtitleBox,
       }: EditorState): EditorData => ({
         title,
         subtitle,
         titleFontSize,
         subtitleFontSize,
+        titleFontFamily,
+        subtitleFontFamily,
+        titleFontWeight,
+        subtitleFontWeight,
+        titleColor,
+        subtitleColor,
+        titleLineHeight,
+        subtitleLineHeight,
+        titleLetterSpacing,
+        subtitleLetterSpacing,
+        titleAlign,
+        subtitleAlign,
+        titleRotation,
+        subtitleRotation,
+        logoRotation,
+        logoFlipX,
+        logoFlipY,
         titlePosition,
         subtitlePosition,
         theme,
@@ -141,6 +263,12 @@ export const useEditorStore = create<EditorState>()(
         removeLogoBg,
         maskLogo,
         presets,
+        autoLayout,
+        freezeSizeOnDrag,
+        snapToGuides,
+        selected,
+        resizingTitleBox,
+        resizingSubtitleBox,
       });
 
       const patch = (partial: Partial<EditorData>) =>
@@ -159,6 +287,25 @@ export const useEditorStore = create<EditorState>()(
         setSubtitle: (value) => apply({ subtitle: value }),
         setTitleFontSize: (size) => apply({ titleFontSize: size }),
         setSubtitleFontSize: (size) => apply({ subtitleFontSize: size }),
+        setTitleBoxWidthPct: (pct) => apply({ titleBoxWidthPct: Math.min(100, Math.max(10, Math.round(pct))) }),
+        setSubtitleBoxWidthPct: (pct) => apply({ subtitleBoxWidthPct: Math.min(100, Math.max(10, Math.round(pct))) }),
+        setTitleFontFamily: (family) => apply({ titleFontFamily: family }),
+        setSubtitleFontFamily: (family) => apply({ subtitleFontFamily: family }),
+        setTitleFontWeight: (weight) => apply({ titleFontWeight: weight }),
+        setSubtitleFontWeight: (weight) => apply({ subtitleFontWeight: weight }),
+        setTitleColor: (color) => apply({ titleColor: color }),
+        setSubtitleColor: (color) => apply({ subtitleColor: color }),
+        setTitleLineHeight: (lh) => apply({ titleLineHeight: lh }),
+        setSubtitleLineHeight: (lh) => apply({ subtitleLineHeight: lh }),
+        setTitleLetterSpacing: (ls) => apply({ titleLetterSpacing: ls }),
+        setSubtitleLetterSpacing: (ls) => apply({ subtitleLetterSpacing: ls }),
+        setTitleAlign: (align) => apply({ titleAlign: align }),
+        setSubtitleAlign: (align) => apply({ subtitleAlign: align }),
+        setTitleRotation: (deg) => apply({ titleRotation: deg }),
+        setSubtitleRotation: (deg) => apply({ subtitleRotation: deg }),
+        setLogoRotation: (deg) => apply({ logoRotation: deg }),
+        toggleLogoFlipX: () => apply({ logoFlipX: !get().logoFlipX }),
+        toggleLogoFlipY: () => apply({ logoFlipY: !get().logoFlipY }),
         setTitlePosition: (x, y, commit = true) =>
           (commit ? apply : patch)({ titlePosition: { x, y } }),
         setSubtitlePosition: (x, y, commit = true) =>
@@ -205,6 +352,17 @@ export const useEditorStore = create<EditorState>()(
           future.length = 0;
           set(initialState);
         },
+        loadDesign: (data) => {
+          past.length = 0;
+          future.length = 0;
+          set((state) => ({ ...state, ...data }));
+        },
+        setAutoLayout: (enabled) => apply({ autoLayout: enabled }),
+        toggleFreezeSizeOnDrag: () => apply({ freezeSizeOnDrag: !get().freezeSizeOnDrag }),
+        setSnapToGuides: (enabled) => apply({ snapToGuides: enabled }),
+        setSelected: (sel) => patch({ selected: sel }),
+        setResizingTitleBox: (resizing) => patch({ resizingTitleBox: resizing }),
+        setResizingSubtitleBox: (resizing) => patch({ resizingSubtitleBox: resizing }),
       };
     },
     {
@@ -214,6 +372,27 @@ export const useEditorStore = create<EditorState>()(
         subtitle: state.subtitle,
         titlePosition: state.titlePosition,
         subtitlePosition: state.subtitlePosition,
+        titleFontSize: state.titleFontSize,
+        subtitleFontSize: state.subtitleFontSize,
+        titleBoxWidthPct: state.titleBoxWidthPct,
+        subtitleBoxWidthPct: state.subtitleBoxWidthPct,
+        titleFontFamily: state.titleFontFamily,
+        subtitleFontFamily: state.subtitleFontFamily,
+        titleFontWeight: state.titleFontWeight,
+        subtitleFontWeight: state.subtitleFontWeight,
+        titleColor: state.titleColor,
+        subtitleColor: state.subtitleColor,
+        titleLineHeight: state.titleLineHeight,
+        subtitleLineHeight: state.subtitleLineHeight,
+        titleLetterSpacing: state.titleLetterSpacing,
+        subtitleLetterSpacing: state.subtitleLetterSpacing,
+        titleAlign: state.titleAlign,
+        subtitleAlign: state.subtitleAlign,
+        titleRotation: state.titleRotation,
+        subtitleRotation: state.subtitleRotation,
+        logoRotation: state.logoRotation,
+        logoFlipX: state.logoFlipX,
+        logoFlipY: state.logoFlipY,
         theme: state.theme,
         layout: state.layout,
         vertical: state.vertical,
@@ -229,6 +408,11 @@ export const useEditorStore = create<EditorState>()(
         removeLogoBg: state.removeLogoBg,
         maskLogo: state.maskLogo,
         presets: state.presets,
+        autoLayout: state.autoLayout,
+        freezeSizeOnDrag: state.freezeSizeOnDrag,
+        snapToGuides: state.snapToGuides,
+        selected: state.selected,
+        // do not persist transient resizing flags
       }),
     }
   )

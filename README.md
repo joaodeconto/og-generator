@@ -1,102 +1,117 @@
 # OG Image Generator
-> \uD83D\uDEA7 Projeto em desenvolvimento — contribuições são bem-vindas.
+Create polished Open Graph images in minutes. Friendly, fast, and predictable — with keyboard controls and precise dragging.
 
-Aplicação Next.js para criar imagens Open Graph personalizadas. Usa React, Tailwind CSS, Zustand e NextAuth e está preparada para implantação na Vercel.
+## What You Can Do
+- Create social preview images for blogs, docs, products, and announcements.
+- Drag your logo, edit title/subtitle, and clamp precisely to the canvas.
+- Remove a logo background, invert colors, or apply a circular mask.
+- Export crisp PNGs in multiple sizes. Copy OG/Twitter meta tags.
+- Undo/redo safely — each drag counts as a single undo action.
 
-## Quickstart
-Requisitos: Node.js 18+ e pnpm.
+## Create Your First Image
+1) Sign in: use Google or GitHub from the top-right menu.
+2) Add content: set Title and Subtitle; pick a canvas size.
+3) Add a logo: upload or pick an existing one; drag to position.
+4) Refine: use Background Remove, Invert, or Mask; pick a background color.
+5) Nudge precisely: use arrow keys (hold Shift to move faster). Shift+Up/Down scales the logo.
+6) Export: click Export → choose size; or Copy Meta to paste into your site.
 
-```bash
-pnpm install
-cp .env.example .env.local  # preencha com suas credenciais
-pnpm dev
-# acesse http://localhost:3000
-```
+Tips
+- Dragging is precise and predictable; movement is clamped to the canvas edge.
+- Keyboard parity: every drag can be done with arrows; each drag = one undo.
+- Fonts are loaded before export to prevent blurry text.
 
 ## Features
-- [x] Autenticação com Google e GitHub (NextAuth)
-- [x] Avatar e menu de sessão persistente
-- [ ] Provedores adicionais (Twitter, Facebook, Instagram)
-- [x] Editor com título, subtítulo e logo arrastável (posicionamento limitado aos quatro lados, sem deformar)
-- [x] Remoção de fundo, inversão B/W e máscara circular do logo (com loading)
-- [x] Histórico de undo/redo para edições
-- [ ] Upload de logo via drag-and-drop
-- [x] Exportação de PNG em múltiplos tamanhos
-- [x] Toasts para salvar, exportar e erros
-- [x] Cor de fundo personalizável
-- [x] Cópia de metatags OG/Twitter com feedback via toast
-- [ ] Presets automáticos de layout e cores
-- [x] API de persistência do editor (CRUD)
-- [x] Presets de dimensões do canvas
-- [x] Tooltips nos botões da barra de ferramentas
+- [x] Auth with Google and GitHub (NextAuth)
+- [x] Persistent avatar and session menu
+- [ ] Additional providers (Twitter, Facebook, Instagram)
+- [x] Canvas editor: title, subtitle, draggable logo (edge clamping; no unintended resize while moving)
+- [x] Background removal, B/W invert, circular mask (with loading state)
+- [x] Undo/redo history (single undo entry per drag)
+- [ ] Logo upload via drag-and-drop
+- [x] PNG export in multiple sizes (font readiness guarded)
+- [x] Toasts for save, export, and errors
+- [x] Custom background color
+- [x] Copy OG/Twitter meta tags with toast feedback
+- [ ] Preset layouts and color themes (planned)
+- [x] Editor state persistence API (CRUD)
+- [x] Canvas dimension presets
+- [x] Tooltips for toolbar buttons
+- [ ] Canvas Tools: text (fonts, colors, sizes) and objects (scale, rotate, align) — in progress
 
-## How it works
-Projeto construído com **Next.js 15** (App Router) e **React 18**. Os estilos são gerenciados com **Tailwind CSS** e o estado global com **Zustand**.
-A autenticacão é feita via **NextAuth**, a remoção de fundo usa um **WebWorker** com modelo WASM e o estado do editor pode ser serializado e salvo em `/api/design`.
-Imagens externas são carregadas via `/api/image` para contornar restrições de CORS antes de qualquer processamento.
+### Keyboard Shortcuts
+- Cmd/Ctrl+Z: undo
+- Cmd/Ctrl+Shift+Z: redo
+- Cmd/Ctrl+C: copy meta tags
+- Cmd/Ctrl+S: save
+- Arrows: move logo (Shift modifies step)
+- Shift+Up/Down: change logo scale
 
+## How It Works
+- Stack: Next.js 15 (App Router) + React 18, Tailwind CSS, Zustand
+- Auth via NextAuth; image background removal via WebWorker + WASM model
+- Export powered by `html-to-image` with document fonts readiness guard
+- External images proxied through `/api/image` to avoid CORS issues
 
-Os textos de título e subtítulo utilizam CSS `clamp()` e `text-wrap: balance`, mantendo legibilidade em diferentes tamanhos.
+Dragging is a critical feature: precise, predictable, keyboard parity, and one undo per drag. Transform order is `scale()` then `translate()` to avoid visual distortion, and canvas-edge clamping is symmetric.
 
-Estrutura principal:
-- `app/` – rotas e páginas (editor em `app/(editor)/page.tsx`)
-- `components/` – componentes reutilizáveis como `CanvasStage`, `AuthButtons` e `editor/*`
-- `lib/` – configuração de auth, store do editor, helpers de imagem e metatags
+## Quickstart
+- Requirements: Node.js 18+ and pnpm
+- Local dev:
+  - `pnpm install`
+  - `cp .env.example .env.local` (fill in credentials)
+  - `pnpm dev` then open http://localhost:3000
 
-### Atalhos de Teclado
-- **Cmd/Ctrl+Z**: desfazer  
-- **Cmd/Ctrl+Shift+Z**: refazer  
-- **Cmd/Ctrl+C**: copiar metatags  
-- **Cmd/Ctrl+S**: salvar  
-- **Setas**: mover o logo  
-- **Shift+Setas para cima/baixo**: redimensionar o logo
+## Fast Commands
+- `pnpm agent`: lint + tests (with coverage) + docs guard
+- `pnpm docs:log`: append a daily log stub from last commit message
+- `pnpm docs:guard`: ensure code diffs are accompanied by docs/log updates and README env vars
+- `pnpm test`: run Jest with coverage
+- `pnpm lint`: run ESLint
 
 ## Env Vars
-Copie o arquivo `.env.example` para `.env.local` e preencha as chaves:
+Copy `.env.example` to `.env.local` and fill credentials. Variables are validated at runtime by `lib/env.ts` (Zod). If `NEXTAUTH_SECRET` is not provided, a default `dev-secret` is used for development only.
 
-```bash
-cp .env.example .env.local
-```
+Required/optional keys (documented by docs guard):
+- `NEXTAUTH_SECRET`, `NEXTAUTH_URL`
+- `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`
+- `GITHUB_ID`, `GITHUB_SECRET`
+- `TWITTER_CLIENT_ID`, `TWITTER_CLIENT_SECRET` (optional)
+- `TWITTER_CONSUMER_KEY`, `TWITTER_CONSUMER_SECRET` (optional, legacy)
+- `FACEBOOK_CLIENT_ID`, `FACEBOOK_CLIENT_SECRET` (optional)
+- `INSTAGRAM_CLIENT_ID`, `INSTAGRAM_CLIENT_SECRET` (optional)
 
-Defina um `NEXTAUTH_SECRET` forte e configure credenciais dos provedores OAuth desejados. Variáveis opcionais (Twitter, Facebook, Instagram) omitem os botões de login se ausentes.  
-As variáveis são validadas em tempo de execução por `lib/env.ts` usando [Zod](https://github.com/colinhacks/zod). Caso `NEXTAUTH_SECRET` não seja fornecido, um valor inseguro `dev-secret` é utilizado apenas em desenvolvimento.
-
-Exemplo mínimo:
+Minimal example:
 
 ```env
-NEXTAUTH_SECRET=seu-segredo
+NEXTAUTH_SECRET=your-secret
 GOOGLE_CLIENT_ID=...
 GOOGLE_CLIENT_SECRET=...
 ```
 
 ## Documentation
-Consulte [docs/dev_doc.md](docs/dev_doc.md) para detalhes de arquitetura e [docs/log](docs/log) para o histórico de decisões.
+- Architecture and specs: `docs/dev_doc.md`
+- Decision log: `docs/log/`
 
 ## Testing
-Execute os testes unitários e verifique se a documentação está sincronizada:
+Run unit and component tests and verify docs are in sync:
 
 ```bash
 pnpm lint       # ESLint
-pnpm test       # Jest com cobertura
-pnpm docs:guard # garante atualização de README/dev_doc/log
+pnpm test       # Jest with coverage
+pnpm docs:guard # guard README/dev_doc/log and env var docs
 ```
 
-Os testes residem em `__tests__/` e cobrem utilitários e fluxos principais.
+Tests live in `__tests__/` and cover utilities, editor flows, drag/clamp behavior, and API routes.
 
-## Roadmap & Status
-- [x] Bootstrap Next.js + Tailwind + Zustand
-- [x] Autenticação Google e GitHub
-- [x] Avatar e menu de sessão persistente
-- [ ] Provedores Twitter e Facebook
-- [x] Canvas com título, subtítulo e logo arrastável
-- [ ] Upload de logo via drag-and-drop
-- [x] Remoção de fundo, inversão B/W e loading do logo
-- [ ] Hi‑DPI export (2×)
-- [ ] Templates de layout e cores
+Coverage policy:
+- Global: ≥ 80% lines and ≥ 80% branches (see `jest.config.ts`)
+- Critical utils target 90%+ (per-file thresholds ratcheted)
 
 ## Known Issues
-- Alguns sites bloqueiam a coleta de metadados; nesse caso o painel de Metadata exibe um toast de erro.
-- Alguns hosts podem bloquear requisições feitas pelo proxy `/api/image`, resultando em falha na remoção de fundo.
+- Some sites block metadata scraping; the Metadata panel shows a toast on failure
+- Some hosts may block the `/api/image` proxy, impacting background removal
 
-## Licença
-Projeto licenciado sob MIT. Consulte [LICENSE](LICENSE) para mais detalhes.
+## License
+MIT — see `LICENSE` for details.
+

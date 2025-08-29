@@ -41,6 +41,21 @@ describe('Draggable', () => {
     expect(wrapper).toHaveStyle('transform: scale(2) translate(-50%, -50%)');
   });
 
+  it('freezes width while dragging and clears after release', () => {
+    render(
+      <Draggable position={{ x: 50, y: 50 }} onChange={() => {}} zoom={1}>
+        <div data-testid="content" style={{ width: 120 }} />
+      </Draggable>
+    );
+    const wrapper = screen.getByTestId('content').parentElement as HTMLElement;
+    Object.defineProperty(wrapper, 'offsetWidth', { value: 120 });
+
+    expect(wrapper.style.width).toBe('');
+    fireEvent.pointerDown(wrapper, { clientX: 0, clientY: 0 });
+    expect(wrapper.style.width).toBe('120px');
+    fireEvent.pointerUp(wrapper, { clientX: 0, clientY: 0 });
+    expect(wrapper.style.width).toBe('');
+  });
 
   it('clamps position within canvas bounds', () => {
     const onChange = jest.fn();

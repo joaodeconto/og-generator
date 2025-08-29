@@ -23,6 +23,10 @@ export default function CanvasPanel() {
     width,
     height,
     setSize,
+    autoLayout,
+    setAutoLayout,
+    freezeSizeOnDrag,
+    toggleFreezeSizeOnDrag,
   } = useEditorStore();
 
   const current = (Object.entries(SIZE_PRESETS).find(
@@ -31,6 +35,24 @@ export default function CanvasPanel() {
 
   return (
     <section className="space-y-3">
+      <label className="flex items-center gap-2">
+        <input
+          type="checkbox"
+          checked={autoLayout ?? false}
+          onChange={(e) => setAutoLayout(e.target.checked)}
+          className="h-4 w-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+        />
+        <span className="text-sm">Auto layout</span>
+      </label>
+      <label className="flex items-center gap-2">
+        <input
+          type="checkbox"
+          checked={!!freezeSizeOnDrag}
+          onChange={() => toggleFreezeSizeOnDrag()}
+          className="h-4 w-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+        />
+        <span className="text-sm">Lock element width while dragging</span>
+      </label>
       <div>
         <span className="text-sm" id="theme-label">
           Theme

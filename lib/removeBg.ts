@@ -38,3 +38,15 @@ export function removeImageBackground(source: Blob | string): Promise<string> {
     worker!.postMessage({ id, source });
   });
 }
+
+/**
+ * Cancel any in-flight background removal by terminating the worker.
+ * A new worker will be created on the next call to removeImageBackground.
+ */
+export function cancelRemoveBackground() {
+  try {
+    worker?.terminate();
+  } finally {
+    worker = null;
+  }
+}

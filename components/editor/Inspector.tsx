@@ -10,11 +10,11 @@ import { Button } from "@/components/ui/button";
 
 const tabs = [
   { id: "canvas", label: "Canvas", component: CanvasPanel },
+  { id: "metadata", label: "Metadata", component: MetadataPanel },
   { id: "text", label: "Text", component: TextPanel },
   { id: "logo", label: "Logo", component: LogoPanel },
-  { id: "metadata", label: "Metadata", component: MetadataPanel },
+  { id: "export", label: "Export", component: ExportPanel },
   { id: "presets", label: "Presets", component: PresetsPanel },
-  { id: "export", label: "Export", component: ExportPanel }
 ];
 
 export default function Inspector() {

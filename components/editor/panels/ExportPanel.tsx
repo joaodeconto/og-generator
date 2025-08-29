@@ -35,6 +35,21 @@ export default function ExportPanel() {
     }
   };
 
+  const handleExport2x = async () => {
+    const el = document.getElementById("og-canvas");
+    if (!el) return;
+    try {
+      await exportElementAsPng(
+        el as HTMLElement,
+        SIZE_PRESETS[selected],
+        `og-image-${selected}@2x.png`,
+        { backgroundColor: background, pixelRatio: 2 }
+      );
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const handleCopyMeta = async () => {
     try {
       await copyMetaTags({ title, description: subtitle });
@@ -75,6 +90,9 @@ export default function ExportPanel() {
       </div>
       <Button className="w-full" aria-label="Export image as PNG" onClick={handleExport}>
         Export PNG
+      </Button>
+      <Button className="w-full" variant="secondary" aria-label="Export image as 2x PNG" onClick={handleExport2x}>
+        Export 2x PNG
       </Button>
       <Button
         className="w-full"

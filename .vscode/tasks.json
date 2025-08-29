@@ -1,0 +1,15 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    { "label": "Dev", "type": "npm", "script": "dev", "problemMatcher": [] },
+    { "label": "Typecheck", "type": "npm", "script": "typecheck" },
+    { "label": "Lint", "type": "npm", "script": "lint" },
+    { "label": "Test", "type": "npm", "script": "test" },
+    { "label": "Build", "type": "npm", "script": "build" },
+    {
+      "label": "Check (type+lint+test+build)",
+      "dependsOn": ["Typecheck", "Lint", "Test", "Build"],
+      "dependsOrder": "sequence"
+    }
+  ]
+}

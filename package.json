@@ -8,6 +8,8 @@
     "start": "next start",
     "lint": "eslint .",
     "test": "jest --coverage",
+    "agent": "tsx scripts/agent.ts",
+    "agent:fix-log": "tsx scripts/agent.ts --fix-log",
     "docs:log": "tsx scripts/docs-log.ts",
     "docs:guard": "tsx scripts/docs-guard.ts"
   },

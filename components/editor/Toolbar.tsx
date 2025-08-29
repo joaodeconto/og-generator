@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useEditorStore } from "lib/editorStore";
 import { exportElementAsPng } from "lib/images";
 import { copyMetaTags } from "lib/meta";
@@ -26,12 +26,29 @@ export default function Toolbar() {
   } = useEditorStore();
   const { save: toastSave, exportImage: toastExport, error: toastError } =
     useToast();
+  const [fontsReady, setFontsReady] = useState(true);
+
+  useEffect(() => {
+    if (typeof document !== 'undefined' && 'fonts' in document) {
+      try {
+        const setLoaded = () => setFontsReady(true);
+        // @ts-ignore
+        const fonts: FontFaceSet = (document as any).fonts;
+        // @ts-ignore
+        setFontsReady(fonts.status === 'loaded');
+        fonts.ready.then(setLoaded).catch(() => setFontsReady(true));
+      } catch {
+        setFontsReady(true);
+      }
+    }
+  }, []);
 
   const handleUndo = useCallback(() => undo(), [undo]);
   const handleRedo = useCallback(() => redo(), [redo]);
   const handleCopyMeta = useCallback(async () => {
     try {
       await copyMetaTags({ title, description: subtitle });
+      toastSave("Meta copied");
     } catch (err) {
       console.error(err);
     }
@@ -79,25 +96,12 @@ export default function Toolbar() {
   return (
     <TooltipProvider>
       <header className="flex items-center justify-between border-b bg-background/80 p-2 backdrop-blur">
-        <div className="flex gap-2">
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button aria-label="Undo" onClick={handleUndo}>
-                Undo
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>Undo (Cmd/Ctrl+Z)</TooltipContent>
-          </Tooltip>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button aria-label="Redo" onClick={handleRedo}>
-                Redo
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>Redo (Cmd/Ctrl+Shift+Z)</TooltipContent>
-          </Tooltip>
+        <div className="flex items-center gap-3">
+          <img src="/logo.png" alt="OGGenerator" width={24} height={24} />
+          <span className="text-sm font-semibold">OGGenerator</span>
         </div>
-        <div className="flex gap-2">
+        
+        <div className="flex items-center gap-2">
           <Tooltip>
             <TooltipTrigger asChild>
               <Button aria-label="Copy Meta" onClick={handleCopyMeta}>
@@ -108,11 +112,11 @@ export default function Toolbar() {
           </Tooltip>
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button aria-label="Export" onClick={handleExport}>
+              <Button aria-label="Export" onClick={handleExport} disabled={!fontsReady}>
                 Export
               </Button>
             </TooltipTrigger>
-            <TooltipContent>Export PNG</TooltipContent>
+            <TooltipContent>Export PNG {fontsReady ? '' : '(loading fonts...)'}</TooltipContent>
           </Tooltip>
           <Tooltip>
             <TooltipTrigger asChild>

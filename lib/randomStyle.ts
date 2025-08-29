@@ -31,3 +31,17 @@ export function generateRandomStyle(): RandomStyle {
 export function generateRandomPreset(): Preset {
   return generateRandomStyle();
 }
+
+export interface TemplatePreset {
+  id: string;
+  name: string;
+  preset: Preset;
+}
+
+export const templatePresets: TemplatePreset[] = [
+  { id: 'blog', name: 'Blog', preset: { theme: 'light', layout: 'left', accentColor: '#3b82f6' } },
+  { id: 'product', name: 'Product', preset: { theme: 'light', layout: 'center', accentColor: '#22c55e' } },
+  { id: 'event', name: 'Event', preset: { theme: 'dark', layout: 'center', accentColor: '#f59e0b' } },
+  { id: 'promo', name: 'Promo', preset: { theme: 'dark', layout: 'right', accentColor: '#ef4444' } },
+  { id: 'app', name: 'App Launch', preset: { theme: 'light', layout: 'center', accentColor: '#a855f7' } },
+];

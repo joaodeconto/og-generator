@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { ensureSameOriginImage } from 'lib/urls';
 import { blobToDataURL, invertImageColors } from 'lib/images';
-import { removeImageBackground } from 'lib/removeBg';
+import { removeImageBackground, cancelRemoveBackground } from 'lib/removeBg';
 import { toast } from 'components/ToastProvider';
 
 interface Options {
@@ -19,6 +19,7 @@ export default function useProcessedLogo({
 }: Options) {
   const [logoDataUrl, setLogoDataUrl] = useState<string | undefined>(undefined);
   const [loading, setLoading] = useState(false);
+  const [cancellable, setCancellable] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -32,6 +33,7 @@ export default function useProcessedLogo({
       }
 
       setLoading(true);
+      setCancellable(!!removeLogoBg);
 
       try {
         if (removeLogoBg) {
@@ -58,6 +60,7 @@ export default function useProcessedLogo({
         if (!cancelled) setLogoDataUrl(undefined);
       } finally {
         if (!cancelled) setLoading(false);
+        setCancellable(false);
       }
     };
 
@@ -67,6 +70,13 @@ export default function useProcessedLogo({
     };
   }, [logoFile, logoUrl, removeLogoBg, invertLogo]);
 
-  return { logoDataUrl, loading };
+  const cancel = () => {
+    if (!loading) return;
+    cancelRemoveBackground();
+    setLoading(false);
+    setCancellable(false);
+  };
+
+  return { logoDataUrl, loading, cancellable, cancel };
 }
 
